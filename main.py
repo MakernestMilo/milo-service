@@ -9,6 +9,9 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+import corpus  # import is the load. No lazy loading.
+corpus.verify()
+
 
 app = FastAPI()
 
@@ -85,6 +88,7 @@ def health():
         "status": "ok",
         "build": BUILD_ID,
         "uptime": time.monotonic() - START_TIME,
+        "chapters": len(corpus.CHAPTERS),
     }
 
 
