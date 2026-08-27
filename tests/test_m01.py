@@ -2,7 +2,7 @@ import logging
 from fastapi.testclient import TestClient
 from main import app
 client = TestClient(app, raise_server_exceptions=False)
-def test_health_returns_200():
+def test_health_returns_999():
     r = client.get("/health")
     assert r.status_code == 200
     body = r.json()
