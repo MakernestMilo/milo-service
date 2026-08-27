@@ -4,7 +4,7 @@ from main import app
 client = TestClient(app, raise_server_exceptions=False)
 def test_health_returns_200():
     r = client.get("/health")
-    assert r.status_code == 200
+    assert r.status_code == 999
     body = r.json()
     assert body["status"] == "ok"
     assert "build" in body and "uptime" in body
