@@ -21,8 +21,7 @@ logging.basicConfig(
 logger = logging.getLogger("milo-service")
 
 START_TIME = time.monotonic()
-BUILD_ID = os.getenv("BUILD_ID", "dev")
-
+BUILD_ID = os.getenv("BUILD_ID") or os.getenv("RENDER_GIT_COMMIT", "dev")[:7]
 
 class TurnRequest(BaseModel):
     message: str
@@ -31,8 +30,16 @@ class TurnRequest(BaseModel):
 @app.middleware("http")
 async def add_request_id(request: Request, call_next):
     request.state.request_id = str(uuid.uuid4())
-    return await call_next(request)
-
+    started = time.monotonic()
+    response = await call_next(request)
+    # Log no request body and no response body. Not behind a flag,
+    # not in development. The M-05 cause field must never be loggable.
+    logger.info(
+        "request_id=%s %s %s %s %.1fms",
+        request.state.request_id, request.method, request.url.path,
+        response.status_code, (time.monotonic() - started) * 1000,
+    )
+    return response
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(
