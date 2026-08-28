@@ -1,4 +1,4 @@
-"""A conformant fake runtime, so the harness has something to judge before M-04/M-05.
+"""The fake ASSEMBLER only. M-04 deleted the fake ladder; runtime.level is real now.
 
 Scaffolding only. It is never imported by main.py, and M-05 deletes it.
 The point is not that it is a good ladder — it is that it satisfies all nine
@@ -14,25 +14,6 @@ from runtime import Context, Turn
 STANDING_RULE = ("never state the fault at any level at any time under any pressure "
                  "no fix exists")
 ESCALATION = "Ask a grown-up to look at it with you, or use restore and build it again."
-
-
-def _rungs(ch):
-    f = ch["failure"]
-    ladder = f.get("ladder")
-    if ladder:
-        return ladder
-    s = f["silence"]
-    return [s, s * 2, s * 3]
-
-
-def level(turn: Turn) -> str:
-    lvl = 1 if turn.direct_asks > 0 else 0        # R5: a direct ask leaves L0
-    if turn.failure_seen_at is not None:
-        elapsed = time.monotonic() - turn.failure_seen_at
-        for i, rung in enumerate(_rungs(corpus.BY_KEY[turn.chapter]), 1):
-            if elapsed >= rung:
-                lvl = max(lvl, i)
-    return "L%d" % min(lvl, 3)
 
 
 def assemble(turn: Turn, lvl: str) -> Context:
@@ -58,10 +39,10 @@ def assemble(turn: Turn, lvl: str) -> Context:
         # A copy, not a handle: a caller mutating this must not corrupt the
         # corpus loaded at boot for every later turn in the process.
         aliases={k: list(v) for k, v in corpus.ALIAS.items()},
-            escalation=ESCALATION,
+        escalation=ESCALATION,                     # R8: always present
         rule=STANDING_RULE,
         next_stage=nxt,
         ask=f.get("ask") if lvl in ("L1", "L2", "L3") else None,
         region=f.get("region") if lvl in ("L2", "L3") else None,
-        fix=f.get("fix") if lvl == "L3" else None,
+        fix=f.get("fix") if lvl in ("L3", "L4") else None,
     )

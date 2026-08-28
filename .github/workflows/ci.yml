@@ -25,4 +25,4 @@ jobs:
       # this job entirely, so the required check never reports and the merge
       # blocks — rather than a hollow job passing in its place.
       - name: Harness count
-        run: python3 -c "import qc, tests.fixtures.fake_runtime as f; rows = qc.run(f.level, f.assemble); assert len(rows) == 5712, len(rows)"
+        run: python3 -c "import qc, runtime as r, tests.fixtures.fake_runtime as f; rows = qc.run(r.level, f.assemble); assert len(rows) == 5712, len(rows)"
