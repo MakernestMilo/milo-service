@@ -14,4 +14,3 @@ jobs:
         run: python3 -m pytest -q tests/test_qc.py --tb=short
       - name: Harness count
         run: python3 -c "import qc, tests.fixtures.fake_runtime as f; rows = qc.run(f.level, f.assemble); assert len(rows) == 5712, len(rows)"
-
