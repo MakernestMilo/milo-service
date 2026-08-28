@@ -73,7 +73,8 @@ def r2(ctx, words):
 
 
 def r3(ctx, lvl):
-    if ctx.fix and lvl != "L3":
+    # Decision G: a fix is legal at L3 and at L4, illegal everywhere else.
+    if ctx.fix and lvl not in ("L3", "L4"):
         return "R3 fix present at " + lvl
 
 
@@ -167,5 +168,6 @@ def summary(rows):
 
 
 if __name__ == "__main__":
+    import runtime
     import tests.fixtures.fake_runtime as fake
-    print(summary(run(fake.level, fake.assemble)))
+    print(summary(run(runtime.level, fake.assemble)))
