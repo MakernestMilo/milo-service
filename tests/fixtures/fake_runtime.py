@@ -58,7 +58,7 @@ def assemble(turn: Turn, lvl: str) -> Context:
         # A copy, not a handle: a caller mutating this must not corrupt the
         # corpus loaded at boot for every later turn in the process.
         aliases={k: list(v) for k, v in corpus.ALIAS.items()},
-           escalation="",
+            escalation=ESCALATION,
         rule=STANDING_RULE,
         next_stage=nxt,
         ask=f.get("ask") if lvl in ("L1", "L2", "L3") else None,
