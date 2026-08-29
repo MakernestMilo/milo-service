@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import corpus
 
@@ -26,6 +26,13 @@ class Context:
     ask: str | None = None
     region: str | None = None
     fix: str | None = None
+    # Decision AA / C-15. Three cumulative sets, resolved from shelf order.
+    # on_machine is the union opened by the first chapter up to and including
+    # the current one; opened_here is this chapter's openings, a subset of it;
+    # in_the_box is its exact complement over the fourteen chapters.
+    on_machine: list[str] = field(default_factory=list)
+    opened_here: list[str] = field(default_factory=list)
+    in_the_box: list[str] = field(default_factory=list)
 
 
 # Ported verbatim from milo-level.js. Where it looks wrong it is still the

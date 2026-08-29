@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import pathlib
 import re
+from functools import lru_cache
 
 import corpus
 from runtime import Context, Turn
@@ -33,16 +34,62 @@ def chapter_label(ch) -> str:
     return f"chapter {ch['key']}" if ch["key"].isdigit() else "a flagship build"
 
 
-def parts_block(ch):
-    """p is the part's name, j is why it exists. The child's words come from ALIAS."""
+part_sets = corpus.part_sets    # decision AA lives in corpus; one definition only
+
+
+def aliases_for(part):
+    """Exact key only. A part with no entry gets no line rather than a guess.
+
+    C-12: no cap. Every alias for every part on the machine. If this table ever
+    proves too large it returns to the architect as a corpus question; it is
+    never silently trimmed here again.
+    """
+    return list(corpus.ALIAS.get(part) or [])
+
+
+@lru_cache(maxsize=None)
+def _parts_lines(key):
+    """The working set: cumulative, fully described, aliases in full."""
+    machine, opened_here, _ = part_sets(key)
     out = []
-    for p in ch.get("parts") or []:
-        line = f"- {p['p']} — {p['j']}"
-        words = corpus.ALIAS.get(p["p"])
+    for name, why in machine.items():
+        line = f"- {name} — {' '.join(why)}"
+        if name in opened_here:
+            line += "  (opened in this chapter)"
+        words = aliases_for(name)
         if words:
-            line += "\n  they may call it: " + " / ".join(words[:6])
+            line += "\n  they may call it: " + " / ".join(words)
         out.append(line)
-    return out
+    return tuple(out)
+
+
+def parts_block(ch):
+    return list(_parts_lines(ch["key"]))
+
+
+@lru_cache(maxsize=None)
+def _box_lines(key):
+    """The third set. Named and marked, never described, never raised.
+
+    The aliases come with the name. The card is printed and in the child's hands
+    with a picture of every component, so a child at chapter 02 can look at the
+    buzzer and ask about "the noisy thing" — and a word that routes nowhere is
+    the alias cap again, one layer out. What stays withheld is the description,
+    which is what makes it a later build rather than something on the desk.
+    """
+    _, _, box = part_sets(key)
+    out = []
+    for name in box:
+        line = f"- {name}"
+        words = aliases_for(name)
+        if words:
+            line += "\n  they may call it: " + " / ".join(words)
+        out.append(line)
+    return tuple(out)
+
+
+def box_block(ch):
+    return list(_box_lines(ch["key"]))
 
 
 def wiring_block(ch):
@@ -82,8 +129,14 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
              f"{ch['sub']}. {len(ch['stages'])} steps, {ch['time']}. No tools, no glue, "
              f"no soldering — everything pushes in by hand.")
 
-    L.append("\nPARTS ON THE DESK (the complete list — nothing else exists):")
+    L.append("\nON THE MACHINE (everything built so far — this is what they have):")
     L.extend(parts_block(ch))
+
+    box = box_block(ch)
+    if box:
+        L.append("\nSTILL IN THE BOX (parts of later builds — answer if they ask, "
+                 "never bring them up):")
+        L.extend(box)
 
     L.append(f"\nALL STEPS OF {ch['name'].upper()}:")
     for i, x in enumerate(ch["stages"]):
@@ -131,8 +184,12 @@ def assemble(turn: Turn, lvl: str) -> Context:
              "prompt": render(turn, lvl)}                  # the artefact the rules score
 
     nxt = ch["stages"][idx + 1]["h"] if idx + 1 < len(ch["stages"]) else None
+    machine, opened_here, box = part_sets(turn.chapter)
 
     return Context(
+        on_machine=sorted(machine),
+        opened_here=sorted(opened_here),
+        in_the_box=sorted(box),
         stage=stage,
         parts_allowed=sorted({p["p"] for c in corpus.CHAPTERS
                               for p in (c.get("parts") or [])}),

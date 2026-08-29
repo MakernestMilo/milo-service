@@ -9,6 +9,7 @@ import re
 import time
 from collections import Counter
 from dataclasses import dataclass
+from functools import lru_cache
 
 import corpus
 
@@ -56,7 +57,9 @@ def matched(text, chapter):
 BOILERPLATE = (
     "CHILD name unknown do not ask for it KIT MakerNest Origins This is chapter a "
     "flagship build steps No tools no glue no soldering everything pushes in by hand "
-    "PARTS ON THE DESK the complete list nothing else exists they may call it ALL STEPS "
+    "ON THE MACHINE everything built so far this is what they have opened in this "
+    "chapter STILL IN THE BOX parts of later builds answer if they ask never bring "
+    "them up they may call it ALL STEPS "
     "OF THEY ARE HERE done STAGES YOU MAY SPEAK ABOUT Say nothing about any stage after "
     "the current one CURRENT STEP What this step is WIRING FOR Pins on this build KNOWN "
     "FAILURE MODES FOR THIS STEP this is what actually goes wrong symptom narrow region "
@@ -79,12 +82,28 @@ def card_text(ch):
     return " ".join(bits)
 
 
+def parts_text(ch):
+    """Decision AA widened the parts block, so it widens public with it.
+
+    Rule 03 of the standing brief: public means the child can already read it. A
+    part's description and the words a child may call it by are book and card
+    material, and they are now served for the whole cumulative machine rather
+    than one chapter's openings. Leaving them out of public makes the guard fire
+    on teaching — which is drift two of the standing brief, one layer over.
+    """
+    machine, _, box = corpus.part_sets(ch["key"])
+    bits = list(box)
+    for name, why in machine.items():
+        bits += [name] + why + (corpus.ALIAS.get(name) or [])
+    return " ".join(bits)
+
+
 def cause_words(ch):
     pub = set(re.findall(r"[a-z]{4,}", " ".join(
         [re.sub(r"<[^>]+>", " ", s.get("html", "")) for s in ch["stages"]]
         + [" ".join(s.get("do") or []) for s in ch["stages"]]
         + [PART_WORDS, ch["sub"], ch["rung"], STANDING_RULE,
-           BOILERPLATE, card_text(ch)]
+           BOILERPLATE, card_text(ch), parts_text(ch)]
         + list((ch["failure"] or {}).get("says") or [])).lower()))
     return [w for w in re.findall(r"[a-z]{5,}", corpus.cause(ch["key"]).lower())
             if w not in pub]
@@ -95,10 +114,20 @@ def r1(ctx):
         return "R1 no instruction available"
 
 
+@lru_cache(maxsize=None)
+def _words(words):
+    """Word boundaries, not substrings — the same defect P7 fixed for names.
+    'detect' lives inside 'detector', which is a word children say. One
+    alternation rather than one pass per word, so the blob is scanned once."""
+    return re.compile(r"\b(" + "|".join(re.escape(w) for w in words) + r")\b")
+
+
 def r2(ctx, words):
+    if not words:
+        return None
     blob = json.dumps({"s": ctx.stage, "a": ctx.ask, "r": ctx.region,
                        "f": ctx.fix, "u": ctx.rule, "n": ctx.next_stage}).lower()
-    leak = [w for w in words if w in blob]
+    leak = sorted(set(_words(tuple(words)).findall(blob)))
     return "R2 cause words in context: " + ",".join(leak) if leak else None
 
 

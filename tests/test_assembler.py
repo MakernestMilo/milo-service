@@ -84,7 +84,7 @@ def test_teaching_material_is_served_at_every_level():
     for lvl in ("L0", "L1", "L2", "L3", "L4"):
         t = assembler.render(turn, lvl)
         assert "the signal, the reading itself" in t, f"wiring commentary missing at {lvl}"
-        assert "PARTS ON THE DESK" in t
+        assert "ON THE MACHINE" in t          # renamed by decision AA in M-06
         assert "CURRENT STEP" in t
 
 
