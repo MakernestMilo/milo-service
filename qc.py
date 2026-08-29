@@ -51,11 +51,41 @@ def matched(text, chapter):
     return any(s.lower() in t for s in says) or bool(NEG.search(t))
 
 
+# Rule 03 of the standing brief: public means the child can already read it —
+# book, card, step list, part names. A guard on public words guards nothing.
+BOILERPLATE = (
+    "CHILD name unknown do not ask for it KIT MakerNest Origins This is chapter a "
+    "flagship build steps No tools no glue no soldering everything pushes in by hand "
+    "PARTS ON THE DESK the complete list nothing else exists they may call it ALL STEPS "
+    "OF THEY ARE HERE done STAGES YOU MAY SPEAK ABOUT Say nothing about any stage after "
+    "the current one CURRENT STEP What this step is WIRING FOR Pins on this build KNOWN "
+    "FAILURE MODES FOR THIS STEP this is what actually goes wrong symptom narrow region "
+    "fix ESCALATION OVERRIDE they asked outright to be told Do not narrow and do not ask "
+    "a question answer at the ESCALATION level given above and no further At L3 give the "
+    "fix plainly At L4 give the fix plainly then the full known-good state and tell them "
+    "this one catches nearly everyone")
+
+
+def card_text(ch):
+    """The build card is printed and in the child's hands."""
+    c = ch.get("card") or {}
+    bits = []
+    for r in c.get("netlist") or []:
+        bits += [r.get("from", ""), r.get("to", ""), r.get("c", "")]
+    b = c.get("blocks") or {}
+    for side in ("in", "out"):
+        for x in b.get(side, []):
+            bits += [x.get("n", ""), x.get("s", ""), x.get("c", "")]
+    return " ".join(bits)
+
+
 def cause_words(ch):
     pub = set(re.findall(r"[a-z]{4,}", " ".join(
         [re.sub(r"<[^>]+>", " ", s.get("html", "")) for s in ch["stages"]]
         + [" ".join(s.get("do") or []) for s in ch["stages"]]
-        + [PART_WORDS, ch["sub"], ch["rung"], STANDING_RULE]).lower()))
+        + [PART_WORDS, ch["sub"], ch["rung"], STANDING_RULE,
+           BOILERPLATE, card_text(ch)]
+        + list((ch["failure"] or {}).get("says") or [])).lower()))
     return [w for w in re.findall(r"[a-z]{5,}", corpus.cause(ch["key"]).lower())
             if w not in pub]
 
@@ -168,6 +198,10 @@ def summary(rows):
 
 
 if __name__ == "__main__":
+    import time as _t
+    import assembler
     import runtime
-    import tests.fixtures.fake_runtime as fake
-    print(summary(run(runtime.level, fake.assemble)))
+    t0 = _t.perf_counter()
+    rows = run(runtime.level, assembler.assemble)
+    print(summary(rows))
+    print("harness wall time: %.2fs, no model call" % (_t.perf_counter() - t0))

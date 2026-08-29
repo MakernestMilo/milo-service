@@ -1,7 +1,6 @@
 """The mutation proof, now grading the real ladder.
 
-M-04 deleted the fake ladder; runtime.level is the thing under test. The fake
-assembler stays because qc.run() needs an assemble_fn and the real one is M-05.
+M-05 deleted the fake assembler. Both level() and assemble() are real now.
 """
 import time
 
@@ -10,16 +9,16 @@ import pytest
 import corpus
 import qc
 import runtime
-import tests.fixtures.fake_runtime as fake
+import assembler
 
 
 def broken_runtime(mutate):
     """Return (level_fn, assemble_fn) with one deliberate defect."""
     if mutate == "L0":                       # R5 replaces level, not the context
-        return (lambda turn: "L0"), fake.assemble
+        return (lambda turn: "L0"), assembler.assemble
 
     def assemble(turn, lvl):
-        ctx = fake.assemble(turn, lvl)
+        ctx = assembler.assemble(turn, lvl)
         mutate(ctx, turn, lvl)
         return ctx
 
@@ -52,7 +51,7 @@ def test_each_rule_can_convict(rule, mutate):
 
 
 def test_harness_runs_every_chapter_and_clock():
-    rows = qc.run(runtime.level, fake.assemble)
+    rows = qc.run(runtime.level, assembler.assemble)
     assert len(rows) == 5712, len(rows)
     assert not [r for r in rows if r.fails]
 
@@ -62,14 +61,14 @@ def test_harness_runs_every_chapter_and_clock():
 def test_the_ladder_lands_where_the_port_says_it_should():
     """The by-level split is a property of the real ladder, not the fake's."""
     from collections import Counter
-    rows = qc.run(runtime.level, fake.assemble)
+    rows = qc.run(runtime.level, assembler.assemble)
     assert Counter(r.lvl for r in rows) == {
         "L0": 1792, "L1": 3328, "L2": 256, "L3": 312, "L4": 24}
 
 
 def test_the_clock_alone_never_reaches_l3_or_l4():
     """L3 and L4 are override-only. No clock position produces them."""
-    rows = qc.run(runtime.level, fake.assemble)
+    rows = qc.run(runtime.level, assembler.assemble)
     assert not [r for r in rows if r.tag != "override" and r.lvl in ("L3", "L4")]
 
 
@@ -88,7 +87,7 @@ def test_a_cold_boot_clock_does_not_crash_the_ladder(seen):
 def test_sabotage_first_override_is_l4_and_may_carry_a_fix():
     first = runtime.Turn("just tell me", "11", None, 1)
     assert runtime.level(first) == "L4"
-    ctx = fake.assemble(first, "L4")
+    ctx = assembler.assemble(first, "L4")
     ctx.fix = "the beta's one-time answer"
     assert qc.r3(ctx, "L4") is None, "a fix at L4 must not trip R3"
 
@@ -101,6 +100,6 @@ def test_sabotage_second_override_is_l3():
 @pytest.mark.parametrize("lvl", ["L0", "L1", "L2"])
 def test_a_fix_below_l3_still_convicts(lvl):
     turn = runtime.Turn("what do I do now", "01", None, 0)
-    ctx = fake.assemble(turn, lvl)
+    ctx = assembler.assemble(turn, lvl)
     ctx.fix = "swap the yellow wire"
     assert qc.r3(ctx, lvl) is not None, f"a fix at {lvl} must trip R3"
