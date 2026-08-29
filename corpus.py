@@ -1,4 +1,5 @@
 import json, pathlib
+from functools import lru_cache
 
 CONTENT = pathlib.Path(__file__).parent / "content"
 
@@ -21,6 +22,37 @@ BY_KEY = {c["key"]: c for c in CHAPTERS}
 def cause(key):
     """Studio only. The M-05 assembler must never import this function."""
     return _CAUSE[key]
+
+
+@lru_cache(maxsize=None)
+def part_sets(key):
+    """Decision AA / C-15. Three sets, resolved from shelf order.
+
+    ch['parts'] is what a chapter OPENS, never what a child HAS. The working set
+    is the cumulative union from the first chapter to the current one, which is
+    why the chapters that open nothing inherit a full machine rather than an
+    empty desk. A part opened twice resolves by union: its descriptions are kept
+    in shelf order and both are served.
+
+    It lives here rather than in the assembler because the harness needs the same
+    answer, and two implementations of one decision is how they drift apart.
+    Cached: the corpus does not change at runtime, and the harness asks 5,712
+    times. Callers read the result and must not mutate it.
+    """
+    i = ORDER.index(key)
+    machine = {}
+    for c in CHAPTERS[:i + 1]:
+        for p in c.get("parts") or []:
+            e = machine.setdefault(p["p"], [])
+            if p["j"] not in e:
+                e.append(p["j"])
+    opened_here = [p["p"] for p in (BY_KEY[key].get("parts") or [])]
+    box = []
+    for c in CHAPTERS[i + 1:]:
+        for p in c.get("parts") or []:
+            if p["p"] not in machine and p["p"] not in box:
+                box.append(p["p"])
+    return machine, opened_here, box
 
 SHELF = ["01","02","03","04","05","06","07","08","D","09","10","11","12","G"]
 STAGES = {"01":8,"02":6,"03":6,"04":6,"05":6,"06":6,"07":6,"08":6,
