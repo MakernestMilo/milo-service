@@ -13,9 +13,28 @@ def _load():
         withheld[ch["key"]] = failure.pop("cause", None)
         ch["failure"] = failure
         chapters.append(ch)
-    return chapters, withheld, raw["alias"], raw["teach"]
+    return chapters, withheld, _alias(raw["alias"]), raw["teach"]
+
+
+def _alias(base):
+    """The ported table, plus the named additions in alias_additions.json.
+
+    The source file is fingerprinted and stays unedited, so nothing is added to
+    it. Additions live in one list that can be read in a single screen — the
+    same shape decision S gave VOICE. BASE_ALIAS keeps the port checkable.
+    """
+    add = json.loads((CONTENT / "alias_additions.json").read_text(encoding="utf-8"))
+    out = dict(base)
+    for src, parts in add["inherit"].items():
+        for part in parts:
+            out[part] = list(base[src])          # keying only; no new word
+    for part, words in add["added"].items():
+        out[part] = list(words)
+    return out
 
 CHAPTERS, _CAUSE, ALIAS, TEACH = _load()
+BASE_ALIAS = json.loads(
+    (CONTENT / "corpus.json").read_text(encoding="utf-8"))["alias"]
 ORDER = [c["key"] for c in CHAPTERS]
 BY_KEY = {c["key"]: c for c in CHAPTERS}
 
@@ -68,4 +87,7 @@ def verify():
         assert _CAUSE[k], f"{k}: no withheld cause"
     total = sum(len(c["stages"]) for c in CHAPTERS)
     assert total == 88, f"expected 88 stages, got {total}"
-    assert len(ALIAS) == 17 and len(TEACH) == 21
+    # The port is still seventeen. The additions are named and counted apart,
+    # so neither number can drift behind the other.
+    assert len(BASE_ALIAS) == 17 and len(TEACH) == 21
+    assert len(ALIAS) == 22, f"alias table is {len(ALIAS)}"

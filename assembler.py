@@ -69,9 +69,23 @@ def parts_block(ch):
 
 @lru_cache(maxsize=None)
 def _box_lines(key):
-    """The third set. Named and marked, never described, never raised."""
+    """The third set. Named and marked, never described, never raised.
+
+    The aliases come with the name. The card is printed and in the child's hands
+    with a picture of every component, so a child at chapter 02 can look at the
+    buzzer and ask about "the noisy thing" — and a word that routes nowhere is
+    the alias cap again, one layer out. What stays withheld is the description,
+    which is what makes it a later build rather than something on the desk.
+    """
     _, _, box = part_sets(key)
-    return tuple(f"- {name}" for name in box)
+    out = []
+    for name in box:
+        line = f"- {name}"
+        words = aliases_for(name)
+        if words:
+            line += "\n  they may call it: " + " / ".join(words)
+        out.append(line)
+    return tuple(out)
 
 
 def box_block(ch):
