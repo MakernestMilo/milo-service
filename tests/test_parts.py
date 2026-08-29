@@ -88,12 +88,15 @@ def test_every_alias_of_every_part_on_the_machine_is_served():
 # ------------------------------------------------------------ the third set
 
 def test_the_box_is_named_but_never_described():
-    """Named, marked as belonging to later builds, answered about, never raised."""
+    """Named, marked as belonging to later builds, answered about, never raised.
+    The aliases come with the name; the description is what stays back."""
     machine, _, box = corpus.part_sets("02")
     text = render01("02")
     assert "STILL IN THE BOX" in text
     for name in box:
         assert name in text
+        for word in corpus.ALIAS.get(name) or []:
+            assert word in text, f"box part {name} alias dropped: {word}"
     for c in corpus.CHAPTERS:
         for p in c.get("parts") or []:
             if p["p"] in box and p["p"] not in machine:
