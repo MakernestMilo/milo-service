@@ -1,0 +1,14 @@
+{
+ "_why": "M-06 step 02. The ported source is fingerprinted and stays unedited; every addition to ALIAS is named here instead. Same shape as decision S for VOICE: verbatim, plus a list. Anything not on this list is a defect.",
+
+ "inherit": {
+  "the red / black / yellow wires": ["the red wire", "the black wire", "the yellow wire"]
+ },
+ "_inherit_why": "Keying, not authoring. The source holds eleven wire aliases under one combined key and no part is named that. None of the eleven is colour-specific, so all three parts take the same list. No new word enters the corpus here.",
+
+ "added": {
+  "ring": ["light ring", "the light ring", "the light"],
+  "clips": ["four clips", "the four clips"]
+ },
+ "_added_why": "ring: the book says 'the light ring' throughout and never bare 'ring' on introduction, so a child asking about 'the light' had no route. clips: the book gives them no second name; 'four clips' is the architect's call and is recorded as adding no route the part name did not already carry."
+}
