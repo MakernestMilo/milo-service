@@ -42,6 +42,8 @@ LADDER_INPUTS = ("failure_seen_at", "direct_asks", "level", "elapsed")
 # re-earned. Both constants stay here, at the top, where that is visible.
 MODEL = "claude-sonnet-5"
 MAX_TOKENS = 1024
+# A slow call is a failed call. A child waiting is the failure this prevents.
+TIMEOUT_SECONDS = 20.0
 
 
 class TurnRequest(BaseModel):
@@ -100,6 +102,35 @@ def advance(session: Session, text: str) -> runtime.Turn:
                         session.failure_seen_at, session.direct_asks)
 
 
+class ModelUnavailable(RuntimeError):
+    """The call did not produce an answer. Cause is never surfaced to the child
+    and never logged — M-05's rule about the cause field holds here too."""
+
+
+def bank(ctx, lvl: str) -> str:
+    """P9 and Q4. When the call fails the child gets the corpus's own words,
+    never silence.
+
+    Nothing here is authored. Every string is the corpus's, and the level
+    decides which of them the child may have — the same gate the assembler
+    applies, so the bank can never say more than the prompt could have.
+
+    The floor is the current step's instruction. Rule 01 of the standing brief:
+    teaching is available at every level without condition, so a child whose
+    model call failed still gets told what the step is rather than nothing.
+    """
+    parts = [" ".join(ctx.stage.get("instructions") or [])]
+    if ctx.ask:
+        parts.append(ctx.ask)
+    if ctx.region:
+        parts.append(ctx.region)
+    if ctx.fix:
+        parts.append(ctx.fix)
+    if lvl == "L4":
+        parts.append(ctx.escalation)
+    return "\n\n".join(p for p in parts if p)
+
+
 def call_model(system: str, utterance: str) -> str:
     """The one call. The key comes from the host's secret store and is never
     read from the tree — no committed file, no example, no fixture."""
@@ -108,14 +139,20 @@ def call_model(system: str, utterance: str) -> str:
     key = os.getenv("MODEL_API_KEY")
     if not key:
         raise RuntimeError("MODEL_API_KEY is not set")
-    client = anthropic.Anthropic(api_key=key)
+    client = anthropic.Anthropic(api_key=key, timeout=TIMEOUT_SECONDS)
     reply = client.messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,
         system=system,
         messages=[{"role": "user", "content": utterance}],
     )
-    return "".join(b.text for b in reply.content if getattr(b, "type", None) == "text")
+    text = "".join(b.text for b in reply.content
+                   if getattr(b, "type", None) == "text")
+    # A malformed response is a failed call. An empty string reaching a child
+    # is silence, which is the thing the bank exists to prevent.
+    if not text.strip():
+        raise ModelUnavailable("the response carried no text")
+    return text
 
 
 @app.middleware("http")
@@ -180,6 +217,18 @@ def health():
     }
 
 
+def request_state():
+    """The middleware's request id, for the log line only."""
+    return _NO_STATE
+
+
+class _NoState:
+    request_id = "unknown"
+
+
+_NO_STATE = _NoState()
+
+
 @app.post("/turn")
 async def turn(payload: TurnRequest):
     session = SESSIONS.get(payload.session)
@@ -206,7 +255,14 @@ async def turn(payload: TurnRequest):
     ctx = assembler.assemble(turn, lvl)
     system = assembler.VOICE + "\n\n=== CONTEXT ===\n" + ctx.stage["prompt"]
 
-    reply = call_model(system, payload.message)
+    try:
+        reply = call_model(system, payload.message)
+    except Exception:
+        # Failed, slow and malformed all land here and all answer from the
+        # bank. The child never gets silence, and never learns which it was.
+        logger.error("model call failed request_id=%s level=%s — serving the bank",
+                     getattr(request_state(), "request_id", "unknown"), lvl)
+        reply = bank(ctx, lvl)
 
     return {"reply": reply, "level": lvl, "session": payload.session}
 
