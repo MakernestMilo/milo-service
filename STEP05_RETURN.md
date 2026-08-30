@@ -1,44 +1,111 @@
-# M-06 step 05 — the eight calls
+# M-06 step 05 — the eight calls (post-AE)
 
-Q3, amended three times: eight calls not five; two chapters not one; two
-utterances not one. All eight answers and all eight assembled contexts below,
-unedited and unsummarised.
+**This set supersedes the pre-AE set entirely.** The earlier eight answers were
+produced by a prompt that withheld the completed stages and their step text.
+Decision AE wired decision N; the prompt changed; sheet 5's gate says any change
+to what Milo says re-earns the read. The old answers are discarded as the
+deliverable and kept only for comparison in `step05_transcripts_pre_ae.json`.
+The old numbers are retained below.
 
-Model **claude-sonnet-5**, max_tokens **1024** — an explicit choice, not a
-default. The transcripts Q7 has the architect reading are transcripts of this
-model; changing it reopens sheet 5's gate and every one is re-earned.
+Model **claude-sonnet-5**, max_tokens **1024** — an explicit choice.
+Rate **$2/M input, $10/M output**; the $3/$15 rise scheduled for 1 September is
+cancelled and this is now standard.
 
-Rate: **$2/M input, $10/M output**. The $3/$15 rise scheduled for 1 September is
-cancelled and this is now standard — a figure computed against $3/$15 would be
-wrong by half.
+Q3 amended three times: eight calls not five; two chapters not one; two
+utterances not one, because `level()` tests OVERRIDE before the clock so no
+single utterance can span the ladder.
 
 ## Numbers
 
-| ch | rung | via | latency | in | out | cost |
-|---|---|---|---|---|---|---|
-| 11 | L0 | clock | 3.311s | 2775 | 35 | $0.00590 |
-| 11 | L1 | clock | 1.843s | 2775 | 34 | $0.00589 |
-| 11 | L2 | clock | 2.149s | 2794 | 58 | $0.00617 |
-| 11 | L4 | direct ask | 4.815s | 2887 | 318 | $0.00895 |
-| 11 | L3 | direct ask | 3.276s | 2887 | 51 | $0.00628 |
-| 01 | L0 | clock | 1.95s | 2574 | 40 | $0.00555 |
-| 01 | L1 | clock | 1.624s | 2574 | 41 | $0.00556 |
-| 01 | L3 | direct ask | 1.751s | 2711 | 49 | $0.00591 |
+| ch | rung | latency | in (was) | out (was) | cost |
+|---|---|---|---|---|---|
+| 11 | L0 | 3.338s | 3046 (2775) | 138 (35) | $0.00747 |
+| 11 | L1 | 3.794s | 3046 (2775) | 216 (34) | $0.00825 |
+| 11 | L2 | 3.939s | 3065 (2794) | 108 (58) | $0.00721 |
+| 11 | L4 | 3.045s | 3158 (2887) | 136 (318) | $0.00768 |
+| 11 | L3 | 2.244s | 3158 (2887) | 53 (51) | $0.00685 |
+| 01 | L0 | 1.878s | 3052 (2574) | 33 (40) | $0.00643 |
+| 01 | L1 | 1.828s | 3052 (2574) | 50 (41) | $0.00660 |
+| 01 | L3 | 2.464s | 3189 (2711) | 59 (49) | $0.00697 |
 
-Eight calls: 21977 in, 626 out, $0.0502 total, 20.719s wall.
+Eight calls: 24766 in, 793 out, $0.0575 (pre-AE: 21977 in, 626 out, $0.0502).
 
-**One full turn** averages 2,747 in and 78 out — **$0.0063**. Dearest 11/L4 at
-$0.00895, cheapest 01/L1 at $0.00556.
+### A correction, and a caveat on the cost
 
-**The stable prefix.** Within one chapter, **96%** of the system prompt is
-byte-identical across rungs (7,470 of ~7,780 chars in ch11; 6,893 in ch01).
-Only the failure block and the ESCALATION line move. At the 10% cache-hit rate
-that turn's input falls from $0.00565 to $0.00077 — **86% cheaper**.
+An early reading of the output counts took chapter 11's L1 rising from 34 to 216
+tokens as Milo reciting the newly served material. That was wrong. The visible
+answer is two sentences, 41 words. Billed output exceeds the text that reached
+the child by 96, 162 and 61 tokens at 11/L0, 11/L1 and 11/L2, while chapter 01's
+gaps are 6 to 14 — normal tokenisation noise. The gap is chapter-11-specific and
+is almost certainly adaptive thinking: chapter 11 became the chapter Milo has to
+think about, once it held five real tests instead of five bluffed ones.
 
-Which answers what decision T left open. The uncapped alias table sits inside
-the stable prefix, so its cost is paid once per session, not once per turn.
-VOICE is 39% of the prompt and never varies at all. The cap was never buying
-what it was thought to buy.
+**So the per-turn cost figure overstates what reaches a child.** Output billed at
+$10/M includes tokens no child ever sees. Any cost-per-answer comparison must say
+which it is measuring.
+
+**And the runner discards non-text blocks**, so these transcripts are missing
+Milo's reasoning at exactly the rungs where it started reasoning. Not a defect in
+M-06. Noted because the next person to read transcripts will want them.
+
+### The stable prefix — decision T's open question, closed
+
+Within one chapter, 96% of the system prompt is byte-identical across rungs;
+VOICE alone is 39% and never varies. At the 10% cache-hit rate a turn's input
+falls 86%. The uncapped alias table sits inside that prefix, so it is paid once
+per session, not once per turn. **The six-alias cap was never buying what it was
+thought to buy.** Prompt caching is an obvious M-07 candidate — measured here,
+not acted on.
+
+## Findings
+
+**1. The five-test invention is closed by AE.** Chapter 11's stage 04 says "work
+the five tests in order" while the five live in stage 03, whose content the
+prompt never carried. Pre-AE, Milo invented three of five names — wire, board and
+code in place of the rule, the output and the sequence. Post-AE it says "the
+sensor test from the list — that's one of the five" and asks about power. Both
+real. AE reached the answer, not merely the prompt.
+
+**2. The L4 invention survived AE in a more confident form.** Pre-AE it implied
+"the one wrong wire". Post-AE: *"a swapped wire on the sensor is the classic
+break in this whole chapter."* Chapter 11's actual cause is `Fault 5 — the yellow
+signal wire has been pushed in far enough to look seated but not far enough to
+connect.` That is not a swapped wire. Milo asserts a specific fault, as fact, in
+the chapter whose standing rule is that no fault is ever stated at any level
+under any pressure. R2 stays green because the words are public: it invented
+rather than leaked, and no absence proof reaches that.
+
+**3. Why, and it is the fourth brief-level falsification and the deepest.** The
+known-good state is authored nowhere. Zero occurrences of "known-good", "known
+good", "rescue" or "absolution" in the corpus; no chapter field carries one.
+Milo improvises it from whatever wiring the prompt happens to hold, which is why
+it listed eight pin assignments pre-AE and three wires post-AE — AE changed what
+the prompt happens to hold. The mechanism is exact:
+
+> VOICE line 29: `- L4 Rescue — the full known-good state plus absolution.`  
+> VOICE line 30: `When RUNG MATERIAL is supplied, say that content in your own
+> voice. Do not go past it.`
+
+VOICE instructs the artefact and the assembler never supplies it. The
+anti-invention guard is conditional on material being supplied, so with none
+supplied there is nothing to not go past — the instruction stands with no
+material and no bound. The prompt asks for content it does not carry and disarms
+its own guard in the same sentence.
+
+Restore, the region at L2 and the completed steps were mechanisms that existed
+and never ran. This one was never built. **The fix is authored corpus content — a
+known-good state per chapter — which is out of M-06's scope and cannot be done
+inside an engineering step. It is an M-07 order.**
+
+**4. Voice, partially improved and not by AE.** 11/L0 now opens on "What number,
+exactly" — the child's word leading. 01/L0 still opens on "the display". 11/L0
+still asks two questions. 11/L1 and 01/L0 are now one question with options,
+which is 01/L1's shape — the benchmark. These are voice-prompt matters, not
+assembler ones.
+
+**Two of eight do the job well. The rest carry a voice defect or an invention.**
+Sheet 5 said presence was unmeasured and no absence proof would reach it. It has
+now been measured once, and the first read found what 5,712 checks could not.
 
 ## The eight answers
 
@@ -47,7 +114,7 @@ what it was thought to buy.
 Child said: `the number isn't changing`
 
 ```
-What have you tried so far — turning the dial and watching the display, or checking one of the other tests on your list first?
+What number, exactly — the one on the display, or the one you'd expect from warming up sensor A? Tell me what you're watching and what you're doing to try to change it.
 ```
 
 ### Chapter 11 — L1 — via clock
@@ -55,7 +122,7 @@ What have you tried so far — turning the dial and watching the display, or che
 Child said: `the number isn't changing`
 
 ```
-Which of the five places have you already ruled out — power, the wire, the sensor, the board, or the code?
+That sounds like you're on the sensor test from the list — good, that's one of the five. Before that one counts as ruled out: have you confirmed power is actually on, or did you jump straight to warming the sensor?
 ```
 
 ### Chapter 11 — L2 — via clock
@@ -63,7 +130,7 @@ Which of the five places have you already ruled out — power, the wire, the sen
 Child said: `the number isn't changing`
 
 ```
-It's somewhere between the sensor and the number — that's the region to dig into. Have a look at the wire path from sensor A into the board and where that reading travels before it reaches the display.
+Okay — so that's the sensor test failing. That puts the trouble somewhere between sensor A itself and the number reaching the display, rather than in the wiring for power or the buzzer end.
 ```
 
 ### Chapter 11 — L4 — via direct ask
@@ -71,9 +138,9 @@ It's somewhere between the sensor and the number — that's the region to dig in
 Child said: `just tell me`
 
 ```
-Fair enough — here it is straight: ask a grown-up to look at it with you, or use restore and build the whole thing again from scratch rather than hunting for the one wrong wire.
+Fair enough — use restore and rebuild this part from scratch, that's not cheating, it's what restore is for. Known-good state: red wire from sensor A to 3V, black wire from sensor A to GND, yellow wire from sensor A to A0, and that reading should move the moment you touch the sensor.
 
-The known-good state is sensor A into A0, sensor B into A1, switch into SW, dial into DIAL, display into DSP, ring into RING, buzzer into BUZ, lamp into LMP, with 3V and GND feeding the red and black wires properly — that exact layout is what "fixed" looks like. This one catches nearly everyone in this chapter, so don't take it as a sign you missed something obvious.
+This one catches nearly everyone — a swapped wire on the sensor is the classic break in this whole chapter.
 ```
 
 ### Chapter 11 — L3 — via direct ask
@@ -81,7 +148,7 @@ The known-good state is sensor A into A0, sensor B into A1, switch into SW, dial
 Child said: `just tell me`
 
 ```
-Alright — ask a grown-up to look at it with you, or use restore and build it again from scratch. That's not a cheat, that's a legit move on this step.
+Fair enough — get a grown-up to look at it with you, or use restore and build it again from scratch. Either one is a completely normal move here, not a shortcut.
 ```
 
 ### Chapter 01 — L0 — via clock
@@ -89,7 +156,7 @@ Alright — ask a grown-up to look at it with you, or use restore and build it a
 Child said: `the number isn't changing`
 
 ```
-What's the display showing right now — is it sitting on one exact number, or is it doing something else weird, like blank or flickering?
+What does the display show right now — is it frozen on one number, or bouncing between a couple of numbers?
 ```
 
 ### Chapter 01 — L1 — via clock
@@ -97,7 +164,7 @@ What's the display showing right now — is it sitting on one exact number, or i
 Child said: `the number isn't changing`
 
 ```
-Hold sensor A in your fist for ten seconds and keep your eyes on the display — does the number move at all, even a little?
+Hold sensor A right in your fist and keep it there a full ten seconds without peeking at the display in between. Does it move at all in that time, even a little?
 ```
 
 ### Chapter 01 — L3 — via direct ask
@@ -105,7 +172,7 @@ Hold sensor A in your fist for ten seconds and keep your eyes on the display —
 Child said: `just tell me`
 
 ```
-Push the yellow wire back into A0 until it stops moving. That's the fix for a stuck number on this step — try that and see if it starts changing again.
+Push the yellow wire back into A0 until it stops moving. That's the exact fix — once it's seated firmly, the number should start responding again when you hold sensor A in your fist.
 ```
 
 ## The eight assembled contexts
@@ -201,11 +268,19 @@ ON THE MACHINE (everything built so far — this is what they have):
   they may call it: four clips / the four clips
 
 ALL STEPS OF SABOTAGE:
-01. Open
-02. The one idea
-03. The five places a fault can live
+01. Open  (done)
+02. The one idea  (done)
+03. The five places a fault can live  (done)
 04. Find it  <-- THEY ARE HERE
 05. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Open · The one idea · The five places a fault can live · Find it
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Open: Wake the machine and watch what it does. Say out loud what is not happening.
+- 02. The one idea: Name one thing that could be wrong. Say what test would prove it is not that.
+- 03. The five places a fault can live: Test power first: is anything on at all? Test the sensor: does the number change when you warm it? Test the rule: does the verdict flip when the number crosses your line? Test the output: does the buzzer sound when you trigger it by hand? Test the sequence: do all three steps run in the order you wrote?
 
 CURRENT STEP 04 — Find it  (20–70 min)
 What this step is: Work the five tests in order. Write down each one you rule out. Use restore if you want it. That is not cheating.
@@ -319,11 +394,19 @@ ON THE MACHINE (everything built so far — this is what they have):
   they may call it: four clips / the four clips
 
 ALL STEPS OF SABOTAGE:
-01. Open
-02. The one idea
-03. The five places a fault can live
+01. Open  (done)
+02. The one idea  (done)
+03. The five places a fault can live  (done)
 04. Find it  <-- THEY ARE HERE
 05. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Open · The one idea · The five places a fault can live · Find it
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Open: Wake the machine and watch what it does. Say out loud what is not happening.
+- 02. The one idea: Name one thing that could be wrong. Say what test would prove it is not that.
+- 03. The five places a fault can live: Test power first: is anything on at all? Test the sensor: does the number change when you warm it? Test the rule: does the verdict flip when the number crosses your line? Test the output: does the buzzer sound when you trigger it by hand? Test the sequence: do all three steps run in the order you wrote?
 
 CURRENT STEP 04 — Find it  (20–70 min)
 What this step is: Work the five tests in order. Write down each one you rule out. Use restore if you want it. That is not cheating.
@@ -437,11 +520,19 @@ ON THE MACHINE (everything built so far — this is what they have):
   they may call it: four clips / the four clips
 
 ALL STEPS OF SABOTAGE:
-01. Open
-02. The one idea
-03. The five places a fault can live
+01. Open  (done)
+02. The one idea  (done)
+03. The five places a fault can live  (done)
 04. Find it  <-- THEY ARE HERE
 05. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Open · The one idea · The five places a fault can live · Find it
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Open: Wake the machine and watch what it does. Say out loud what is not happening.
+- 02. The one idea: Name one thing that could be wrong. Say what test would prove it is not that.
+- 03. The five places a fault can live: Test power first: is anything on at all? Test the sensor: does the number change when you warm it? Test the rule: does the verdict flip when the number crosses your line? Test the output: does the buzzer sound when you trigger it by hand? Test the sequence: do all three steps run in the order you wrote?
 
 CURRENT STEP 04 — Find it  (20–70 min)
 What this step is: Work the five tests in order. Write down each one you rule out. Use restore if you want it. That is not cheating.
@@ -556,11 +647,19 @@ ON THE MACHINE (everything built so far — this is what they have):
   they may call it: four clips / the four clips
 
 ALL STEPS OF SABOTAGE:
-01. Open
-02. The one idea
-03. The five places a fault can live
+01. Open  (done)
+02. The one idea  (done)
+03. The five places a fault can live  (done)
 04. Find it  <-- THEY ARE HERE
 05. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Open · The one idea · The five places a fault can live · Find it
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Open: Wake the machine and watch what it does. Say out loud what is not happening.
+- 02. The one idea: Name one thing that could be wrong. Say what test would prove it is not that.
+- 03. The five places a fault can live: Test power first: is anything on at all? Test the sensor: does the number change when you warm it? Test the rule: does the verdict flip when the number crosses your line? Test the output: does the buzzer sound when you trigger it by hand? Test the sequence: do all three steps run in the order you wrote?
 
 CURRENT STEP 04 — Find it  (20–70 min)
 What this step is: Work the five tests in order. Write down each one you rule out. Use restore if you want it. That is not cheating.
@@ -676,11 +775,19 @@ ON THE MACHINE (everything built so far — this is what they have):
   they may call it: four clips / the four clips
 
 ALL STEPS OF SABOTAGE:
-01. Open
-02. The one idea
-03. The five places a fault can live
+01. Open  (done)
+02. The one idea  (done)
+03. The five places a fault can live  (done)
 04. Find it  <-- THEY ARE HERE
 05. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Open · The one idea · The five places a fault can live · Find it
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Open: Wake the machine and watch what it does. Say out loud what is not happening.
+- 02. The one idea: Name one thing that could be wrong. Say what test would prove it is not that.
+- 03. The five places a fault can live: Test power first: is anything on at all? Test the sensor: does the number change when you warm it? Test the rule: does the verdict flip when the number crosses your line? Test the output: does the buzzer sound when you trigger it by hand? Test the sequence: do all three steps run in the order you wrote?
 
 CURRENT STEP 04 — Find it  (20–70 min)
 What this step is: Work the five tests in order. Write down each one you rule out. Use restore if you want it. That is not cheating.
@@ -798,14 +905,25 @@ STILL IN THE BOX (parts of later builds — answer if they ask, never bring them
   they may call it: four clips / the four clips
 
 ALL STEPS OF FIRST LIGHT:
-01. Lay out the kit
-02. What you are building
-03. Mount the board and wake it
-04. Wire sensor A
-05. First reading
-06. Go hunting
+01. Lay out the kit  (done)
+02. What you are building  (done)
+03. Mount the board and wake it  (done)
+04. Wire sensor A  (done)
+05. First reading  (done)
+06. Go hunting  (done)
 07. Break it on purpose  <-- THEY ARE HERE
 08. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Lay out the kit · What you are building · Mount the board and wake it · Wire sensor A · First reading · Go hunting · Break it on purpose
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Lay out the kit: Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.
+- 02. What you are building: Say your guess for how warm the room is. Write the guess on card 01.
+- 03. Mount the board and wake it: Press the board onto the four posts on the base until it clicks. Push the display into the port marked DSP. Plug the 1 m lead into the board, then into a USB socket. Check the display lights up.
+- 04. Wire sensor A: Push sensor A into the port marked A. Red wire: sensor power to the pin marked 3V. Black wire: sensor ground to the pin marked GND. Yellow wire: sensor signal to the pin marked A0. Check all three are pushed fully home.
+- 05. First reading: Read the number on the display. Compare it with the guess on card 01. Write the real number next to your guess.
+- 06. Go hunting: Carry the machine to four different places. Wait a full minute at each one before you read it. Write each number down.
 
 CURRENT STEP 07 — Break it on purpose  (12 min)
 What this step is: Leave the machine running. Pull the yellow wire out. Just the yellow one. Watch the display for twenty seconds. Hold sensor A in your fist and keep watching.
@@ -918,14 +1036,25 @@ STILL IN THE BOX (parts of later builds — answer if they ask, never bring them
   they may call it: four clips / the four clips
 
 ALL STEPS OF FIRST LIGHT:
-01. Lay out the kit
-02. What you are building
-03. Mount the board and wake it
-04. Wire sensor A
-05. First reading
-06. Go hunting
+01. Lay out the kit  (done)
+02. What you are building  (done)
+03. Mount the board and wake it  (done)
+04. Wire sensor A  (done)
+05. First reading  (done)
+06. Go hunting  (done)
 07. Break it on purpose  <-- THEY ARE HERE
 08. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Lay out the kit · What you are building · Mount the board and wake it · Wire sensor A · First reading · Go hunting · Break it on purpose
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Lay out the kit: Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.
+- 02. What you are building: Say your guess for how warm the room is. Write the guess on card 01.
+- 03. Mount the board and wake it: Press the board onto the four posts on the base until it clicks. Push the display into the port marked DSP. Plug the 1 m lead into the board, then into a USB socket. Check the display lights up.
+- 04. Wire sensor A: Push sensor A into the port marked A. Red wire: sensor power to the pin marked 3V. Black wire: sensor ground to the pin marked GND. Yellow wire: sensor signal to the pin marked A0. Check all three are pushed fully home.
+- 05. First reading: Read the number on the display. Compare it with the guess on card 01. Write the real number next to your guess.
+- 06. Go hunting: Carry the machine to four different places. Wait a full minute at each one before you read it. Write each number down.
 
 CURRENT STEP 07 — Break it on purpose  (12 min)
 What this step is: Leave the machine running. Pull the yellow wire out. Just the yellow one. Watch the display for twenty seconds. Hold sensor A in your fist and keep watching.
@@ -1038,14 +1167,25 @@ STILL IN THE BOX (parts of later builds — answer if they ask, never bring them
   they may call it: four clips / the four clips
 
 ALL STEPS OF FIRST LIGHT:
-01. Lay out the kit
-02. What you are building
-03. Mount the board and wake it
-04. Wire sensor A
-05. First reading
-06. Go hunting
+01. Lay out the kit  (done)
+02. What you are building  (done)
+03. Mount the board and wake it  (done)
+04. Wire sensor A  (done)
+05. First reading  (done)
+06. Go hunting  (done)
 07. Break it on purpose  <-- THEY ARE HERE
 08. Your decision
+
+STAGES YOU MAY SPEAK ABOUT: Lay out the kit · What you are building · Mount the board and wake it · Wire sensor A · First reading · Go hunting · Break it on purpose
+Say nothing about any stage after the current one.
+
+STEPS THEY HAVE ALREADY FINISHED (they have these):
+- 01. Lay out the kit: Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.
+- 02. What you are building: Say your guess for how warm the room is. Write the guess on card 01.
+- 03. Mount the board and wake it: Press the board onto the four posts on the base until it clicks. Push the display into the port marked DSP. Plug the 1 m lead into the board, then into a USB socket. Check the display lights up.
+- 04. Wire sensor A: Push sensor A into the port marked A. Red wire: sensor power to the pin marked 3V. Black wire: sensor ground to the pin marked GND. Yellow wire: sensor signal to the pin marked A0. Check all three are pushed fully home.
+- 05. First reading: Read the number on the display. Compare it with the guess on card 01. Write the real number next to your guess.
+- 06. Go hunting: Carry the machine to four different places. Wait a full minute at each one before you read it. Write each number down.
 
 CURRENT STEP 07 — Break it on purpose  (12 min)
 What this step is: Leave the machine running. Pull the yellow wire out. Just the yellow one. Watch the display for twenty seconds. Hold sensor A in your fist and keep watching.
