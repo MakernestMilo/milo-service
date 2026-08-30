@@ -227,6 +227,7 @@ def summary(rows):
 
 
 if __name__ == "__main__":
+    import sys
     import time as _t
     import assembler
     import runtime
@@ -234,3 +235,10 @@ if __name__ == "__main__":
     rows = run(runtime.level, assembler.assemble)
     print(summary(rows))
     print("harness wall time: %.2fs, no model call" % (_t.perf_counter() - t0))
+    # The harness has to be able to say no. Both defects the summary prints
+    # count: a check that failed, and a failure report no chapter matches.
+    # Neither is covered by a test, so this exit code is the only signal there
+    # is for them.
+    failed = [r for r in rows if r.fails]
+    stray = unmatched()
+    sys.exit(1 if failed or stray else 0)
