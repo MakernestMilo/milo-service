@@ -166,7 +166,17 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
         e += "\n  fix: " + f["fix"]
     L.append(e)
 
+    # Decision AB: the escalation line carries the route itself, at every level,
+    # not the rung label alone. The sentence is the corpus's own — nothing is
+    # authored here, the render was simply incomplete.
+    # Decision AC: restore is not a part of any chapter, so it never reached the
+    # parts block and its child words never reached the prompt. They are served
+    # here, alongside the route, so "where is the reset" has somewhere to land.
     L.append(f"\nESCALATION: {lvl}")
+    L.append(ESCALATION)
+    restore_words = aliases_for("restore")
+    if restore_words:
+        L.append("they may call it: " + " / ".join(restore_words))
     if turn.direct_asks:
         L.append(OVERRIDE_LINE)
     return "\n".join(L)
