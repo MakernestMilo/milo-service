@@ -148,6 +148,18 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     if len(scope) > 1:
         L.append("\nSTAGES YOU MAY SPEAK ABOUT: " + " · ".join(x["h"] for x in scope)
                  + "\nSay nothing about any stage after the current one.")
+        # Decision AE. Scope alone granted permission and served nothing: every
+        # heading is already in ALL STEPS, so joining headings again told the
+        # model nothing it did not have. Chapter 11's stage 04 says "work the
+        # five tests in order" while the five tests are stage 03's content, and
+        # a model told to work five tests and never told what they are invents
+        # them. Sheet 1: every step they have already finished, at L0, with
+        # nothing withheld. No words are authored here — this is the corpus's
+        # own step text, one stage earlier.
+        L.append("\nSTEPS THEY HAVE ALREADY FINISHED (they have these):")
+        for x in scope:
+            if x is not s:
+                L.append(f"- {x['n']}. {x['h']}: " + " ".join(x.get("do") or []))
 
     # Decision Q. Served at every level.
     L.append(f"\nCURRENT STEP {s['n']} — {s['h']}  ({s['m']})")
@@ -191,7 +203,11 @@ def assemble(turn: Turn, lvl: str) -> Context:
 
     stage = {"n": s.get("n"), "h": s.get("h"), "m": s.get("m"),
              "instructions": list(s.get("do") or []),      # R1 reads this
-             "prompt": render(turn, lvl)}                  # the artefact the rules score
+             # Decision AE wires decision N, which was implemented and had never
+             # run: assemble() let procedural and done both default to off, so
+             # stages_in_scope() returned the current stage alone every time.
+             "prompt": render(turn, lvl, procedural=True,
+                              done=tuple(range(idx)))}     # the artefact the rules score
 
     nxt = ch["stages"][idx + 1]["h"] if idx + 1 < len(ch["stages"]) else None
     machine, opened_here, box = part_sets(turn.chapter)
