@@ -36,6 +36,10 @@ BUILD_ID = os.getenv("BUILD_ID") or os.getenv("RENDER_GIT_COMMIT", "dev")[:7]
 # child cannot see, and accepting its inputs as parameters hands it back.
 LADDER_INPUTS = ("failure_seen_at", "direct_asks", "level", "elapsed")
 
+# The model that will sit beside a child. Not a default reached for: the ten
+# transcripts Q7 has the architect reading are transcripts of this model, so
+# changing it reopens sheet 5's gate and every one of those transcripts is
+# re-earned. Both constants stay here, at the top, where that is visible.
 MODEL = "claude-sonnet-5"
 MAX_TOKENS = 1024
 
@@ -47,6 +51,14 @@ class TurnRequest(BaseModel):
 
     message: str
     session: str
+    # Decision AD. Q2 said an utterance and a session identifier and nothing
+    # else; chapter is a third field and the wording is amended rather than
+    # worked around. "Nothing else" exists to keep ladder state off the wire,
+    # and chapter fails that test: a client lying about direct_asks buys
+    # chapter 11's one-time full answer, while a client lying about chapter
+    # gets the wrong chapter's help — immediately visible, and it buys nothing.
+    # Inventing a session-creation endpoint to preserve the phrase would add
+    # surface the order never described in order to make a sentence come true.
     chapter: str | None = None
 
 
