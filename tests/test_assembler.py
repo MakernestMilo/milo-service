@@ -95,12 +95,22 @@ def test_the_step_instruction_is_served_at_every_level():
         assert assembler.assemble(turn, lvl).stage["instructions"]
 
 
-def test_the_harness_stays_under_a_second_with_no_model_call():
+# Q8. What this protects is the harness staying off the model path: a model
+# call landing in run() would cost orders of magnitude more than any regex
+# regression, so the bound is a tripwire, not a performance target. The old
+# name said "under a second" while the assertion permitted five, and by M-06
+# step 03 the name was false by a factor of two — a green rule under an
+# under-informed bound. Measured 2.3-3.0s cold on the development machine
+# after step 03; CI runners are slower, so the headroom is deliberate.
+HARNESS_SECONDS = 10.0
+
+
+def test_the_harness_stays_off_the_model_path():
     t0 = time.perf_counter()
     rows = qc.run(runtime.level, assembler.assemble)
     elapsed = time.perf_counter() - t0
     assert len(rows) == 5712
-    assert elapsed < 5.0, f"harness took {elapsed:.2f}s"
+    assert elapsed < HARNESS_SECONDS, f"harness took {elapsed:.2f}s"
 
 
 # ---------------------------------------------------------------- AB and AC
