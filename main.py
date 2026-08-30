@@ -59,6 +59,18 @@ class Session:
     direct_asks: int = 0
 
 
+# This dictionary is coherent only in a single process, and that is a
+# deployment fact rather than a property of the code: WEB_CONCURRENCY=1 is set
+# explicitly in Render's environment for this service. With more than one
+# worker the requests of one session round-robin across processes, so a child's
+# second turn can land on a worker that never saw their first — failure_seen_at
+# unset, ask count zero, the ladder silently back at L0. That is the standing
+# brief's corollary on sheet 4 exactly: a path where a child asks, waits, and
+# never arrives at L3, which is a defect and not a pedagogy.
+#
+# So M-07 is not replacing a dictionary with a database for tidiness. It is
+# replacing the one thing that makes this service unable to scale past a single
+# worker, and the setting comes out only when the store goes in.
 SESSIONS: dict[str, Session] = {}
 
 
