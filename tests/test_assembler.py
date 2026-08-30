@@ -101,3 +101,37 @@ def test_the_harness_stays_under_a_second_with_no_model_call():
     elapsed = time.perf_counter() - t0
     assert len(rows) == 5712
     assert elapsed < 5.0, f"harness took {elapsed:.2f}s"
+
+
+# ---------------------------------------------------------------- AB and AC
+
+LEVELS = ("L0", "L1", "L2", "L3", "L4")
+
+
+@pytest.mark.parametrize("key", [c["key"] for c in corpus.CHAPTERS])
+def test_the_escalation_route_is_in_the_prompt_at_every_level(key):
+    """Decision AB. The rung label alone left Milo unable to offer restore at
+    all — R8 read ctx.escalation and passed while the prompt carried only
+    'ESCALATION: L3'. Sheet 4 promises the offer of restore; this is what makes
+    it possible to make."""
+    turn = runtime.Turn("what do I do now", key, None, 0)
+    for lvl in LEVELS:
+        prompt = assembler.assemble(turn, lvl).stage["prompt"]
+        assert assembler.ESCALATION in prompt, \
+            f"chapter {key}: escalation route missing from the prompt at {lvl}"
+
+
+@pytest.mark.parametrize("key", [c["key"] for c in corpus.CHAPTERS])
+def test_restore_aliases_reach_the_prompt_at_every_level(key):
+    """Decision AC. restore is not a part of any chapter, so the parts block
+    never carried it and 'where is the reset' had nowhere to land. Nothing else
+    in the prompt serves these words, so this is the only check that holds
+    them."""
+    words = corpus.ALIAS.get("restore") or []
+    assert words, "ALIAS['restore'] is empty — decision AC has nothing to serve"
+    turn = runtime.Turn("where is the reset", key, None, 0)
+    for lvl in LEVELS:
+        prompt = assembler.assemble(turn, lvl).stage["prompt"].lower()
+        for w in words:
+            assert w.lower() in prompt, \
+                f"chapter {key}: restore alias {w!r} missing from the prompt at {lvl}"

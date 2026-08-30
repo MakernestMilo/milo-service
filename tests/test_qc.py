@@ -26,14 +26,10 @@ def broken_runtime(mutate):
     return runtime.level, assemble
 
 
-# Step 03 findings, open and awaiting architect decisions. R8 fires on every
-# row because the escalation route never reaches the prompt; R7 on the
-# 'where is the reset' rows because restore is not a part of any chapter, so
-# its aliases never enter the parts block. Neither can be cleared inside an
-# engineering step: R8 needs a new block (decision S reserves those) and R7 a
-# corpus shape decision. The mutation proof grades around them until then, and
-# this set must return to empty.
-OPEN = {"R7", "R8"}
+# Closed by decisions AB and AC. R8's escalation route and R7's restore
+# aliases now reach the prompt, so nothing stands red and the mutation proof
+# grades the full set again. This must stay empty.
+OPEN = set()
 
 
 def _sub(c, pattern, repl):
