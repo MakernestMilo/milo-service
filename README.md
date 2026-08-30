@@ -43,8 +43,9 @@ Run the QC harness:
 python3 qc.py
 ```
 
-Expected first line: `5712 checks · 5712 pass · 0 fail`. The harness exits 0
-whether or not checks fail, so read the line rather than the exit status.
+Expected first line: `5712 checks · 5712 pass · 0 fail`. The harness exits
+non-zero if any check fails, or if a failure report matches no chapter, so its
+exit status can be used as a gate.
 
 Start the service:
 
