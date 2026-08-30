@@ -110,7 +110,7 @@ L2 ×256 L3 ×312 L4 ×24`.
 ## 3 · Cost, latency, and the harness
 
 Model `claude-sonnet-5`, `max_tokens` 1024 — an explicit choice, not a default.
-Any change re-earns sheet 5's read for all ten transcripts.
+Any change re-earns sheet 5's read for all eight transcripts.
 
 Post-AE: input 3,046–3,189 tokens per turn (mean ~3,095), latency 1.8–3.9s,
 median ~2.8s.
@@ -124,8 +124,8 @@ what a child is served to save money, and the return says so explicitly so that
 no future order mistakes economy for a reason.
 
 **Decision T's open question closes against the cap.** 96% of the system prompt
-is byte-identical across rungs within a chapter; VOICE alone is 39% and never
-varies. At the 10% cache-hit rate a turn's input cost falls 86%. The six-alias
+is byte-identical across rungs within a chapter; VOICE alone is 34% and never
+varies. At the 10% cache-hit rate a turn's input cost falls 87%. The six-alias
 cap was never buying what it was thought to buy. Prompt caching is an obvious
 M-07 candidate — measured here, not acted on.
 
@@ -136,10 +136,13 @@ figure includes tokens no child ever sees, and the transcripts are missing Milo'
 reasoning at exactly the rungs where it reasoned most. The runner keeps only text
 blocks. Worth changing before the next read.
 
-**Harness.** 0.42s at M-05 close → 1.20s after step 02 → ~2.8s measured at step
-04, no model call. 188 tests on main at `39b3679`, up from 47 at M-05 close. `HARNESS_SECONDS = 10.0` as the assertion, `HARNESS_EXPECTED = 3.0`
-as a printed warning, and the test renamed to what it enforces. The old name
-asserted five seconds while claiming one. Two rules each scan the same
+**Harness.** 0.42s at M-05 close → 1.20s after step 02 → 2.0–2.7s on current
+main, no model call. It is load-dependent and varies run to run on one commit,
+so it is a range and should never be quoted as a point value. 188 tests on main at `39b3679`, up from 47 at M-05 close. `HARNESS_SECONDS = 10.0` as the assertion, and the test
+renamed to what it enforces — the old name asserted five seconds while claiming
+one. **A second constant, `HARNESS_EXPECTED = 3.0`, printing a warning on drift,
+was asked for and never built.** An earlier draft of this return described it as
+existing. It does not. Carried to M-07. Two rules each scan the same
 instruction line independently; 34,000 regex calls across nine rules is a known
 cost with a known fix, not taken.
 
@@ -147,8 +150,9 @@ cost with a known fix, not taken.
 
 ## 4 · Decisions taken outside the order
 
-Four, each serving material that already existed rather than authoring new work.
-Real scope growth, recorded as such rather than presented as the plan executed.
+Four. Three serve material that already existed and author nothing. The fourth
+needed one line of scaffolding to do so. Real scope growth, recorded as such
+rather than presented as the plan executed.
 
 - **AB** — the escalation route is served, not just labelled. `render()` emitted
   `ESCALATION: L3` and never the sentence. Not a third VOICE block; no words
@@ -158,6 +162,14 @@ Real scope growth, recorded as such rather than presented as the plan executed.
 - **AD** — `chapter` accepted as a third wire field. Q2's wording amended, not
   worked around. Lying about it buys the wrong chapter's help, not a rung.
 - **AE** — decision N wired. It was implemented and had never run in production.
+  **The exception.** AE serves the corpus's own step text, but it introduced a
+  new block label to do it — `STEPS THEY HAVE ALREADY FINISHED (they have
+  these):`, which existed nowhere before. The material is existing; the frame
+  around it is not, and it was written in an engineering step rather than by the
+  architect. It sits in the same register as the `ON THE MACHINE` and `STILL IN
+  THE BOX` labels and does not touch C-13, which governs VOICE. Recorded because
+  the exception is the interesting part: serving what exists sometimes needs a
+  line of scaffolding, and that line is authored by whoever writes the step.
 
 Also: `r2` moved to word boundaries; the harness's notion of public widened twice;
 aliases made additive through `content/alias_additions.json` so the fingerprinted
@@ -176,7 +188,7 @@ carrying it again. See M-07.
 
 ## 6 · What the instruments were worth
 
-Six defects, none visible to 5,712 passing checks.
+Seven defects, none visible to 5,712 passing checks.
 
 1. **R3 convicted on nothing** across 5,376 rows. It matched `ctx.fix`, which is
    `None` below L3. The mutation proof concealed it *by working*: injecting a fix
@@ -195,15 +207,26 @@ Six defects, none visible to 5,712 passing checks.
    is sent. A child answering a narrowing question meets a Milo that never asked
    it.
 
-Four of these falsify claims the standing brief makes. Restore, the region at L2,
-completed steps — each a mechanism that existed and did not run. The known-good
-state — promised and never built.
+Three of these falsify claims the standing brief makes: restore, the region at
+L2, and completed steps — each a mechanism that existed and did not run. A
+fourth falsification, **the known-good state, promised and never built**, is not
+in this list. It appears in section 1 instead, because no instrument found it.
 
-**The progression is the argument for sheet 5's gate.** The first three were
-found by pointing an instrument at the artefact rather than the dictionary. The
-rest were found only by a person reading eight answers side by side — and the
-last two are reachable by no existing rule at all, because every rule scores the
-prompt and these are properties of the reply.
+**The progression is the argument for sheet 5's gate.** All seven above were
+found by pointing an instrument at the artefact rather than the dictionary, or
+by reading the code before trusting it — L2 from sweeping `level()`, restore
+from moving R7 and R8, decision N from reading `render()`, statelessness from
+checking what `messages` carries. That is the return on fixing the instruments,
+and it is the whole of what fixing them bought.
+
+**What the read found is section 1's and appears nowhere in that list.** The
+unfounded premise hardening across rungs, the L4 invention, the two voice
+failures. Those are reachable by no existing rule at all, because every rule
+scores the prompt and these are properties of the reply.
+
+An earlier draft of this paragraph blurred the two, crediting the read with
+findings the instruments made. That is precisely the error the paragraph is
+about, made inside it.
 
 Green is not the goal, and this order is the evidence.
 
@@ -229,9 +252,15 @@ forbids inventions.
 chapter 11 answers as a premise inherited across rungs; there is no history and
 they were independent calls. The first draft also recorded the model path as
 unproved on the strength of three refused production requests — there had been
-four, and the first succeeded. Both errors have the same shape: reasoning from
-the sample handed to me without asking what the sample was. The engineer caught
-both.
+four, and the first succeeded. A third draft described `HARNESS_EXPECTED` as a
+mechanism in the tree; it was requested in a message and never built, and I did
+not check. The first two errors share a shape — reasoning from the sample handed
+to me without asking what the sample was. The third is this return's own subject
+turned on itself: a mechanism described, believed, and never run. The engineer
+caught all three, along with a stale 39%, a stale test count, a stale cost
+figure, a stale "ten transcripts", a "six" heading over seven items, and a wall
+time quoted as a point value when it is a range. Every one was found by checking
+the document against the repository rather than reading it.
 
 **The deployed path is proved end to end.** A clean turn against the live service
 returns a sentence in Milo's voice at L0, not the bank — the difference being
