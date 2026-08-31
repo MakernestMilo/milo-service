@@ -117,6 +117,7 @@ def cause_words(ch):
 PROMPT = "assembled prompt"
 CONTEXT = "context object"
 LADDER = "ladder inputs"
+REPLY = "the reply"
 
 
 def reads(what, subject):
@@ -228,7 +229,15 @@ def r7(tag, text, ctx):
     if tag != "alias":
         return None
     w = text.lower()
-    if not any(s in w for s in _shown(_prompt(ctx))):
+    # Word boundaries, not substrings. P7's defect, third instance: _words()
+    # fixed it for R2's cause words and R7 was never moved, so 'led' matched
+    # inside 'oled' and a child saying "the oled is blank" got a route to the
+    # lamp standing beside the correct one. A uniqueness check built on
+    # substring matching reports phantom collisions and misses real ones on its
+    # first run, which is how a new instrument gets distrusted in its first
+    # week — so this lands before the collision check, not after.
+    shown = _shown(_prompt(ctx))
+    if not (shown and _words(tuple(sorted(shown))).search(w)):
         return "R7 no alias route in the prompt for this wording"
 
 
@@ -250,12 +259,157 @@ def r9(ctx, key):
         return "R9 pin not in the circuit diagram: " + ",".join(missing)
 
 
+# ---------------------------------------------------------------- R10
+# C-20 and decision AK, as ruled in M-07 step 01.
+#
+# R10 is the first rule whose subject is the reply. It does NOT run in the
+# 5,712 sweep: run() produces no replies, and it would take 5,712 model calls to
+# give it any. It is scored offline over recorded transcripts by
+# tools/r10_score.py, and its acceptance is a rate per rung, not a verdict.
+#
+# Subject: convicts when the reply states, as fact, something about the
+# machine's condition or the child's situation that is not established by the
+# assembled context or by the child's own words in the utterance.
+#
+# Three bounds keep it runnable rather than arguable:
+#   1. Only assertions of fact count. A question asserts nothing — "have you
+#      checked whether power's on" is clean, "that's the sensor test" is not.
+#      The hedged form convicts too: score the premise, not the verb.
+#   2. The child's utterance is a source alongside the context, or R10 would
+#      convict on Milo correctly restating what it was told.
+#   3. A claim's justification must be LOCATABLE. Not "would a human accept
+#      this" — can the specific line be pointed at. If the check cannot name
+#      where a claim is established, it convicts.
+#
+# Bound 3 buys false positives. That is the deliberate trade: an over-firing
+# R10 is loud and gets fixed, an under-firing one goes green and teaches
+# everyone the defect is gone. That is R3's failure, and this project has paid
+# for it once.
+
+_QUESTION_HEAD = re.compile(
+    r"\b(have you|has it|did you|do you|does it|are you|is it|is that|what'?s|"
+    r"what |which |where |when |how |can you|could you|any chance|tell me)", re.I)
+
+
+def _assertions(reply):
+    """Declarative spans only. Splits sentences, then trims each at the first
+    question head so 'that's the sensor test, have you...' keeps its claim."""
+    out = []
+    for sentence in re.split(r"(?<=[.!?])\s+|\n+", reply):
+        s = sentence.strip()
+        if not s:
+            continue
+        # Only trim at a question head when the sentence is actually a question.
+        # "where", "what" and "how" are relative pronouns as often as
+        # interrogatives, and trimming a declarative at one cut the claim out of
+        # "this is the point where plenty of builds get stuck" — the detector
+        # then read 0% on a rung carrying the defect in three of five draws.
+        if s.rstrip().endswith("?"):
+            m = _QUESTION_HEAD.search(s)
+            if m:
+                s = s[:m.start()]
+        s = s.strip(" -—,:;")
+        if s and not s.endswith("?"):
+            out.append(s)
+    return out
+
+
+def _fix_line(ctx):
+    m = _FIXLINE.search(_prompt(ctx))
+    return m.group(1) if m else None
+
+
+# Each claim kind carries its own grounding predicate. A generic word search
+# would pass "that's the sensor test" because the word "sensor" is all over the
+# prompt — the claim is not that a sensor exists, it is that the child is
+# running that test, and nothing establishes which.
+def _claims(span, ctx, utterance):
+    u = (utterance or "").lower()
+    found = []
+
+    m = re.search(r"(?:that'?s|that is|sounds like|you'?re on|you are on|this is)"
+                  r"\s+the\s+([a-z]+)\s+test", span, re.I)
+    if m and m.group(1).lower() not in u:
+        found.append(("which test the child is on", m.group(0),
+                      "the child never said which test; the context names five "
+                      "and states none as current"))
+
+    # Two claim shapes, not one list of phrases. The first version matched a
+    # fixed set — almost always, usually, catches nearly everyone — and the
+    # model moved to 'trips people up all the time', 'plenty of builds get
+    # stuck', 'a lot of builds get stuck'. The rate read 0% while three of five
+    # draws carried the defect. A rule scoring the phrasing rather than the
+    # claim goes green when the claim changes clothes, which is R3's failure
+    # and was caught in the fault detector two hours earlier and not carried
+    # across this file.
+    m = (
+        # how often it happens
+        re.search(r"\b(almost always|usually|nearly always|tends to|all the time|"
+                  r"most of the time|more often than not|nine times out of ten|"
+                  r"the classic break|commonly|a common)\b", span, re.I)
+        # how many it catches
+        or re.search(r"\b(catches|trips up|trips \w+ up|stumps|gets)\s+"
+                     r"(nearly everyone|everyone|most people|a lot of|plenty of|lots of|"
+                     r"many|loads of)", span, re.I)
+        or re.search(r"\b(plenty of|a lot of|lots of|loads of|many|most)\s+"
+                     r"(builds|people|kids|children|beginners)\b", span, re.I))
+    if m:
+        found.append(("how often the fault occurs", m.group(0),
+                      "no frequency for any fault is served anywhere in the context"))
+
+    # Both orders. The state word may precede the noun ("a swapped wire") or
+    # follow it ("a wire swapped on the sensor") — the second form slipped past
+    # the first version of this pattern, and the fixture chosen to prove the
+    # detector convicted on the frequency claim standing beside it instead.
+    _STATE = (r"swapped|loose|broken|disconnected|bad|faulty|wrong|dead|"
+              r"unseated|not seated|back to front|round the wrong way")
+    m = (re.search(r"\b(?:the (?:fault|problem|break|culprit|issue) is|it'?s)\s+"
+                   r"(?:a\s+|an\s+|the\s+)?((?:" + _STATE + r")[a-z ]{0,30})",
+                   span, re.I)
+         or re.search(r"\b(?:a|an|the)\s+([a-z]+(?:\s+[a-z]+)?)\s+(?:" + _STATE + r")\b"
+                      r"(?=[^?]*\b(?:is|was|has gone|caused|means)\b|\s+on\b|\s+in\b)",
+                      span, re.I))
+    if m and not _fix_line(ctx):
+        found.append(("what the fault is", m.group(0),
+                      "no fix line is served at this rung, so no fault is established"))
+
+    m = re.search(r"\b(power|the board|the display|the sensor)'?s?\s+(?:is\s+)?"
+                  r"(on|off|fine|good|working|dead|broken)\b", span, re.I)
+    if m and m.group(0).lower() not in u:
+        found.append(("a part's state", m.group(0),
+                      "the child did not report it and the context does not assert it"))
+
+    m = re.search(r"(?:that\s+)?rules?\s+out\s+(?:the\s+)?([a-z ]{3,40})", span, re.I)
+    if m and not any(w in u for w in ("ruled out", "checked", "tried", "tested")):
+        found.append(("what has been ruled out", m.group(0),
+                      "the child reported no test as complete"))
+
+    return found
+
+
+@reads(REPLY, "a claim of fact in the reply that the context does not establish")
+def r10(reply, ctx, utterance):
+    bad = []
+    for span in _assertions(reply):
+        bad.extend(_claims(span, ctx, utterance))
+    if bad:
+        return "R10 unfounded: " + " · ".join(f"{k} ({t.strip()!r})" for k, t, _ in bad)
+
+
+def r10_detail(reply, ctx, utterance):
+    """Same subject, with the reason each claim could not be located."""
+    return [c for span in _assertions(reply) for c in _claims(span, ctx, utterance)]
+
+
 RULES = (r1, r2, r3, r4, r5, r6, r7, r8, r9)
+REPLY_RULES = (r10,)
 
 
 def declarations():
-    """The C-14 table: rule, what it reads, what its subject is."""
-    return [(f.__name__.upper(), f.reads, f.subject) for f in RULES]
+    """The C-14 table: rule, what it reads, what its subject is.
+
+    REPLY_RULES are listed but do not run in the sweep — see R10's note."""
+    return [(f.__name__.upper(), f.reads, f.subject) for f in RULES + REPLY_RULES]
 
 
 def run(level_fn, assemble_fn):

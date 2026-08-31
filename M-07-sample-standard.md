@@ -95,3 +95,42 @@ should enumerate the set at all. Its rung is *point at the region*, and the
 authored material for it is the region, not the five tests. Whether L2 is failing
 or correctly not enumerating is a question for the architect, and the check
 should not assume the answer.
+
+## The threshold collision, and the rule it produces
+
+The absolution clause's falsification was fixed in advance as *a fall to 0% or
+20% carries; 40% is one draw and does not* — stated in **absolute rates**
+against a 60% baseline.
+
+That baseline was then found to be wrong. R10's frequency detector had a
+false-negative class, and the corrected figures are 100% baseline and 60% under
+the clause: a −40 move, two draws, which clears the one-draw floor by the
+*principle* the threshold encoded and fails it by the *numbers* as written.
+
+**Ruled: the falsification is void, and void means unestablished.** Not proven,
+not refuted. Reinterpreting an absolute threshold as a movement size after
+seeing the data would rescue the clause on a reading chosen once the answer was
+known, which is exactly what fixing a threshold in advance exists to prevent.
+
+The clause stays in place, carrying that status. Removing it on a void test is
+as unjustified as keeping it on one.
+
+**The rule this produces: a threshold expressed in absolute rates is unsafe when
+the baseline can move.** Future falsifications are stated as movement sizes
+against whatever the baseline turns out to be — "a fall of more than one draw",
+not "a fall to 20%".
+
+## The real result: fragmentation, not removal
+
+Baseline 11/L4 was one claim in one shape across five draws — `catches nearly
+everyone` four times, `trips up nearly everyone` once.
+
+Under the clause: three different shapes in three draws — `all the time`,
+`plenty of builds`, `a lot of builds` — and two draws fully clean.
+
+The clause did not eliminate the frequency claim. It **fragmented** it. Forbid a
+form, get a variant — the same signature as the premise defect at 11/L1, where
+removing the negative example turned a hedge into a flat assertion.
+
+**Second piece of evidence that authored prose pressures these behaviours rather
+than removing them.** Worth more than the pass or fail it replaced.

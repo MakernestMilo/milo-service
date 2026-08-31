@@ -71,14 +71,24 @@ def level(turn: Turn) -> str:
     # The override is tested before matched(), so it resolves without a clock.
     if OVERRIDE.search(turn.text):
         # Decision H: direct_asks includes the current ask, so 1 is the first.
-        if turn.chapter == "11":
+        # C-17 and decision AG: the gate is a data condition, never a chapter
+        # name. Decision H recorded the reason as "it is the hardest chapter",
+        # which is a judgement and so spreads — any chapter can be argued into
+        # it. The real reason is structural: chapter 11 has no fix in the
+        # corpus, so L3 has nothing to give and the rescue is the only rung with
+        # content. First-ask rescue therefore applies wherever the chapter holds
+        # no fix. Today that is exactly one chapter, and the test asserts it.
+        if not f.get("fix"):
             return "L4" if turn.direct_asks == 1 else "L3"
         return "L3"
     if not matched(turn.text, turn.chapter) and turn.failure_seen_at is None:
         return "L0"
     if e is None:
         return "L0"
-    if turn.chapter == "11":
+    # C-17: does this chapter have the material the rung requires, not which
+    # chapter is this. Thirteen chapters carry ladder: null today, so this is
+    # provably inert until they are authored — see the inertness test.
+    if f.get("ladder"):
         a, b, c = f["ladder"]
         if e < a:
             return "L0"

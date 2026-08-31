@@ -1,0 +1,24 @@
+{
+  "_why": "M-07 step 00b. The uniqueness check's subject is not 'exactly one part claims this word' — 'the light' is legitimately ring's and legitimately lamp's, because the book says 'push the light ring into the port marked RING' and refers to its colour, and a lamp is also a light. Uniqueness cannot be reached by editing the table. The subject is: every collision is either resolved or accepted, and accepted ones are named here with a reason. Anything not on this list is a defect.",
+  "_boundaries": "Counted on word boundaries, not substrings. That alone resolved three of the twelve found under substring matching: 'led' inside 'oled' (P7's defect, third instance), and both 'clip' inside the clips additions — so the clips aliases cost no collisions at all.",
+  "accepted": [
+    {"word": "button", "of": "switch", "inside": "start again button", "owned_by": "restore",
+     "why": "restore's phrase names the button a child presses; switch's 'button' is the component. Both are what a child would say and neither can be edited away."},
+    {"word": "cable", "of": "the wires", "inside": "power cable", "owned_by": "the 1 m lead",
+     "why": "the lead is a cable and so are the wires. Pre-existing, and true of the objects."},
+    {"word": "cable", "of": "the wires", "inside": "usb cable", "owned_by": "the 1 m lead",
+     "why": "as above."},
+    {"word": "light", "of": "lamp", "inside": "light ring", "owned_by": "ring",
+     "why": "the book calls it the light ring throughout. A lamp is also a light. Both claims are correct."},
+    {"word": "light", "of": "lamp", "inside": "the light", "owned_by": "ring",
+     "why": "as above. This is the collision that decided the check's subject."},
+    {"word": "light", "of": "lamp", "inside": "the light ring", "owned_by": "ring",
+     "why": "as above."},
+    {"word": "light", "of": "lamp", "inside": "the light one", "owned_by": "sensor B",
+     "why": "sensor B is the light-sensing one. Pre-existing and correct."},
+    {"word": "the light", "of": "ring", "inside": "the light bit", "owned_by": "lamp",
+     "why": "as above, in the other direction."},
+    {"word": "the light", "of": "ring", "inside": "the light one", "owned_by": "sensor B",
+     "why": "three parts claim 'the light' and all three claims are correct. Where the ambiguity goes is a voice question for M-07, not a table question: Milo asks which — one question, never two — rather than routing to the first match and answering confidently about the wrong object."}
+  ]
+}

@@ -111,3 +111,35 @@ def test_every_part_of_every_chapter_has_an_alias_entry():
     missing = sorted({p["p"] for c in corpus.CHAPTERS for p in (c.get("parts") or [])
                       if not (corpus.ALIAS.get(p["p"]) or [])})
     assert not missing, f"parts with no alias entry: {missing}"
+
+
+def test_every_alias_collision_is_resolved_or_accepted():
+    """M-07 step 00b. Not 'exactly one part claims this word' — 'the light' is
+    legitimately ring's and legitimately lamp's, and uniqueness cannot be
+    reached by editing the table. Every collision is resolved or accepted, and
+    accepted ones are named with a reason. Anything not on the list is a defect.
+
+    Counted on word boundaries. Substring counting reports phantom collisions
+    and misses real ones, which is how a new instrument gets distrusted in its
+    first week."""
+    import json
+    import pathlib
+    import re
+    accepted = {(a["word"], a["inside"]) for a in json.loads(
+        pathlib.Path("content/accepted_collisions.json").read_text(encoding="utf-8"))["accepted"]}
+    A = {k: [w.lower() for w in v] for k, v in corpus.ALIAS.items()}
+    wires = {"the red / black / yellow wires", "the red wire",
+             "the black wire", "the yellow wire"}
+    fam = lambda p: "WIRES" if p in wires else p
+    unlisted = []
+    for pa, wa in A.items():
+        for a in wa:
+            for pb, wb in A.items():
+                if fam(pa) == fam(pb):
+                    continue
+                for b in wb:
+                    if a != b and re.search(r"\b" + re.escape(a) + r"\b", b):
+                        if (a, b) not in accepted:
+                            unlisted.append(f"{a!r} ({fam(pa)}) inside {b!r} ({fam(pb)})")
+    assert not unlisted, ("alias collision neither resolved nor accepted:\n  "
+                          + "\n  ".join(sorted(set(unlisted))))

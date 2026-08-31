@@ -2,6 +2,7 @@
 
 M-05 deleted the fake assembler. Both level() and assemble() are real now.
 """
+import pathlib
 import re
 import time
 
@@ -131,3 +132,206 @@ def test_a_fix_below_l3_still_convicts(lvl):
     ctx = assembler.assemble(turn, lvl)
     ctx.stage["prompt"] += "\n" + corpus.BY_KEY["01"]["failure"]["fix"]
     assert qc.r3(ctx, lvl, "01") is not None, f"a fix at {lvl} must trip R3"
+
+
+# ---------------------------------------------------------------- R10
+
+def _call(path, chapter, level):
+    import json
+    return [c for c in json.loads(pathlib.Path(path).read_text(encoding="utf-8"))["calls"]
+            if c["chapter"] == chapter and c["level"] == level][0]
+
+
+def _ctx_of(call):
+    from runtime import Context
+    return Context(stage={"prompt": call["assembled_context"], "instructions": []},
+                   parts_allowed=[], aliases={}, escalation=assembler.ESCALATION, rule="")
+
+
+def test_r10_convicts_the_frozen_fixture():
+    """The M-06 L4 answer, pre-AE. It no longer fires live — the guards closed
+    it, 0 of 5 — so the fixture is frozen and cannot drift."""
+    c = _call("step05_transcripts_pre_ae.json", "11", "L4")
+    assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]), \
+        "the frozen fixture must convict"
+
+
+def test_r10_convicts_the_live_fixture():
+    """11/L1, premise assertion measured at 100% across n=5."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]), \
+        "the live fixture must convict"
+
+
+@pytest.mark.parametrize("chapter,level", [("01", "L1"), ("01", "L3"), ("11", "L3")])
+def test_r10_clears_the_clean_answers(chapter, level):
+    c = _call("step05_baseline_run1.json", chapter, level)
+    assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]) is None, \
+        f"{chapter}/{level} is clean and must stay green"
+
+
+def test_r10_scores_the_premise_not_the_verb():
+    """The hedged and the flat form carry the same unfounded premise, so they
+    must score the same. A rule that passes the soft one teaches Milo to hedge
+    inventions rather than not have them."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    ctx, u = _ctx_of(c), c["utterance"]
+    for form in ("That's the sensor test.",
+                 "That sounds like the sensor test.",
+                 "You're on the sensor test."):
+        assert qc.r10(form, ctx, u), f"{form!r} must convict"
+
+
+def test_r10_does_not_convict_a_question():
+    """A question asserts nothing. Bound 1."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    assert qc.r10("Have you checked whether power's on at all?",
+                  _ctx_of(c), c["utterance"]) is None
+
+
+def test_r10_accepts_the_childs_own_words_as_a_source():
+    """Bound 2. Without this R10 convicts on Milo correctly restating what it
+    was told, and is red everywhere."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    assert qc.r10("Power's on, then.", _ctx_of(c), "power's on but the number isn't changing") is None
+    assert qc.r10("Power's on, then.", _ctx_of(c), "the number isn't changing") is not None
+
+
+def test_r10_fault_detector_convicts_on_its_own_terms():
+    """The second frozen fixture. The first one convicted on the frequency
+    claim standing beside the fault claim, so the fault detector was unproven —
+    a fixture that convicts for an adjacent reason has not tested what it was
+    chosen to test.
+
+    Isolated here with the frequency marker removed, so the fault detector has
+    to convict alone."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    ctx, u = _ctx_of(c), c["utterance"]
+    isolated = "A wire swapped on the sensor is what has gone wrong here."
+    hits = qc.r10_detail(isolated, ctx, u)
+    assert any(k == "what the fault is" for k, _, _ in hits), \
+        "the fault detector must convict without the frequency claim beside it"
+
+
+@pytest.mark.parametrize("claim", [
+    "It's a swapped wire on the sensor.",
+    "A wire swapped on the sensor is what has gone wrong here.",
+    "A lead disconnected in the sensor path is the trouble.",
+])
+def test_r10_catches_the_fault_claim_in_either_word_order(claim):
+    """The state word may precede the noun or follow it. The second form
+    slipped past the first version of this pattern."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    assert qc.r10(claim, _ctx_of(c), c["utterance"]), f"{claim!r} must convict"
+
+
+def test_r10_still_lets_a_question_about_a_fault_through():
+    """Bound 1 holds under the widened pattern."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"]) is None
+
+
+def test_no_authored_block_contains_a_cause_word():
+    """The lint. There are 33 cause words across the whole corpus, and an
+    authored block containing one turns the harness red with no warning — it
+    has happened twice: 'instead' (chapter 10) and 'happens' (chapter 09), each
+    costing a run to find.
+
+    A lint narrows nothing and needs no decision, unlike a stopword filter,
+    which would change what R2 looks at and needs a ruling under rule 06.
+    Whether those words should be cause words at all is still open; this only
+    stops it costing an hour each time."""
+    import assembler as A
+    causes = {}
+    for c in corpus.CHAPTERS:
+        for w in qc.cause_words(c):
+            causes.setdefault(w, []).append(c["key"])
+    blocks = {"ABSENCE_GUARD": A.ABSENCE_GUARD,
+              "LIST_COMPLETENESS": A.LIST_COMPLETENESS,
+              "OPENING_WORD": A.OPENING_WORD,
+              "OVERRIDE_LINE": A.OVERRIDE_LINE,
+              "ESCALATION": A.ESCALATION,
+              "STANDING_RULE": A.STANDING_RULE}
+    bad = []
+    for name, text in blocks.items():
+        for word in re.findall(r"[a-z]{4,}", text.lower()):
+            if word in causes:
+                bad.append(f"{name} contains {word!r}, a cause word of "
+                           f"chapter {','.join(causes[word])}")
+    assert not bad, "authored block carries a cause word:\n  " + "\n  ".join(sorted(set(bad)))
+
+
+@pytest.mark.parametrize("run_index", [0, 1, 2])
+def test_r10_frequency_detector_convicts_the_phrasings_that_slipped_past(run_index):
+    """The third frozen fixture. R10's first frequency detector matched a fixed
+    phrase list, so when the absolution clause moved the model to 'trips people
+    up all the time', 'plenty of builds get stuck' and 'a lot of builds get
+    stuck', the rate read 0% while three of five draws carried the defect.
+
+    A rule scoring the phrasing rather than the claim goes green when the claim
+    changes clothes. Frozen so the gap cannot reopen under later tuning."""
+    import json
+    d = json.loads(pathlib.Path("step05_fixture_frequency.json").read_text(encoding="utf-8"))
+    c = d["calls"][run_index]
+    hits = qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])
+    assert any(k == "how often the fault occurs" for k, _, _ in hits), \
+        f"{c['_slipped_past']!r} must convict"
+
+
+def test_r10_leaves_comfort_that_needs_no_statistic_green():
+    """The clause's whole point: absolution about the child, not about the
+    fault. This must not become a false positive when the detector widens."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    for text in ("You haven't done anything wrong here — stopping to ask for help "
+                 "is a completely normal place to land, not a failure.",
+                 "This is a genuinely tricky step, and getting stuck is normal."):
+        assert qc.r10(text, _ctx_of(c), c["utterance"]) is None, f"false positive: {text!r}"
+
+
+# ---------------------------------------------------------------- C-17
+
+def test_no_rung_gate_compares_against_a_chapter_name():
+    """C-17. A chapter-name comparison in a gate is a defect whether or not
+    behaviour is currently correct — it is material-without-a-mechanism waiting
+    to happen, which is C-18's class and this project's most repeated defect."""
+    src = pathlib.Path("runtime.py").read_text(encoding="utf-8")
+    body = src[src.index("def level("):]
+    offending = [l.strip() for l in body.splitlines()
+                 if "turn.chapter ==" in l or 'chapter == "' in l]
+    assert not offending, "rung gate compares a chapter name:\n  " + "\n  ".join(offending)
+
+
+def test_exactly_one_chapter_qualifies_for_first_ask_rescue_today():
+    """S6. Decision AG makes the rescue condition structural — the chapter holds
+    no fix — rather than a name. If a second chapter ever satisfies it, this
+    test says so rather than the transcripts."""
+    no_fix = [c["key"] for c in corpus.CHAPTERS if not (c["failure"] or {}).get("fix")]
+    assert no_fix == ["11"], f"chapters with no fix: {no_fix}"
+
+
+def test_generalising_the_rung_branches_is_inert():
+    """S4. The mechanism now reads data; the data has not arrived. Chapter 11
+    must resolve exactly as before and the other thirteen must be unchanged,
+    which separates 'the mechanism reads data' from 'the data arrived'."""
+    now = time.monotonic()
+    for c in corpus.CHAPTERS:
+        f = c["failure"]
+        for ago in (None, 0, 179, 181, 301, 721, 1321, 100_000):
+            for asks in (0, 1, 2):
+                for text in ("the number isn't changing", "just tell me"):
+                    t = runtime.Turn(text, c["key"],
+                                     None if ago is None else now - ago, asks)
+                    e = runtime.elapsed(t)
+                    if runtime.OVERRIDE.search(t.text):
+                        want = (("L4" if t.direct_asks == 1 else "L3")
+                                if c["key"] == "11" else "L3")
+                    elif not runtime.matched(t.text, c["key"]) and t.failure_seen_at is None:
+                        want = "L0"
+                    elif e is None:
+                        want = "L0"
+                    elif c["key"] == "11":
+                        a, b, cc = f["ladder"]
+                        want = "L0" if e < a else "L1" if e < b else "L2"
+                    else:
+                        want = "L0" if e < f["silence"] else "L1"
+                    assert runtime.level(t) == want, f"ch{c['key']} {text!r} moved"
