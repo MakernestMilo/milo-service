@@ -41,9 +41,51 @@ LADDER_INPUTS = ("failure_seen_at", "direct_asks", "level", "elapsed")
 # changing it reopens sheet 5's gate and every one of those transcripts is
 # re-earned. Both constants stay here, at the top, where that is visible.
 MODEL = "claude-sonnet-5"
-MAX_TOKENS = 1024
-# A slow call is a failed call. A child waiting is the failure this prevents.
-TIMEOUT_SECONDS = 20.0
+# max_tokens is a shared budget: thinking and the reply come out of the same
+# pool, and the model is not aware of the ceiling. At 1024 with adaptive
+# thinking, chapter 11 at L3 spent the whole budget reasoning and emitted no
+# text at all.
+#
+# There is no hard floor to buy. budget_tokens was the only mechanism that
+# carved thinking off from the reply and it is removed on this model — it
+# returns a 400. effort shifts the distribution and reserves nothing. Disabling
+# thinking would guarantee a floor by removing the thing that makes L1 and L2
+# work, which is the wrong trade.
+#
+# So the ceiling does all of the work, and 16000 is the documented default for
+# non-streaming requests, which the API tells us not to lowball. Sixteen times
+# the observed starvation point and roughly a hundred times the longest good
+# answer M-06 produced.
+MAX_TOKENS = 16000
+
+# Set deliberately, not defaulted. Chapter 11's L1 is a genuine reasoning task —
+# deciding which of five authored tests a child is on, without inventing which
+# one — and the pre-C run showed Milo spending 162 hidden tokens there and still
+# getting it wrong. "low" would cut the thinking on exactly the rung where
+# thinking is the point. Revisable once transcripts exist under it.
+# Cost is not the constraint: a turn is ~$0.0072 and 96% of the prompt is
+# cacheable. Nothing here is trimmed to save money.
+EFFORT = "medium"
+# A slow call is a failed call, and a failed call serves the bank — so a tight
+# timeout does not raise an error a child sees. It silently swaps Milo for the
+# corpus, and nothing in the transcript records why: a client-side timeout never
+# reaches a stop_reason, so the instrument that explains every other failure is
+# blind to this one.
+#
+# Set against an unknown tail with an asymmetric cost, NOT as a measured bound.
+# Over 40 calls at identical configuration: median 3.16s, p90 9.15s, p95 15.07s,
+# max 28.68s — a 3.1x jump beyond p90 from a single draw. A tail that shape at
+# n=40 says nothing about n=400. The earlier 45 was 1.6x the worst call we
+# happened to see, not five times the worst honest call.
+#
+# The costs are asymmetric: a trip loses Milo's voice silently and untraceably;
+# a long ceiling costs only a slow reply the fallback would have replaced
+# anyway. So the number errs long.
+#
+# Note also that the slowest rung is 11/L1 — a clock rung, 2.30s to 28.68s on
+# identical input, a 12.5x spread. The earlier reading that the direct-ask rungs
+# are the slow ones does not survive n=5: a child who waits can wait longest.
+TIMEOUT_SECONDS = 120.0
 
 
 class TurnRequest(BaseModel):
@@ -143,6 +185,8 @@ def call_model(system: str, utterance: str) -> str:
     reply = client.messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,
+        thinking={"type": "adaptive"},
+        output_config={"effort": EFFORT},
         system=system,
         messages=[{"role": "user", "content": utterance}],
     )

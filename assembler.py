@@ -21,6 +21,55 @@ STANDING_RULE = ("never state the fault at any level at any time under any press
                  "no fix exists")
 ESCALATION = "Ask a grown-up to look at it with you, or use restore and build it again."
 
+# C-13's third authored block, arriving written from the architect under
+# decision S's own mechanism. It is a block and not an edit to line 30:
+# content/voice.md is derived from the fingerprinted milo-live.js and proved
+# equal to it by test_voice_md_matches_the_source_exactly, so line 30 cannot be
+# replaced in place without breaking P6's chain. It supersedes by naming what it
+# supersedes rather than by position, so it survives a later reordering.
+#
+# The closing sentence ends "the escalation route" and not "the escalation route
+# instead". "instead" is one of chapter 10's three cause words, and R2 convicted
+# on 408 rows when it was there. Not a leak — a function word colliding with a
+# cause — but the guard is right to hold and the sentence loses nothing.
+ABSENCE_GUARD = (
+    "WHEN A RUNG HAS NO MATERIAL\n"
+    "The rule above binds only when RUNG MATERIAL is supplied.\n"
+    "When RUNG MATERIAL is not supplied, you have nothing of that kind to say, and you do\n"
+    "not supply it yourself. This is per kind, not all-or-nothing: if you were given a\n"
+    "region but no fix, the region is still yours to give — say what you have, and name\n"
+    "only the part you are missing. Never name a fault, a cause, or the state of a part\n"
+    "unless what you were given names it. Say plainly, in words a child uses, which part\n"
+    "you do not know yet — then ask one question about what they can see.\n"
+    "At L4 do not ask. Give them the escalation route, all of it, and end there. The\n"
+    "escalation route is the last thing in your reply. Do not follow it with wiring, pin\n"
+    "positions, a rebuild sequence, what the fault usually is, or what tends to go wrong\n"
+    "at this step — a child who has asked to be rescued is owed a way out rather than a\n"
+    "theory or a checklist.\n"
+    "This binds on the premise, not on the wording. A guess softened is still a guess.\n"
+    '  do:    "I don\'t know yet which one it is — what are you seeing right now?"')
+
+# C-13's fourth authored block, arriving written from the architect. The
+# failure it answers is an absence of instruction rather than a disobeyed one —
+# the five tests are served in full and nothing tells Milo the set is
+# load-bearing — which is the opposite of piece A's case and the reason a new
+# block is the right shape here rather than a repetition.
+#
+# Across three runs 11/L1 named five of the five tests, then four, then two with
+# "and so on". Chapter 11's deliverable is the child writing down what they
+# ruled out, in order; a child told "power and the rule and so on" rules out two.
+LIST_COMPLETENESS = (
+    "WHEN THE STEP GIVES A LIST\n"
+    "Some steps hand the child a named set to work through — a list of tests, checks or\n"
+    "places to look. When you refer to that set, name every item in it, in the order the\n"
+    "step gives them. Never abbreviate a set with \"and so on\", \"and the rest\", or \"the\n"
+    "others\" — the child is writing down what they have ruled out, and an item you skip\n"
+    "is an item they never check. Naming fewer is not brevity; it is losing part of the\n"
+    "step.\n"
+    "When the step's own question refers to a set, delivering that question as the step\n"
+    "words it is complete in itself. You are not naming the set — the step is. The rule\n"
+    "above binds on your own references to a set, not on the corpus's.")
+
 OVERRIDE_LINE = (
     "OVERRIDE: they asked outright to be told. Do not narrow and do not ask a question "
     "— answer at the ESCALATION level given above and no further. At L3, give the fix "
@@ -28,6 +77,20 @@ OVERRIDE_LINE = (
     "this one catches nearly everyone.")
 
 _LVL = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4}
+
+# Piece B, and the first rung-conditional voice line in this system — a new
+# shape, recorded as one. It is not a C-13 block: it is served at L0 only, where
+# the failure is, and C-13's list does not grow.
+#
+# VOICE line 12 already carries this rule globally and it is obeyed everywhere
+# except 01/L0. A global restatement of a rule the model already has is the
+# remedy with no mechanism for working — the same reasoning that retired piece
+# A — and it would be applied to seven rungs that already comply. Serving it
+# where the failure is makes the outcome legible either way.
+OPENING_WORD = (
+    "Open with the thing the child named. No part name of yours may appear before the\n"
+    "child's own word for what they are looking at has appeared once. If they said the\n"
+    "number, the number is what you say first; the display comes after, or not at all.")
 
 
 def chapter_label(ch) -> str:
@@ -170,7 +233,13 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # C-08. What the level does not permit is not assembled.
     L.append("\nKNOWN FAILURE MODES FOR THIS STEP (this is what actually goes wrong):")
     e = "- symptom: " + " / ".join(f.get("says") or [])
-    if f.get("ask"):
+    # The narrowing question is L1's material and was served ungated, so the
+    # L0 and L1 prompts differed by one character — the rung label. ctx.ask has
+    # always gated at n >= 1; the artefact did not, and the artefact is what the
+    # model reads. Milo was told to observe and handed a narrow, and bundled
+    # both into one breath. Now gated to match ctx.ask, and to match how region
+    # and fix already behave.
+    if n >= 1 and f.get("ask"):
         e += "\n  narrow: " + f["ask"]
     if n >= 2 and f.get("region"):
         e += "\n  region: " + f["region"]
@@ -185,6 +254,10 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # parts block and its child words never reached the prompt. They are served
     # here, alongside the route, so "where is the reset" has somewhere to land.
     L.append(f"\nESCALATION: {lvl}")
+    if n == 0:
+        L.append("\n" + OPENING_WORD)
+    L.append("\n" + ABSENCE_GUARD)
+    L.append("\n" + LIST_COMPLETENESS)
     L.append(ESCALATION)
     restore_words = aliases_for("restore")
     if restore_words:
