@@ -132,7 +132,10 @@ if __name__ == "__main__":
     n = 1
     if "--runs" in sys.argv:
         n = int(sys.argv[sys.argv.index("--runs") + 1])
+    label = ""
+    if "--tag" in sys.argv:
+        label = "_" + sys.argv[sys.argv.index("--tag") + 1]
     for i in range(1, n + 1):
         if n > 1:
             print(f"--- run {i} of {n} ---")
-        main(tag=f"_run{i}" if n > 1 else "")
+        main(tag=(label + f"_run{i}") if n > 1 else label)

@@ -30,9 +30,9 @@ PREMISE = re.compile(
     re.I)
 
 
-def load():
+def load(pattern="step05_transcripts_run*.json"):
     out = {}
-    for f in sorted(glob.glob("step05_transcripts_run*.json")):
+    for f in sorted(glob.glob(pattern)):
         n = int(re.search(r"run(\d+)", f).group(1))
         out[n] = {(c["chapter"], c["level"]): c
                   for c in json.loads(pathlib.Path(f).read_text(encoding="utf-8"))["calls"]}
@@ -127,5 +127,35 @@ def main():
     print("  That is what R10's fixture should be built on.")
 
 
+def compare(pat_a, pat_b, label_a, label_b):
+    """Per rung, per dimension, rate under A against rate under B."""
+    a, b = load(pat_a), load(pat_b)
+    if not a or not b:
+        sys.exit(f"need both sets: {pat_a!r} and {pat_b!r}")
+    na, nb = sorted(a), sorted(b)
+    print(f"{label_a}: n={len(na)}    {label_b}: n={len(nb)}")
+    print("Rates compared per rung per dimension. A dimension that does not move")
+    print("is prose that did not reach it; one that moves is prose that did.\n")
+    for key, lvl in sorted(a[na[0]]):
+        print("=" * 74)
+        print(f"CH {key} · {lvl}")
+        ra = [checks(key, lvl, a[n][(key, lvl)]) for n in na]
+        rb = [checks(key, lvl, b[n][(key, lvl)]) for n in nb]
+        for i, (label, _) in enumerate(ra[0]):
+            va = [r[i][1] for r in ra]
+            vb = [r[i][1] for r in rb]
+            if not all(isinstance(v, bool) for v in va + vb):
+                continue
+            pa, pb = sum(va) / len(va) * 100, sum(vb) / len(vb) * 100
+            move = "" if abs(pa - pb) < 1 else f"   <-- moves {pb - pa:+.0f} points"
+            print(f"  {label:32s} {label_a} {pa:3.0f}%   {label_b} {pb:3.0f}%{move}")
+        print()
+
+
 if __name__ == "__main__":
-    main()
+    if "--compare" in sys.argv:
+        compare("step05_baseline_run*.json",
+                "step05_transcripts_noguards_run*.json",
+                "with", "without")
+    else:
+        main()
