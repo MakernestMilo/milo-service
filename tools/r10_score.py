@@ -30,6 +30,14 @@ def score(call):
     return qc.r10_detail(call["answer"], ctx_of(call), call["utterance"])
 
 
+def score_set(call):
+    """R10's second subject: the gap between an authored set and what the reply
+    names. Reported separately — the two subjects have different rates and
+    pooling them would describe neither."""
+    v = qc.r10_set(call["answer"], call["chapter"], ctx_of(call))
+    return [("an authored set named incompletely", v, "")] if v else []
+
+
 def fixtures():
     print("=== THE TWO FIXTURES · both must convict ===\n")
     pre = json.loads(pathlib.Path("step05_transcripts_pre_ae.json").read_text())["calls"]
@@ -65,14 +73,17 @@ def rates(pattern, label):
     files = sorted(glob.glob(pattern))
     if not files:
         return
-    per = defaultdict(list)
+    per, perset = defaultdict(list), defaultdict(list)
     for f in files:
         for c in json.loads(pathlib.Path(f).read_text())["calls"]:
             per[(c["chapter"], c["level"])].append(bool(score(c)))
+            perset[(c["chapter"], c["level"])].append(bool(score_set(c)))
     print(f"\n=== {label} · n={len(files)} ===")
+    print("  rung    premise   set-completeness")
     for k in sorted(per):
-        v = per[k]
-        print(f"  {k[0]}/{k[1]}: R10 convicts {sum(v)}/{len(v)} = {sum(v)/len(v)*100:3.0f}%")
+        v, w = per[k], perset[k]
+        setcol = (f"{sum(w)/len(w)*100:3.0f}%" if qc.authored_set(k[0]) else "  n/a")
+        print(f"  {k[0]}/{k[1]}   {sum(v)/len(v)*100:5.0f}%     {setcol}")
 
 
 def compare_to_baseline(tag):
