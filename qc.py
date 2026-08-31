@@ -426,11 +426,21 @@ def authored_set(key):
 
 
 def _refers_to_the_set(reply, items):
+    """The obligation attaches to the reference, not to the rung.
+
+    Naming one item is talking about that part, not referring to the set: L2's
+    job is to point at the region, and 'somewhere between the sensor and the
+    number' owes nothing to a list of tests it never invoked. Judging it was a
+    false positive that read 100% at a rung with no obligation.
+
+    A reply refers to the set when it gestures at it — the five, the list — or
+    when it names two or more items, which is enumerating however it is worded.
+    """
     low = reply.lower()
     named = [i for i in items if re.search(r"\b" + re.escape(i) + r"\b", low)]
     gestures = bool(re.search(r"\bthe (?:five|four|three|list|set)\b|"
                               r"\b(?:five|four|three) (?:tests|checks|places)\b", low))
-    return named, (bool(named) or gestures)
+    return named, (gestures or len(named) >= 2)
 
 
 @reads(REPLY, "an authored set named incompletely in the reply")
