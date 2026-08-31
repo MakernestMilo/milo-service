@@ -75,6 +75,8 @@ def main():
         reply = client.messages.create(
             model=service.MODEL,
             max_tokens=service.MAX_TOKENS,
+            thinking={"type": "enabled",
+                      "budget_tokens": service.THINKING_BUDGET},
             system=system,
             messages=[{"role": "user", "content": text}],
         )
@@ -92,9 +94,20 @@ def main():
             "latency_seconds": round(latency, 3),
             "input_tokens": reply.usage.input_tokens,
             "output_tokens": reply.usage.output_tokens,
+            # Without this the transcripts cannot say why an answer is missing.
+            # 11/L3 came back empty at 1024 of 1024 and the file could not tell
+            # us whether it stopped, refused, or ran out.
+            "stop_reason": reply.stop_reason,
+            "stop_details": (reply.stop_details.model_dump()
+                             if getattr(reply, "stop_details", None) else None),
+            "text_blocks": sum(1 for b in reply.content
+                               if getattr(b, "type", None) == "text"),
+            "content_block_types": [getattr(b, "type", None) for b in reply.content],
         })
         print(f"  {key} {lvl}  {latency:5.2f}s  "
-              f"in {reply.usage.input_tokens:5d}  out {reply.usage.output_tokens:4d}")
+              f"in {reply.usage.input_tokens:5d}  out {reply.usage.output_tokens:4d}  "
+              f"stop={reply.stop_reason}  text_blocks={sum(1 for b in reply.content if getattr(b,'type',None)=='text')}"
+              + ("   <-- NO TEXT" if not answer.strip() else ""))
 
     dest = pathlib.Path(__file__).resolve().parents[1] / "step05_transcripts.json"
     dest.write_text(json.dumps({

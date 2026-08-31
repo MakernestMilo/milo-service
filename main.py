@@ -41,7 +41,20 @@ LADDER_INPUTS = ("failure_seen_at", "direct_asks", "level", "elapsed")
 # changing it reopens sheet 5's gate and every one of those transcripts is
 # re-earned. Both constants stay here, at the top, where that is visible.
 MODEL = "claude-sonnet-5"
-MAX_TOKENS = 1024
+# max_tokens is a shared budget: thinking and the reply come out of the same
+# pool. At 1024 with thinking adaptive, chapter 11 at L3 spent the entire
+# budget reasoning and emitted no text at all — a child would have got the bank
+# only because call_model refuses an empty string. Raising the ceiling alone
+# moves the cliff, so the thinking budget is capped explicitly and the
+# remainder is a floor the reply cannot be starved below.
+#
+#   reply floor = MAX_TOKENS - THINKING_BUDGET = 2048 tokens
+#
+# The longest good answer in M-06 was 165 tokens, so that is twelve times the
+# headroom actually needed. Cost is not the constraint here: a turn is ~$0.0072
+# and 96% of the prompt is cacheable.
+MAX_TOKENS = 4096
+THINKING_BUDGET = 2048
 # A slow call is a failed call. A child waiting is the failure this prevents.
 TIMEOUT_SECONDS = 20.0
 
@@ -143,6 +156,7 @@ def call_model(system: str, utterance: str) -> str:
     reply = client.messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,
+        thinking={"type": "enabled", "budget_tokens": THINKING_BUDGET},
         system=system,
         messages=[{"role": "user", "content": utterance}],
     )
