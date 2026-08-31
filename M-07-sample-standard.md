@@ -65,3 +65,33 @@ To be restated at n=5 before R10 is built, and measured again at n=5 after.
 **A rate can move and a verdict cannot.** That makes R10 the first mechanism in
 this project that can be evaluated rather than asserted — which is a better
 argument for it than the one originally given.
+
+## R10's second subject: enumeration completeness, as three rates
+
+Stated per rung, not pooled. The premise fixture is clean because it is a single
+act at a single rung; enumeration is not, and averaging these would produce a
+number describing none of them — the same error as reading 67% at two rungs that
+turned out to be 100% and 20%.
+
+Baseline at n=5, chapter 11's five authored tests:
+
+| rung | items named per draw | complete |
+|---|---|---|
+| 11/L1 | 1, 1, 2, 5, 5 | **2/5 — 40%** |
+| 11/L2 | 1, 1, 3, 2, 3 | **0/5 — 0%** |
+| 11/L3 | 5, 5, 5, 5, 2 | **4/5 — 80%** |
+
+Three populations. A rung that mostly succeeds, a rung that succeeds sometimes,
+and a rung that has never once named the set completely.
+
+**R10's second subject convicts per instance; acceptance is measured per rung.**
+
+If the check can only be built against one, build it against **11/L1** — 40% is
+frequent enough to move visibly at n=5, where 11/L3's 80% would need a larger
+sample to distinguish improvement from noise and 11/L2's 0% cannot get worse.
+
+Note that 11/L2 at 0% is not obviously a defect: nothing establishes that L2
+should enumerate the set at all. Its rung is *point at the region*, and the
+authored material for it is the region, not the five tests. Whether L2 is failing
+or correctly not enumerating is a question for the architect, and the check
+should not assume the answer.
