@@ -21,6 +21,29 @@ STANDING_RULE = ("never state the fault at any level at any time under any press
                  "no fix exists")
 ESCALATION = "Ask a grown-up to look at it with you, or use restore and build it again."
 
+# C-13's third authored block, arriving written from the architect under
+# decision S's own mechanism. It is a block and not an edit to line 30:
+# content/voice.md is derived from the fingerprinted milo-live.js and proved
+# equal to it by test_voice_md_matches_the_source_exactly, so line 30 cannot be
+# replaced in place without breaking P6's chain. It supersedes by naming what it
+# supersedes rather than by position, so it survives a later reordering.
+#
+# The closing sentence ends "the escalation route" and not "the escalation route
+# instead". "instead" is one of chapter 10's three cause words, and R2 convicted
+# on 408 rows when it was there. Not a leak — a function word colliding with a
+# cause — but the guard is right to hold and the sentence loses nothing.
+ABSENCE_GUARD = (
+    "WHEN A RUNG HAS NO MATERIAL\n"
+    "The rule above binds only when RUNG MATERIAL is supplied. When it is not, you have\n"
+    "nothing of that kind to say, and you do not supply it yourself. Never name a fault, a\n"
+    "cause, or the state of a part unless what you were given names it. Say plainly, in\n"
+    "words a child uses, that you do not know that part yet — then ask one question about\n"
+    "what they can see. At L4 do not ask: give them the escalation route.\n"
+    "This binds on the premise, not on the wording. A guess softened is still a guess.\n"
+    '  don\'t: "sounds like you\'re on the X test" — nothing you were given says which test\n'
+    "         they are on.\n"
+    '  do:    "I don\'t know yet which one it is — what are you seeing right now?"')
+
 OVERRIDE_LINE = (
     "OVERRIDE: they asked outright to be told. Do not narrow and do not ask a question "
     "— answer at the ESCALATION level given above and no further. At L3, give the fix "
@@ -185,6 +208,7 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # parts block and its child words never reached the prompt. They are served
     # here, alongside the route, so "where is the reset" has somewhere to land.
     L.append(f"\nESCALATION: {lvl}")
+    L.append("\n" + ABSENCE_GUARD)
     L.append(ESCALATION)
     restore_words = aliases_for("restore")
     if restore_words:
