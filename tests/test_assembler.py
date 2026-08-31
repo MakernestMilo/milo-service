@@ -109,7 +109,7 @@ def test_the_harness_stays_off_the_model_path():
     t0 = time.perf_counter()
     rows = qc.run(runtime.level, assembler.assemble)
     elapsed = time.perf_counter() - t0
-    assert len(rows) == 5712
+    assert len(rows) == 7616
     assert elapsed < HARNESS_SECONDS, f"harness took {elapsed:.2f}s"
 
 

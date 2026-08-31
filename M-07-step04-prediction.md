@@ -77,3 +77,50 @@ in all fourteen chapters.
 
 The added position sits above silence and below the second rung, which is why
 L0, L3 and L4 should not move.
+
+---
+
+# Actual, against the second prediction
+
+| level | before | actual | predicted | verdict |
+|---|---|---|---|---|
+| L0 | 1792 | 1792 | unchanged | **exact** |
+| **L1** | 0 | **1792 — 24% of total** | rises sharply, ~a quarter of total | **exact** |
+| L2 | 3584 | 3584 | falls by ~what L1 gains | wrong — did not move |
+| L3 | 312 | 416 | unchanged | wrong, +104 |
+| L4 | 24 | 32 | unchanged | wrong, +8 |
+| total | 5712 | **7616** | rises | correct |
+
+New line: **`L0 1792 · L1 1792 · L2 3584 · L3 416 · L4 32`, total 7,616.**
+
+**The arithmetic.** 1,904 rows per clock position — 14 chapters × 136 bank
+entries. 5,712 was three positions; 7,616 is four. The added position **adds**
+rows and takes none, which is why L2 is unchanged.
+
+## The internal inconsistency, recorded as the architect's
+
+The prediction said *the sampler adds a position rather than redistributing* and
+also *L2 falls by about the same amount L1 gains*. Both stories were in one
+paragraph and only one can hold. The addition story was right.
+
+Same failure as reading a rate under a configuration that had not been checked,
+in a different medium: two accounts held at once, neither reconciled against the
+other.
+
+It also means **"L3 and L4 unchanged" was never available to predict** alongside
+a rise in total rows. Both hold together only if the added rows land exclusively
+in L1.
+
+## The override multiplier · a property of the harness, not of this change
+
+The eight override-tagged utterances resolve by direct-ask count, not by the
+clock, so each produces **one row per clock position**. This was true at three
+positions too and nobody had looked.
+
+**The by-level line has always carried a multiplier.** Any future change to the
+number of sampling positions moves L3 and L4 whether or not the ladder does —
+8 overrides × 14 chapters × positions. Going from three to four added 112 rows:
++104 to L3, +8 to L4, with chapter 11's first-ask rescue taking the eight.
+
+Recorded as a standing property with its own check, so the next position change
+is expected rather than discovered.

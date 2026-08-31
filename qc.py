@@ -485,7 +485,18 @@ def run(level_fn, assemble_fn):
         f = ch["failure"]
         rungs = f.get("ladder") or [f["silence"]] * 3
         now = time.monotonic()
+        # Four positions, one per rung the clock can reach. The sampler took
+        # three — cold, rungs[1]+1, rungs[2]+100000 — which for a laddered
+        # chapter resolve to L0, L2, L2. No position ever landed inside an L1
+        # window, in any chapter, including the worked example.
+        #
+        # L1's 3,328 rows came entirely from thirteen chapters having no ladder
+        # and falling through to the two-branch else-path. L1 was covered by
+        # accident, and giving those chapters ladders removed the accident:
+        # the count went to zero and the narrowing rung became untested
+        # everywhere. Found by a prediction being wrong, not by a check.
         clocks = [("cold", None),
+                  ("narrow", now - rungs[0] - 1),
                   ("mid", now - rungs[1] - 1),
                   ("late", now - rungs[2] - 100_000)]
         words = cause_words(ch)

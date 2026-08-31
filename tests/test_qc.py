@@ -76,7 +76,7 @@ def test_each_rule_can_convict(rule, mutate):
 
 def test_harness_runs_every_chapter_and_clock():
     rows = qc.run(runtime.level, assembler.assemble)
-    assert len(rows) == 5712, len(rows)
+    assert len(rows) == 7616, len(rows)
     bad = [r for r in rows if r.fails]
     assert not bad, "%d of %d rows failing: %s" % (
         len(bad), len(rows),
@@ -86,11 +86,51 @@ def test_harness_runs_every_chapter_and_clock():
 # ---------------------------------------------------------------- N5, N6, N9
 
 def test_the_ladder_lands_where_the_port_says_it_should():
-    """The by-level split is a property of the real ladder, not the fake's."""
+    """The by-level split is a property of the real ladder, not the fake's.
+
+    Moved twice in M-07 step 04, both times legitimately.
+
+    From `L0 1792 · L1 3328 · L2 256 · L3 312 · L4 24` when thirteen chapters
+    had no ladder — L1's 3,328 came entirely from those thirteen falling through
+    to the two-branch else-path, so the narrowing rung was covered by accident.
+
+    Then the sampler gained a fourth clock position, `rungs[0] + 1`, because no
+    position had ever landed inside an L1 window in any chapter, including the
+    worked example. Found by a prediction being wrong, not by a check.
+
+    The arithmetic: 1,904 rows per clock position — 14 chapters x 136 bank
+    entries. 5,712 was three positions; 7,616 is four. The new position ADDS
+    rows and takes none, which is why L2 is unchanged at 3,584.
+
+    L3 and L4 rose because the eight override-tagged utterances resolve by
+    direct ask rather than by clock, so they produce a row at every position.
+    See test_override_rows_are_duplicated_across_every_clock_position."""
     from collections import Counter
     rows = qc.run(runtime.level, assembler.assemble)
+    assert len(rows) == 7616, f"{len(rows)} rows — 4 positions x 1904 expected"
     assert Counter(r.lvl for r in rows) == {
-        "L0": 1792, "L1": 3328, "L2": 256, "L3": 312, "L4": 24}
+        "L0": 1792, "L1": 1792, "L2": 3584, "L3": 416, "L4": 32}
+
+
+def test_override_rows_are_duplicated_across_every_clock_position():
+    """A property of the harness, not a consequence of step 04 — it was true at
+    three positions too, and nobody had looked.
+
+    The eight override-tagged utterances resolve by direct-ask count, not by the
+    clock, so each produces one row per clock position. The by-level line has
+    therefore always carried a multiplier: any future change to the number of
+    sampling positions moves L3 and L4 whether or not the ladder does.
+
+    Which is why 'L3 and L4 unchanged' was never available to predict alongside
+    a rise in total rows. Both only hold together if the added rows land
+    exclusively in L1."""
+    overrides = sum(1 for _, tag in qc.BANK if tag == "override")
+    positions = 4
+    rows = qc.run(runtime.level, assembler.assemble)
+    override_rows = [r for r in rows if r.tag == "override"]
+    assert len(override_rows) == overrides * len(corpus.CHAPTERS) * positions
+    assert {r.lvl for r in override_rows} <= {"L3", "L4"}, \
+        "an override row resolved by the clock, which the ladder must not allow"
 
 
 def test_the_clock_alone_never_reaches_l3_or_l4():
