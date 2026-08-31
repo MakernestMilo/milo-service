@@ -66,8 +66,20 @@ MAX_TOKENS = 16000
 # Cost is not the constraint: a turn is ~$0.0072 and 96% of the prompt is
 # cacheable. Nothing here is trimmed to save money.
 EFFORT = "medium"
-# A slow call is a failed call. A child waiting is the failure this prevents.
-TIMEOUT_SECONDS = 20.0
+# A slow call is a failed call, and a failed call serves the bank — so a tight
+# timeout does not raise an error a child sees, it silently replaces Milo with
+# the corpus text.
+#
+# The latency shape decides the number, and not the way expected. L1 and L2 are
+# among the fastest rungs at 2.1-2.9s. The slow ones are the two direct-ask
+# rungs: 11/L4 at 6.5s and 11/L3 at 8.6s. So a tight timeout would not
+# preferentially cost the mentoring rungs — it would cost the rungs a child
+# reaches by explicitly asking for help, and a child who says "just tell me" is
+# the one least able to absorb being handed the book instead.
+#
+# 45 is five times the slowest honest call. A child will wait ten seconds. A
+# child handed the book instead of an answer has been abandoned quietly.
+TIMEOUT_SECONDS = 45.0
 
 
 class TurnRequest(BaseModel):
