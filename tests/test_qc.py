@@ -335,3 +335,52 @@ def test_generalising_the_rung_branches_is_inert():
                     else:
                         want = "L0" if e < f["silence"] else "L1"
                     assert runtime.level(t) == want, f"ch{c['key']} {text!r} moved"
+
+
+# ------------------------------------------- R10's second subject
+
+def test_r10_set_convicts_the_frozen_enumeration_fixture():
+    """The fourth frozen fixture: the two-of-five draw from the recorded
+    baseline. It names two of chapter 11's five authored tests with no
+    abbreviating marker at all, which is why the check scores the gap between
+    the authored set and what the reply names rather than a list of phrases."""
+    c = _call("step05_fixture_enumeration.json", "11", "L1")
+    v = qc.r10_set(c["answer"], "11", _ctx_of(c))
+    assert v and "missing" in v, "the frozen enumeration fixture must convict"
+
+
+@pytest.mark.parametrize("reply", [
+    "which of the five have you ruled out — power and the rule and so on?",
+    "the five: power, the rule, and the rest",
+    "have you done power and sensor, or the others?",
+    "which of the five tests — power and sensor?",
+])
+def test_r10_set_convicts_the_act_not_the_phrasing(reply):
+    """'and so on' was the observed form. 'and the rest', 'the others', and
+    naming two of five with no marker at all are the same defect. A check
+    scoring phrases goes green when the claim changes clothes — which the
+    frequency detector did twice in one day."""
+    c = _call("step05_fixture_enumeration.json", "11", "L1")
+    assert qc.r10_set(reply, "11", _ctx_of(c)), f"{reply!r} must convict"
+
+
+@pytest.mark.parametrize("reply", [
+    "Which of the five have you ruled out?",
+    "power, sensor, rule, output, sequence — which have you cleared?",
+    "What's the display doing right now?",
+])
+def test_r10_set_stays_green_where_it_should(reply):
+    """The step's own question is complete in itself — Milo is not naming the
+    set, the step is. Naming all five is complete. A reply that never refers to
+    the set is not in scope."""
+    c = _call("step05_fixture_enumeration.json", "11", "L1")
+    assert qc.r10_set(reply, "11", _ctx_of(c)) is None, f"false positive: {reply!r}"
+
+
+def test_the_authored_set_is_derived_from_the_corpus():
+    """Not hardcoded. One chapter of fourteen hands the child a named set, so
+    the check is inert elsewhere rather than assuming every chapter enumerates —
+    11/L2 at 0% completeness may not be a defect at all, and this check does not
+    decide that by being built."""
+    assert qc.authored_set("11") == ("power", "sensor", "rule", "output", "sequence")
+    assert [c["key"] for c in corpus.CHAPTERS if qc.authored_set(c["key"])] == ["11"]

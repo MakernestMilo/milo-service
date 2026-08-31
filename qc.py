@@ -401,8 +401,64 @@ def r10_detail(reply, ctx, utterance):
     return [c for span in _assertions(reply) for c in _claims(span, ctx, utterance)]
 
 
+# R10's second subject: enumeration completeness.
+#
+# The defect is the GAP between the authored set and what the reply names, not
+# the words used to gesture at it. "and so on" was the observed form; "and the
+# rest", "the others", or naming two of five with no marker at all are the same
+# defect. Scoring a list of abbreviating phrases would go green the moment the
+# claim changed clothes — which the frequency detector did twice in one day.
+#
+# The set is derived from the corpus, not hardcoded: a step that hands the child
+# a named run of tests. One chapter of fourteen has one today, so this is inert
+# elsewhere rather than assuming every chapter should enumerate.
+_SET_ITEM = re.compile(r"\bTest (?:the )?([a-z]+)\b", re.I)
+
+
+@lru_cache(maxsize=None)
+def authored_set(key):
+    """The items of a named set the step hands the child, in the step's order."""
+    for stage in corpus.BY_KEY[key]["stages"]:
+        items = _SET_ITEM.findall(" ".join(stage.get("do") or []))
+        if len(items) >= 3:
+            return tuple(i.lower() for i in items)
+    return ()
+
+
+def _refers_to_the_set(reply, items):
+    low = reply.lower()
+    named = [i for i in items if re.search(r"\b" + re.escape(i) + r"\b", low)]
+    gestures = bool(re.search(r"\bthe (?:five|four|three|list|set)\b|"
+                              r"\b(?:five|four|three) (?:tests|checks|places)\b", low))
+    return named, (bool(named) or gestures)
+
+
+@reads(REPLY, "an authored set named incompletely in the reply")
+def r10_set(reply, key, ctx):
+    items = authored_set(key)
+    if not items:
+        return None
+    named, refers = _refers_to_the_set(reply, items)
+    if not refers:
+        return None
+    # The exception ruled in step 00: when the step's own question refers to the
+    # set, delivering that question as the step words it is complete in itself.
+    # Milo is not naming the set — the step is.
+    # ...but only when Milo does not also attempt the list itself. Delivering
+    # the step's question and then naming two of five is not the step naming the
+    # set, it is Milo abbreviating it with the question standing in front.
+    ask = ((corpus.BY_KEY[key]["failure"] or {}).get("ask") or "").lower().strip(" ?")
+    if ask and ask in reply.lower() and not named:
+        return None
+    if len(named) == len(items):
+        return None
+    missing = [i for i in items if i not in named]
+    return ("R10-set names %d of %d: missing %s"
+            % (len(named), len(items), ",".join(missing)))
+
+
 RULES = (r1, r2, r3, r4, r5, r6, r7, r8, r9)
-REPLY_RULES = (r10,)
+REPLY_RULES = (r10, r10_set)
 
 
 def declarations():
