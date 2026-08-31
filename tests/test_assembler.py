@@ -152,10 +152,13 @@ def test_production_serves_every_authored_block():
     serve everything, and no path in the service may narrow it — a prompt that
     serves fewer blocks in production is the thing this seam exists to measure,
     not to enable."""
-    assert assembler.SERVED_BLOCKS == ("absence", "list")
+    assert assembler.SERVED_BLOCKS == ("absence",)
     turn = runtime.Turn("the number isn't changing", "11", None, 0)
     prompt = assembler.assemble(turn, "L1").stage["prompt"]
     assert "WHEN A RUNG HAS NO MATERIAL" in prompt
-    assert "WHEN THE STEP GIVES A LIST" in prompt
+    # The list block was removed by ruling: the factorial showed it caused the
+    # premise defect it sat beside, +80 at 11/L1 and +40 at 11/L3, and failed at
+    # its own purpose — 80% incomplete with it against 20% without.
+    assert "WHEN THE STEP GIVES A LIST" not in prompt
     main_src = pathlib.Path("main.py").read_text(encoding="utf-8")
     assert "SERVED_BLOCKS" not in main_src, "the service must never set the seam"

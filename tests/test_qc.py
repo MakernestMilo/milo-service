@@ -247,7 +247,6 @@ def test_no_authored_block_contains_a_cause_word():
         for w in qc.cause_words(c):
             causes.setdefault(w, []).append(c["key"])
     blocks = {"ABSENCE_GUARD": A.ABSENCE_GUARD,
-              "LIST_COMPLETENESS": A.LIST_COMPLETENESS,
               "OPENING_WORD": A.OPENING_WORD,
               "OVERRIDE_LINE": A.OVERRIDE_LINE,
               "ESCALATION": A.ESCALATION,

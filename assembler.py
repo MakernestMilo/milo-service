@@ -53,27 +53,6 @@ ABSENCE_GUARD = (
     "This binds on the premise, not on the wording. A guess softened is still a guess.\n"
     '  do:    "I don\'t know yet which one it is — what are you seeing right now?"')
 
-# C-13's fourth authored block, arriving written from the architect. The
-# failure it answers is an absence of instruction rather than a disobeyed one —
-# the five tests are served in full and nothing tells Milo the set is
-# load-bearing — which is the opposite of piece A's case and the reason a new
-# block is the right shape here rather than a repetition.
-#
-# Across three runs 11/L1 named five of the five tests, then four, then two with
-# "and so on". Chapter 11's deliverable is the child writing down what they
-# ruled out, in order; a child told "power and the rule and so on" rules out two.
-LIST_COMPLETENESS = (
-    "WHEN THE STEP GIVES A LIST\n"
-    "Some steps hand the child a named set to work through — a list of tests, checks or\n"
-    "places to look. When you refer to that set, name every item in it, in the order the\n"
-    "step gives them. Never abbreviate a set with \"and so on\", \"and the rest\", or \"the\n"
-    "others\" — the child is writing down what they have ruled out, and an item you skip\n"
-    "is an item they never check. Naming fewer is not brevity; it is losing part of the\n"
-    "step.\n"
-    "When the step's own question refers to a set, delivering that question as the step\n"
-    "words it is complete in itself. You are not naming the set — the step is. The rule\n"
-    "above binds on your own references to a set, not on the corpus's.")
-
 OVERRIDE_LINE = (
     "OVERRIDE: they asked outright to be told. Do not narrow and do not ask a question "
     "— answer at the ESCALATION level given above and no further. At L3, give the fix "
@@ -90,7 +69,7 @@ _LVL = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4}
 # attributed to two blocks removed at once. That is the same attribution problem
 # this order has been fixing everywhere else. The runner sets this to complete
 # the factorial: both, neither, and each alone.
-SERVED_BLOCKS = ("absence", "list")
+SERVED_BLOCKS = ("absence",)
 
 # Piece B, and the first rung-conditional voice line in this system — a new
 # shape, recorded as one. It is not a C-13 block: it is served at L0 only, where
@@ -272,8 +251,6 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
         L.append("\n" + OPENING_WORD)
     if "absence" in SERVED_BLOCKS:
         L.append("\n" + ABSENCE_GUARD)
-    if "list" in SERVED_BLOCKS:
-        L.append("\n" + LIST_COMPLETENESS)
     L.append(ESCALATION)
     restore_words = aliases_for("restore")
     if restore_words:
