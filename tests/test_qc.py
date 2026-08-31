@@ -286,3 +286,52 @@ def test_r10_leaves_comfort_that_needs_no_statistic_green():
                  "is a completely normal place to land, not a failure.",
                  "This is a genuinely tricky step, and getting stuck is normal."):
         assert qc.r10(text, _ctx_of(c), c["utterance"]) is None, f"false positive: {text!r}"
+
+
+# ---------------------------------------------------------------- C-17
+
+def test_no_rung_gate_compares_against_a_chapter_name():
+    """C-17. A chapter-name comparison in a gate is a defect whether or not
+    behaviour is currently correct — it is material-without-a-mechanism waiting
+    to happen, which is C-18's class and this project's most repeated defect."""
+    src = pathlib.Path("runtime.py").read_text(encoding="utf-8")
+    body = src[src.index("def level("):]
+    offending = [l.strip() for l in body.splitlines()
+                 if "turn.chapter ==" in l or 'chapter == "' in l]
+    assert not offending, "rung gate compares a chapter name:\n  " + "\n  ".join(offending)
+
+
+def test_exactly_one_chapter_qualifies_for_first_ask_rescue_today():
+    """S6. Decision AG makes the rescue condition structural — the chapter holds
+    no fix — rather than a name. If a second chapter ever satisfies it, this
+    test says so rather than the transcripts."""
+    no_fix = [c["key"] for c in corpus.CHAPTERS if not (c["failure"] or {}).get("fix")]
+    assert no_fix == ["11"], f"chapters with no fix: {no_fix}"
+
+
+def test_generalising_the_rung_branches_is_inert():
+    """S4. The mechanism now reads data; the data has not arrived. Chapter 11
+    must resolve exactly as before and the other thirteen must be unchanged,
+    which separates 'the mechanism reads data' from 'the data arrived'."""
+    now = time.monotonic()
+    for c in corpus.CHAPTERS:
+        f = c["failure"]
+        for ago in (None, 0, 179, 181, 301, 721, 1321, 100_000):
+            for asks in (0, 1, 2):
+                for text in ("the number isn't changing", "just tell me"):
+                    t = runtime.Turn(text, c["key"],
+                                     None if ago is None else now - ago, asks)
+                    e = runtime.elapsed(t)
+                    if runtime.OVERRIDE.search(t.text):
+                        want = (("L4" if t.direct_asks == 1 else "L3")
+                                if c["key"] == "11" else "L3")
+                    elif not runtime.matched(t.text, c["key"]) and t.failure_seen_at is None:
+                        want = "L0"
+                    elif e is None:
+                        want = "L0"
+                    elif c["key"] == "11":
+                        a, b, cc = f["ladder"]
+                        want = "L0" if e < a else "L1" if e < b else "L2"
+                    else:
+                        want = "L0" if e < f["silence"] else "L1"
+                    assert runtime.level(t) == want, f"ch{c['key']} {text!r} moved"
