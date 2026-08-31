@@ -115,6 +115,12 @@ def main(runs=1, tag=""):
 
     name = f"step05_transcripts{tag}.json"
     dest = pathlib.Path(__file__).resolve().parents[1] / name
+    # Refuse to overwrite a recorded set. The factorial's four arms were saved
+    # once by an auth error and nothing else; a measurement that can silently
+    # destroy the measurement it is compared against is not a measurement.
+    if dest.exists() and "--force" not in sys.argv:
+        sys.exit(f"{name} already exists. Use a different --tag, or --force to "
+                 f"overwrite deliberately.")
     dest.write_text(json.dumps({
         "model": service.MODEL, "max_tokens": service.MAX_TOKENS,
         "calls": out,
