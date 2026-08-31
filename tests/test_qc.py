@@ -2,6 +2,7 @@
 
 M-05 deleted the fake assembler. Both level() and assemble() are real now.
 """
+import pathlib
 import re
 import time
 
@@ -131,3 +132,66 @@ def test_a_fix_below_l3_still_convicts(lvl):
     ctx = assembler.assemble(turn, lvl)
     ctx.stage["prompt"] += "\n" + corpus.BY_KEY["01"]["failure"]["fix"]
     assert qc.r3(ctx, lvl, "01") is not None, f"a fix at {lvl} must trip R3"
+
+
+# ---------------------------------------------------------------- R10
+
+def _call(path, chapter, level):
+    import json
+    return [c for c in json.loads(pathlib.Path(path).read_text(encoding="utf-8"))["calls"]
+            if c["chapter"] == chapter and c["level"] == level][0]
+
+
+def _ctx_of(call):
+    from runtime import Context
+    return Context(stage={"prompt": call["assembled_context"], "instructions": []},
+                   parts_allowed=[], aliases={}, escalation=assembler.ESCALATION, rule="")
+
+
+def test_r10_convicts_the_frozen_fixture():
+    """The M-06 L4 answer, pre-AE. It no longer fires live — the guards closed
+    it, 0 of 5 — so the fixture is frozen and cannot drift."""
+    c = _call("step05_transcripts_pre_ae.json", "11", "L4")
+    assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]), \
+        "the frozen fixture must convict"
+
+
+def test_r10_convicts_the_live_fixture():
+    """11/L1, premise assertion measured at 100% across n=5."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]), \
+        "the live fixture must convict"
+
+
+@pytest.mark.parametrize("chapter,level", [("01", "L1"), ("01", "L3"), ("11", "L3")])
+def test_r10_clears_the_clean_answers(chapter, level):
+    c = _call("step05_baseline_run1.json", chapter, level)
+    assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]) is None, \
+        f"{chapter}/{level} is clean and must stay green"
+
+
+def test_r10_scores_the_premise_not_the_verb():
+    """The hedged and the flat form carry the same unfounded premise, so they
+    must score the same. A rule that passes the soft one teaches Milo to hedge
+    inventions rather than not have them."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    ctx, u = _ctx_of(c), c["utterance"]
+    for form in ("That's the sensor test.",
+                 "That sounds like the sensor test.",
+                 "You're on the sensor test."):
+        assert qc.r10(form, ctx, u), f"{form!r} must convict"
+
+
+def test_r10_does_not_convict_a_question():
+    """A question asserts nothing. Bound 1."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    assert qc.r10("Have you checked whether power's on at all?",
+                  _ctx_of(c), c["utterance"]) is None
+
+
+def test_r10_accepts_the_childs_own_words_as_a_source():
+    """Bound 2. Without this R10 convicts on Milo correctly restating what it
+    was told, and is red everywhere."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    assert qc.r10("Power's on, then.", _ctx_of(c), "power's on but the number isn't changing") is None
+    assert qc.r10("Power's on, then.", _ctx_of(c), "the number isn't changing") is not None
