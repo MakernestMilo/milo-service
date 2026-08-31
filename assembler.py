@@ -46,6 +46,10 @@ ABSENCE_GUARD = (
     "positions, a rebuild sequence, what the fault usually is, or what tends to go wrong\n"
     "at this step — a child who has asked to be rescued is owed a way out rather than a\n"
     "theory or a checklist.\n"
+    "Absolution is about the child, not about the fault. Tell them they have done nothing\n"
+    "wrong and that stopping here is normal. Do not tell them how often it goes wrong, how\n"
+    "many people it catches, or what usually goes wrong — you were given no such number,\n"
+    "and comfort built on one you invented is worth less than comfort that needs none.\n"
     "This binds on the premise, not on the wording. A guess softened is still a guess.\n"
     '  do:    "I don\'t know yet which one it is — what are you seeing right now?"')
 

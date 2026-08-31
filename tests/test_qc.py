@@ -229,3 +229,33 @@ def test_r10_still_lets_a_question_about_a_fault_through():
     """Bound 1 holds under the widened pattern."""
     c = _call("step05_fixture_faultclaim.json", "11", "L4")
     assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"]) is None
+
+
+def test_no_authored_block_contains_a_cause_word():
+    """The lint. There are 33 cause words across the whole corpus, and an
+    authored block containing one turns the harness red with no warning — it
+    has happened twice: 'instead' (chapter 10) and 'happens' (chapter 09), each
+    costing a run to find.
+
+    A lint narrows nothing and needs no decision, unlike a stopword filter,
+    which would change what R2 looks at and needs a ruling under rule 06.
+    Whether those words should be cause words at all is still open; this only
+    stops it costing an hour each time."""
+    import assembler as A
+    causes = {}
+    for c in corpus.CHAPTERS:
+        for w in qc.cause_words(c):
+            causes.setdefault(w, []).append(c["key"])
+    blocks = {"ABSENCE_GUARD": A.ABSENCE_GUARD,
+              "LIST_COMPLETENESS": A.LIST_COMPLETENESS,
+              "OPENING_WORD": A.OPENING_WORD,
+              "OVERRIDE_LINE": A.OVERRIDE_LINE,
+              "ESCALATION": A.ESCALATION,
+              "STANDING_RULE": A.STANDING_RULE}
+    bad = []
+    for name, text in blocks.items():
+        for word in re.findall(r"[a-z]{4,}", text.lower()):
+            if word in causes:
+                bad.append(f"{name} contains {word!r}, a cause word of "
+                           f"chapter {','.join(causes[word])}")
+    assert not bad, "authored block carries a cause word:\n  " + "\n  ".join(sorted(set(bad)))
