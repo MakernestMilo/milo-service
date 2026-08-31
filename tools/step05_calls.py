@@ -49,7 +49,11 @@ PLAN = [
 ]
 
 
-def main():
+def main(runs=1, tag=""):
+    """runs > 1 repeats the whole plan with nothing changed, so a rung's
+    variance across identical configurations can be measured. Every conclusion
+    in step 00 so far rests on one sample per rung; this is what says whether
+    that was safe."""
     if not os.getenv("MODEL_API_KEY"):
         sys.exit("MODEL_API_KEY is not set in this shell. It is not read from "
                  "the tree by design — export it for this run only.")
@@ -109,7 +113,8 @@ def main():
               f"stop={reply.stop_reason}  text_blocks={sum(1 for b in reply.content if getattr(b,'type',None)=='text')}"
               + ("   <-- NO TEXT" if not answer.strip() else ""))
 
-    dest = pathlib.Path(__file__).resolve().parents[1] / "step05_transcripts.json"
+    name = f"step05_transcripts{tag}.json"
+    dest = pathlib.Path(__file__).resolve().parents[1] / name
     dest.write_text(json.dumps({
         "model": service.MODEL, "max_tokens": service.MAX_TOKENS,
         "calls": out,
@@ -124,4 +129,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    n = 1
+    if "--runs" in sys.argv:
+        n = int(sys.argv[sys.argv.index("--runs") + 1])
+    for i in range(1, n + 1):
+        if n > 1:
+            print(f"--- run {i} of {n} ---")
+        main(tag=f"_run{i}" if n > 1 else "")
