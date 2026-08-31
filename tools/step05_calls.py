@@ -75,8 +75,8 @@ def main():
         reply = client.messages.create(
             model=service.MODEL,
             max_tokens=service.MAX_TOKENS,
-            thinking={"type": "enabled",
-                      "budget_tokens": service.THINKING_BUDGET},
+            thinking={"type": "adaptive"},
+            output_config={"effort": service.EFFORT},
             system=system,
             messages=[{"role": "user", "content": text}],
         )

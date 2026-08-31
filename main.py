@@ -42,19 +42,30 @@ LADDER_INPUTS = ("failure_seen_at", "direct_asks", "level", "elapsed")
 # re-earned. Both constants stay here, at the top, where that is visible.
 MODEL = "claude-sonnet-5"
 # max_tokens is a shared budget: thinking and the reply come out of the same
-# pool. At 1024 with thinking adaptive, chapter 11 at L3 spent the entire
-# budget reasoning and emitted no text at all — a child would have got the bank
-# only because call_model refuses an empty string. Raising the ceiling alone
-# moves the cliff, so the thinking budget is capped explicitly and the
-# remainder is a floor the reply cannot be starved below.
+# pool, and the model is not aware of the ceiling. At 1024 with adaptive
+# thinking, chapter 11 at L3 spent the whole budget reasoning and emitted no
+# text at all.
 #
-#   reply floor = MAX_TOKENS - THINKING_BUDGET = 2048 tokens
+# There is no hard floor to buy. budget_tokens was the only mechanism that
+# carved thinking off from the reply and it is removed on this model — it
+# returns a 400. effort shifts the distribution and reserves nothing. Disabling
+# thinking would guarantee a floor by removing the thing that makes L1 and L2
+# work, which is the wrong trade.
 #
-# The longest good answer in M-06 was 165 tokens, so that is twelve times the
-# headroom actually needed. Cost is not the constraint here: a turn is ~$0.0072
-# and 96% of the prompt is cacheable.
-MAX_TOKENS = 4096
-THINKING_BUDGET = 2048
+# So the ceiling does all of the work, and 16000 is the documented default for
+# non-streaming requests, which the API tells us not to lowball. Sixteen times
+# the observed starvation point and roughly a hundred times the longest good
+# answer M-06 produced.
+MAX_TOKENS = 16000
+
+# Set deliberately, not defaulted. Chapter 11's L1 is a genuine reasoning task —
+# deciding which of five authored tests a child is on, without inventing which
+# one — and the pre-C run showed Milo spending 162 hidden tokens there and still
+# getting it wrong. "low" would cut the thinking on exactly the rung where
+# thinking is the point. Revisable once transcripts exist under it.
+# Cost is not the constraint: a turn is ~$0.0072 and 96% of the prompt is
+# cacheable. Nothing here is trimmed to save money.
+EFFORT = "medium"
 # A slow call is a failed call. A child waiting is the failure this prevents.
 TIMEOUT_SECONDS = 20.0
 
@@ -156,7 +167,8 @@ def call_model(system: str, utterance: str) -> str:
     reply = client.messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,
-        thinking={"type": "enabled", "budget_tokens": THINKING_BUDGET},
+        thinking={"type": "adaptive"},
+        output_config={"effort": EFFORT},
         system=system,
         messages=[{"role": "user", "content": utterance}],
     )
