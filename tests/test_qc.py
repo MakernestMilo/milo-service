@@ -195,3 +195,37 @@ def test_r10_accepts_the_childs_own_words_as_a_source():
     c = _call("step05_baseline_run1.json", "11", "L1")
     assert qc.r10("Power's on, then.", _ctx_of(c), "power's on but the number isn't changing") is None
     assert qc.r10("Power's on, then.", _ctx_of(c), "the number isn't changing") is not None
+
+
+def test_r10_fault_detector_convicts_on_its_own_terms():
+    """The second frozen fixture. The first one convicted on the frequency
+    claim standing beside the fault claim, so the fault detector was unproven —
+    a fixture that convicts for an adjacent reason has not tested what it was
+    chosen to test.
+
+    Isolated here with the frequency marker removed, so the fault detector has
+    to convict alone."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    ctx, u = _ctx_of(c), c["utterance"]
+    isolated = "A wire swapped on the sensor is what has gone wrong here."
+    hits = qc.r10_detail(isolated, ctx, u)
+    assert any(k == "what the fault is" for k, _, _ in hits), \
+        "the fault detector must convict without the frequency claim beside it"
+
+
+@pytest.mark.parametrize("claim", [
+    "It's a swapped wire on the sensor.",
+    "A wire swapped on the sensor is what has gone wrong here.",
+    "A lead disconnected in the sensor path is the trouble.",
+])
+def test_r10_catches_the_fault_claim_in_either_word_order(claim):
+    """The state word may precede the noun or follow it. The second form
+    slipped past the first version of this pattern."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    assert qc.r10(claim, _ctx_of(c), c["utterance"]), f"{claim!r} must convict"
+
+
+def test_r10_still_lets_a_question_about_a_fault_through():
+    """Bound 1 holds under the widened pattern."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"]) is None

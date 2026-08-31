@@ -327,9 +327,18 @@ def _claims(span, ctx, utterance):
         found.append(("how often the fault occurs", m.group(0),
                       "no frequency for any fault is served anywhere in the context"))
 
-    m = re.search(r"\b(?:the (?:fault|problem|break|culprit|issue) is|it'?s)\s+"
-                  r"(?:a\s+|an\s+|the\s+)?((?:swapped|loose|broken|disconnected|"
-                  r"bad|faulty|wrong|dead)[a-z ]{0,30})", span, re.I)
+    # Both orders. The state word may precede the noun ("a swapped wire") or
+    # follow it ("a wire swapped on the sensor") — the second form slipped past
+    # the first version of this pattern, and the fixture chosen to prove the
+    # detector convicted on the frequency claim standing beside it instead.
+    _STATE = (r"swapped|loose|broken|disconnected|bad|faulty|wrong|dead|"
+              r"unseated|not seated|back to front|round the wrong way")
+    m = (re.search(r"\b(?:the (?:fault|problem|break|culprit|issue) is|it'?s)\s+"
+                   r"(?:a\s+|an\s+|the\s+)?((?:" + _STATE + r")[a-z ]{0,30})",
+                   span, re.I)
+         or re.search(r"\b(?:a|an|the)\s+([a-z]+(?:\s+[a-z]+)?)\s+(?:" + _STATE + r")\b"
+                      r"(?=[^?]*\b(?:is|was|has gone|caused|means)\b|\s+on\b|\s+in\b)",
+                      span, re.I))
     if m and not _fix_line(ctx):
         found.append(("what the fault is", m.group(0),
                       "no fix line is served at this rung, so no fault is established"))
