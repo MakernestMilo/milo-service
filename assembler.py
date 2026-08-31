@@ -51,6 +51,24 @@ ABSENCE_GUARD = (
     "         they are on.\n"
     '  do:    "I don\'t know yet which one it is — what are you seeing right now?"')
 
+# C-13's fourth authored block, arriving written from the architect. The
+# failure it answers is an absence of instruction rather than a disobeyed one —
+# the five tests are served in full and nothing tells Milo the set is
+# load-bearing — which is the opposite of piece A's case and the reason a new
+# block is the right shape here rather than a repetition.
+#
+# Across three runs 11/L1 named five of the five tests, then four, then two with
+# "and so on". Chapter 11's deliverable is the child writing down what they
+# ruled out, in order; a child told "power and the rule and so on" rules out two.
+LIST_COMPLETENESS = (
+    "WHEN THE STEP GIVES A LIST\n"
+    "Some steps hand the child a named set to work through — a list of tests, checks or\n"
+    "places to look. When you refer to that set, name every item in it, in the order the\n"
+    "step gives them. Never abbreviate a set with \"and so on\", \"and the rest\", or \"the\n"
+    "others\" — the child is writing down what they have ruled out, and an item you skip\n"
+    "is an item they never check. Naming fewer is not brevity; it is losing part of the\n"
+    "step.")
+
 OVERRIDE_LINE = (
     "OVERRIDE: they asked outright to be told. Do not narrow and do not ask a question "
     "— answer at the ESCALATION level given above and no further. At L3, give the fix "
@@ -238,6 +256,7 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     if n == 0:
         L.append("\n" + OPENING_WORD)
     L.append("\n" + ABSENCE_GUARD)
+    L.append("\n" + LIST_COMPLETENESS)
     L.append(ESCALATION)
     restore_words = aliases_for("restore")
     if restore_words:

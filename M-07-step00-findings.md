@@ -49,3 +49,34 @@ tests rules out four and stops, and the fifth is where the fault was.
 - **Piece B.** 01/L0 still opens on *the display* rather than the child's word.
   Untouched by the gating fix and by piece C, so it stands on independent
   evidence.
+
+## R10's second subject now has a real fixture
+
+Three runs of 11/L1, same rung, same utterance, same served material:
+
+| run | tests named | form |
+|---|---|---|
+| 1 | five of five | complete |
+| 2 | four of five | silent omission of `power` |
+| 3 | **two of five** | `"power and the rule and so on"` |
+
+Five, then four, then two is not noise — it is the same rung degrading. The
+two-item run is what the check must go red on.
+
+The failure also changed shape between runs 2 and 3. Silent omission is an
+oversight; `and so on` is an explicit gesture at items it declines to name,
+which is harder to call accidental. Both must score the same, for the same
+reason the anti-hedging clause exists: the defect is the incomplete set, not the
+candour about it.
+
+## And a genuine limit on authored prompts as a remedy
+
+The fourth block tells Milo to name every item of a served set. **Nothing
+verifies that it did.** `and so on` would satisfy any human reading the reply
+quickly, and it satisfied three reads here before the items were counted against
+the corpus.
+
+That is the argument for R10's second subject rather than a reason to doubt the
+block: an authored instruction can only raise the probability, and only a check
+that counts the served set against the reply can establish it. The block and the
+rule are complements, and neither substitutes for the other.
