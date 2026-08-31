@@ -83,7 +83,10 @@ def main():
         sys.exit("no step05_transcripts_run*.json found — run with --runs 3 first")
     ns = sorted(runs)
     rungs = sorted(runs[ns[0]], key=lambda k: (k[0], k[1]))
-    print(f"{len(ns)} runs, nothing changed between them\n")
+    print(f"{len(ns)} runs, nothing changed between them")
+    if len(ns) < 5:
+        print(f"  !! n={len(ns)} is below the standard of 5 — see M-07-sample-standard.md")
+    print()
     for key, lvl in rungs:
         print("=" * 74)
         print(f"CH {key} · {lvl}")
@@ -94,7 +97,11 @@ def main():
             vals = [r[i][1] for r in rows]
             stable = len(set(map(str, vals))) == 1
             mark = "stable" if stable else "MOVES "
-            print(f"  {mark} {label:32s} {vals}")
+            rate = ""
+            if all(isinstance(v, bool) for v in vals):
+                k = sum(vals)
+                rate = f"   {k}/{len(vals)} = {k/len(vals)*100:3.0f}%"
+            print(f"  {mark} {label:32s} {vals}{rate}")
         print()
     print("=" * 74)
     print("KIND vs WORDING")
