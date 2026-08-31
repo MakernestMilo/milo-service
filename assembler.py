@@ -47,8 +47,6 @@ ABSENCE_GUARD = (
     "at this step — a child who has asked to be rescued is owed a way out rather than a\n"
     "theory or a checklist.\n"
     "This binds on the premise, not on the wording. A guess softened is still a guess.\n"
-    '  don\'t: "sounds like you\'re on the X test" — nothing you were given says which test\n'
-    "         they are on.\n"
     '  do:    "I don\'t know yet which one it is — what are you seeing right now?"')
 
 # C-13's fourth authored block, arriving written from the architect. The
@@ -67,7 +65,10 @@ LIST_COMPLETENESS = (
     "step gives them. Never abbreviate a set with \"and so on\", \"and the rest\", or \"the\n"
     "others\" — the child is writing down what they have ruled out, and an item you skip\n"
     "is an item they never check. Naming fewer is not brevity; it is losing part of the\n"
-    "step.")
+    "step.\n"
+    "When the step's own question refers to a set, delivering that question as the step\n"
+    "words it is complete in itself. You are not naming the set — the step is. The rule\n"
+    "above binds on your own references to a set, not on the corpus's.")
 
 OVERRIDE_LINE = (
     "OVERRIDE: they asked outright to be told. Do not narrow and do not ask a question "

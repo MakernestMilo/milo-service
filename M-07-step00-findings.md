@@ -80,3 +80,49 @@ That is the argument for R10's second subject rather than a reason to doubt the
 block: an authored instruction can only raise the probability, and only a check
 that counts the served set against the reply can establish it. The block and the
 rule are complements, and neither substitutes for the other.
+
+## A new category: two authored things, each correct, colliding
+
+Chapter 11's authored ask is `Which of the five have you ruled out?` — a
+sentence that refers to the set without naming it. The list block obliges Milo
+to name every item of a set it refers to. So delivering the corpus's own
+narrowing question verbatim triggered the most expensive instruction in the
+prompt, and Milo resolved it by abandoning the ask and asserting a test instead.
+
+Neither is a bug. The block is right that a set must be named in full; the ask
+is right that this is the narrowing question. **A rule made a corpus sentence
+expensive to say.**
+
+The register has no shape for this. C-13 governs authored blocks, C-23 governs
+block labels, and nothing governs the interaction between an authored rule and
+authored corpus material. It is not a defect in either artefact and would not be
+found by inspecting either alone — only by watching what the model does when
+both are in front of it.
+
+Resolved by scoping the rule to Milo's own references, leaving the corpus's
+sentence untaxed.
+
+## The prohibition mass, recorded as a fact about the design
+
+The two guard blocks are **1,763 characters, 24.4% of chapter 11's L1 prompt**,
+and every sentence in them says what not to do. Nothing in them says what Milo
+should do at L1 when its authored ask is expensive to deliver.
+
+That figure belongs in the return regardless of any single run. Nearly a quarter
+of the prompt instructing what not to do, with nothing saying what to do
+instead, is a property of the design rather than of a rung.
+
+## The negative example, and the test now running
+
+`don't: "sounds like you're on the X test"` sat in the guard as a prohibition,
+and 11/L1 produced *"that sounds like the sensor test"* — the forbidden form,
+verbatim in shape.
+
+Two readings and they are not separable by inspection: the negative example is
+being pattern-matched as a template, or the prohibition does not bind under
+pressure.
+
+The example is removed and the rule and the `do` are kept. **If the phrasing
+drops away, the example was the source. If it persists, the prohibition does not
+bind under pressure — the more important answer, and one no amount of prose will
+fix.**
