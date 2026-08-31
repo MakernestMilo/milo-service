@@ -82,6 +82,16 @@ OVERRIDE_LINE = (
 
 _LVL = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4}
 
+# A measurement seam, not a feature flag. Production never changes it: every
+# authored block is served, always, and there is no path that serves fewer.
+#
+# The counterfactual removed both guard blocks together, so the list block's
+# measured effect on enumeration — +60 at 11/L1, +40 at 11/L3 and 11/L4 — is
+# attributed to two blocks removed at once. That is the same attribution problem
+# this order has been fixing everywhere else. The runner sets this to complete
+# the factorial: both, neither, and each alone.
+SERVED_BLOCKS = ("absence", "list")
+
 # Piece B, and the first rung-conditional voice line in this system — a new
 # shape, recorded as one. It is not a C-13 block: it is served at L0 only, where
 # the failure is, and C-13's list does not grow.
@@ -260,8 +270,10 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     L.append(f"\nESCALATION: {lvl}")
     if n == 0:
         L.append("\n" + OPENING_WORD)
-    L.append("\n" + ABSENCE_GUARD)
-    L.append("\n" + LIST_COMPLETENESS)
+    if "absence" in SERVED_BLOCKS:
+        L.append("\n" + ABSENCE_GUARD)
+    if "list" in SERVED_BLOCKS:
+        L.append("\n" + LIST_COMPLETENESS)
     L.append(ESCALATION)
     restore_words = aliases_for("restore")
     if restore_words:

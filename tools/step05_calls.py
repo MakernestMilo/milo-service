@@ -135,6 +135,10 @@ if __name__ == "__main__":
     label = ""
     if "--tag" in sys.argv:
         label = "_" + sys.argv[sys.argv.index("--tag") + 1]
+    if "--blocks" in sys.argv:
+        which = sys.argv[sys.argv.index("--blocks") + 1]
+        assembler.SERVED_BLOCKS = () if which == "none" else tuple(which.split(","))
+        print(f"    serving guard blocks: {assembler.SERVED_BLOCKS or '(none)'}")
     for i in range(1, n + 1):
         if n > 1:
             print(f"--- run {i} of {n} ---")
