@@ -229,7 +229,15 @@ def r7(tag, text, ctx):
     if tag != "alias":
         return None
     w = text.lower()
-    if not any(s in w for s in _shown(_prompt(ctx))):
+    # Word boundaries, not substrings. P7's defect, third instance: _words()
+    # fixed it for R2's cause words and R7 was never moved, so 'led' matched
+    # inside 'oled' and a child saying "the oled is blank" got a route to the
+    # lamp standing beside the correct one. A uniqueness check built on
+    # substring matching reports phantom collisions and misses real ones on its
+    # first run, which is how a new instrument gets distrusted in its first
+    # week — so this lands before the collision check, not after.
+    shown = _shown(_prompt(ctx))
+    if not (shown and _words(tuple(sorted(shown))).search(w)):
         return "R7 no alias route in the prompt for this wording"
 
 
