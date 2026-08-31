@@ -38,7 +38,11 @@ ABSENCE_GUARD = (
     "nothing of that kind to say, and you do not supply it yourself. Never name a fault, a\n"
     "cause, or the state of a part unless what you were given names it. Say plainly, in\n"
     "words a child uses, that you do not know that part yet — then ask one question about\n"
-    "what they can see. At L4 do not ask: give them the escalation route.\n"
+    "what they can see. At L4 do not ask: give them the escalation route, and end there.\n"
+    "The escalation route is the whole of your reply. Do not follow it with what the fault\n"
+    "usually is, what it is almost always, or what tends to go wrong at this step — you\n"
+    "were given none of that, and a child who has asked to be rescued is owed a way out\n"
+    "rather than a theory.\n"
     "This binds on the premise, not on the wording. A guess softened is still a guess.\n"
     '  don\'t: "sounds like you\'re on the X test" — nothing you were given says which test\n'
     "         they are on.\n"
@@ -51,6 +55,20 @@ OVERRIDE_LINE = (
     "this one catches nearly everyone.")
 
 _LVL = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4}
+
+# Piece B, and the first rung-conditional voice line in this system — a new
+# shape, recorded as one. It is not a C-13 block: it is served at L0 only, where
+# the failure is, and C-13's list does not grow.
+#
+# VOICE line 12 already carries this rule globally and it is obeyed everywhere
+# except 01/L0. A global restatement of a rule the model already has is the
+# remedy with no mechanism for working — the same reasoning that retired piece
+# A — and it would be applied to seven rungs that already comply. Serving it
+# where the failure is makes the outcome legible either way.
+OPENING_WORD = (
+    "Open with the thing the child named. No part name of yours may appear before the\n"
+    "child's own word for what they are looking at has appeared once. If they said the\n"
+    "number, the number is what you say first; the display comes after, or not at all.")
 
 
 def chapter_label(ch) -> str:
@@ -214,6 +232,8 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # parts block and its child words never reached the prompt. They are served
     # here, alongside the route, so "where is the reset" has somewhere to land.
     L.append(f"\nESCALATION: {lvl}")
+    if n == 0:
+        L.append("\n" + OPENING_WORD)
     L.append("\n" + ABSENCE_GUARD)
     L.append(ESCALATION)
     restore_words = aliases_for("restore")
