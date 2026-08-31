@@ -67,19 +67,25 @@ MAX_TOKENS = 16000
 # cacheable. Nothing here is trimmed to save money.
 EFFORT = "medium"
 # A slow call is a failed call, and a failed call serves the bank — so a tight
-# timeout does not raise an error a child sees, it silently replaces Milo with
-# the corpus text.
+# timeout does not raise an error a child sees. It silently swaps Milo for the
+# corpus, and nothing in the transcript records why: a client-side timeout never
+# reaches a stop_reason, so the instrument that explains every other failure is
+# blind to this one.
 #
-# The latency shape decides the number, and not the way expected. L1 and L2 are
-# among the fastest rungs at 2.1-2.9s. The slow ones are the two direct-ask
-# rungs: 11/L4 at 6.5s and 11/L3 at 8.6s. So a tight timeout would not
-# preferentially cost the mentoring rungs — it would cost the rungs a child
-# reaches by explicitly asking for help, and a child who says "just tell me" is
-# the one least able to absorb being handed the book instead.
+# Set against an unknown tail with an asymmetric cost, NOT as a measured bound.
+# Over 40 calls at identical configuration: median 3.16s, p90 9.15s, p95 15.07s,
+# max 28.68s — a 3.1x jump beyond p90 from a single draw. A tail that shape at
+# n=40 says nothing about n=400. The earlier 45 was 1.6x the worst call we
+# happened to see, not five times the worst honest call.
 #
-# 45 is five times the slowest honest call. A child will wait ten seconds. A
-# child handed the book instead of an answer has been abandoned quietly.
-TIMEOUT_SECONDS = 45.0
+# The costs are asymmetric: a trip loses Milo's voice silently and untraceably;
+# a long ceiling costs only a slow reply the fallback would have replaced
+# anyway. So the number errs long.
+#
+# Note also that the slowest rung is 11/L1 — a clock rung, 2.30s to 28.68s on
+# identical input, a 12.5x spread. The earlier reading that the direct-ask rungs
+# are the slow ones does not survive n=5: a child who waits can wait longest.
+TIMEOUT_SECONDS = 120.0
 
 
 class TurnRequest(BaseModel):

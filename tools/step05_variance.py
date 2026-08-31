@@ -91,7 +91,11 @@ def main():
         print("=" * 74)
         print(f"CH {key} · {lvl}")
         toks = [runs[n][(key, lvl)]["output_tokens"] for n in ns]
+        lat = sorted(runs[n][(key, lvl)]["latency_seconds"] for n in ns)
+        med = lat[len(lat) // 2] if len(lat) % 2 else (lat[len(lat)//2 - 1] + lat[len(lat)//2]) / 2
         print(f"  output tokens : {toks}")
+        print(f"  latency (s)   : min {lat[0]:5.2f}  median {med:5.2f}  max {lat[-1]:6.2f}"
+              f"  spread {lat[-1]/lat[0]:4.1f}x   {lat}")
         rows = [checks(key, lvl, runs[n][(key, lvl)]) for n in ns]
         for i, (label, _) in enumerate(rows[0]):
             vals = [r[i][1] for r in rows]
@@ -103,6 +107,18 @@ def main():
                 rate = f"   {k}/{len(vals)} = {k/len(vals)*100:3.0f}%"
             print(f"  {mark} {label:32s} {vals}{rate}")
         print()
+    print("=" * 74)
+    print("LATENCY, ALL RUNGS POOLED — the timeout must be set against this")
+    allv = sorted(runs[n][k]["latency_seconds"] for n in ns for k in rungs)
+    def pct(p):
+        return allv[min(len(allv) - 1, int(len(allv) * p))]
+    print(f"  n={len(allv)} calls   min {allv[0]:.2f}   median {pct(0.5):.2f}"
+          f"   p90 {pct(0.90):.2f}   p95 {pct(0.95):.2f}   max {allv[-1]:.2f}")
+    print(f"  slowest five: {[round(v,2) for v in allv[-5:]]}")
+    print("  A timeout trips silently: the child gets the bank, not an error, and")
+    print("  nothing in the transcript records why — a client-side timeout never")
+    print("  reaches a stop_reason. Set it against the tail, not the worst case seen.")
+    print()
     print("=" * 74)
     print("KIND vs WORDING")
     print("  A rung where 'asserts an unfounded premise' is stable True while")
