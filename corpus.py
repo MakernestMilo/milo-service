@@ -13,7 +13,35 @@ def _load():
         withheld[ch["key"]] = failure.pop("cause", None)
         ch["failure"] = failure
         chapters.append(ch)
+    _ladders(chapters)
     return chapters, withheld, _alias(raw["alias"]), raw["teach"]
+
+
+def _ladders(chapters):
+    """The thirteen authored ladders, added alongside the fingerprinted source.
+
+    Same shape as the aliases: content/source stays unedited, so the additions
+    live in one file that can be read in a single screen. Sabotage is absent by
+    design — it was already set in the ported corpus and is the ceiling the
+    other thirteen were written under.
+
+    Invariant one: ladder[0] equals the chapter's authored silence, in all
+    fourteen. The ladder never contradicts the number the chapter was authored
+    with; it only says what happens after it. Asserted here rather than left to
+    a test, because a mismatch means the two numbers have drifted apart and
+    every rung below is built on the wrong base.
+    """
+    add = json.loads((CONTENT / "ladder_additions.json").read_text(encoding="utf-8"))["ladder"]
+    for ch in chapters:
+        rungs = add.get(ch["key"])
+        if rungs is None:
+            continue
+        f = ch["failure"]
+        assert f.get("ladder") is None, f"chapter {ch['key']} already carries a ladder"
+        assert rungs[0] == f.get("silence"), (
+            f"chapter {ch['key']}: ladder[0] {rungs[0]} != authored silence "
+            f"{f.get('silence')} — invariant one")
+        f["ladder"] = list(rungs)
 
 
 def _alias(base):

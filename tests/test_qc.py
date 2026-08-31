@@ -76,7 +76,7 @@ def test_each_rule_can_convict(rule, mutate):
 
 def test_harness_runs_every_chapter_and_clock():
     rows = qc.run(runtime.level, assembler.assemble)
-    assert len(rows) == 5712, len(rows)
+    assert len(rows) == 7616, len(rows)
     bad = [r for r in rows if r.fails]
     assert not bad, "%d of %d rows failing: %s" % (
         len(bad), len(rows),
@@ -86,11 +86,51 @@ def test_harness_runs_every_chapter_and_clock():
 # ---------------------------------------------------------------- N5, N6, N9
 
 def test_the_ladder_lands_where_the_port_says_it_should():
-    """The by-level split is a property of the real ladder, not the fake's."""
+    """The by-level split is a property of the real ladder, not the fake's.
+
+    Moved twice in M-07 step 04, both times legitimately.
+
+    From `L0 1792 · L1 3328 · L2 256 · L3 312 · L4 24` when thirteen chapters
+    had no ladder — L1's 3,328 came entirely from those thirteen falling through
+    to the two-branch else-path, so the narrowing rung was covered by accident.
+
+    Then the sampler gained a fourth clock position, `rungs[0] + 1`, because no
+    position had ever landed inside an L1 window in any chapter, including the
+    worked example. Found by a prediction being wrong, not by a check.
+
+    The arithmetic: 1,904 rows per clock position — 14 chapters x 136 bank
+    entries. 5,712 was three positions; 7,616 is four. The new position ADDS
+    rows and takes none, which is why L2 is unchanged at 3,584.
+
+    L3 and L4 rose because the eight override-tagged utterances resolve by
+    direct ask rather than by clock, so they produce a row at every position.
+    See test_override_rows_are_duplicated_across_every_clock_position."""
     from collections import Counter
     rows = qc.run(runtime.level, assembler.assemble)
+    assert len(rows) == 7616, f"{len(rows)} rows — 4 positions x 1904 expected"
     assert Counter(r.lvl for r in rows) == {
-        "L0": 1792, "L1": 3328, "L2": 256, "L3": 312, "L4": 24}
+        "L0": 1792, "L1": 1792, "L2": 3584, "L3": 416, "L4": 32}
+
+
+def test_override_rows_are_duplicated_across_every_clock_position():
+    """A property of the harness, not a consequence of step 04 — it was true at
+    three positions too, and nobody had looked.
+
+    The eight override-tagged utterances resolve by direct-ask count, not by the
+    clock, so each produces one row per clock position. The by-level line has
+    therefore always carried a multiplier: any future change to the number of
+    sampling positions moves L3 and L4 whether or not the ladder does.
+
+    Which is why 'L3 and L4 unchanged' was never available to predict alongside
+    a rise in total rows. Both only hold together if the added rows land
+    exclusively in L1."""
+    overrides = sum(1 for _, tag in qc.BANK if tag == "override")
+    positions = 4
+    rows = qc.run(runtime.level, assembler.assemble)
+    override_rows = [r for r in rows if r.tag == "override"]
+    assert len(override_rows) == overrides * len(corpus.CHAPTERS) * positions
+    assert {r.lvl for r in override_rows} <= {"L3", "L4"}, \
+        "an override row resolved by the clock, which the ladder must not allow"
 
 
 def test_the_clock_alone_never_reaches_l3_or_l4():
@@ -309,78 +349,85 @@ def test_exactly_one_chapter_qualifies_for_first_ask_rescue_today():
     assert no_fix == ["11"], f"chapters with no fix: {no_fix}"
 
 
-def test_generalising_the_rung_branches_is_inert():
-    """S4. The mechanism now reads data; the data has not arrived. Chapter 11
-    must resolve exactly as before and the other thirteen must be unchanged,
-    which separates 'the mechanism reads data' from 'the data arrived'."""
+def test_the_generalisation_is_no_longer_inert_because_the_data_arrived():
+    """This test was written in step 02 to prove the opposite: that changing
+    level() from a chapter-key comparison to a data check moved nothing, because
+    thirteen chapters carried no ladder. It asserted the generalisation was
+    inert, and it separated 'the mechanism reads data' from 'the data arrived'.
+
+    The data has now arrived, so the assertion inverts. The chapter-key version
+    would resolve the thirteen differently from the data-driven one — which is
+    the whole point of step 04, and the clearest evidence the mechanism was
+    reading the corpus rather than the chapter name."""
     now = time.monotonic()
+    differs = []
+    for c in corpus.CHAPTERS:
+        if c["key"] == "11":
+            continue
+        f = c["failure"]
+        a, b, d = f["ladder"]
+        for ago in (b + 1, d + 1):
+            t = runtime.Turn(f["says"][0], c["key"], now - ago, 0)
+            data_driven = runtime.level(t)
+            # what the retired chapter-key branch would have said
+            e = runtime.elapsed(t)
+            chapter_key = "L0" if e < f["silence"] else "L1"
+            if data_driven != chapter_key:
+                differs.append((c["key"], data_driven, chapter_key))
+    assert differs, ("the generalisation is still inert — the ladders did not "
+                     "reach level(), so step 04 changed nothing")
+
+
+# ---------------------------------------------------------------- the ladders
+
+SABOTAGE_CEILING = [300, 720, 1320]
+
+
+def test_L1_every_ladder_starts_at_the_authored_silence():
+    """Invariant one. The ladder never contradicts the number the chapter was
+    authored with; it only says what happens after it. Overruling this costs a
+    rethink of all fourteen, because it is the only thing tying these numbers to
+    the chapters they belong to."""
     for c in corpus.CHAPTERS:
         f = c["failure"]
-        for ago in (None, 0, 179, 181, 301, 721, 1321, 100_000):
-            for asks in (0, 1, 2):
-                for text in ("the number isn't changing", "just tell me"):
-                    t = runtime.Turn(text, c["key"],
-                                     None if ago is None else now - ago, asks)
-                    e = runtime.elapsed(t)
-                    if runtime.OVERRIDE.search(t.text):
-                        want = (("L4" if t.direct_asks == 1 else "L3")
-                                if c["key"] == "11" else "L3")
-                    elif not runtime.matched(t.text, c["key"]) and t.failure_seen_at is None:
-                        want = "L0"
-                    elif e is None:
-                        want = "L0"
-                    elif c["key"] == "11":
-                        a, b, cc = f["ladder"]
-                        want = "L0" if e < a else "L1" if e < b else "L2"
-                    else:
-                        want = "L0" if e < f["silence"] else "L1"
-                    assert runtime.level(t) == want, f"ch{c['key']} {text!r} moved"
+        assert f["ladder"][0] == f["silence"], (
+            f"chapter {c['key']}: ladder[0] {f['ladder'][0]} != silence {f['silence']}")
 
 
-# ------------------------------------------- R10's second subject
-
-def test_r10_set_convicts_the_frozen_enumeration_fixture():
-    """The fourth frozen fixture: the two-of-five draw from the recorded
-    baseline. It names two of chapter 11's five authored tests with no
-    abbreviating marker at all, which is why the check scores the gap between
-    the authored set and what the reply names rather than a list of phrases."""
-    c = _call("step05_fixture_enumeration.json", "11", "L1")
-    v = qc.r10_set(c["answer"], "11", _ctx_of(c))
-    assert v and "missing" in v, "the frozen enumeration fixture must convict"
+def test_L2_no_rung_exceeds_sabotage():
+    """Invariant two. Sabotage is the only chapter whose subject is the waiting
+    itself. This is the line that would say a ladder had been set carelessly."""
+    for c in corpus.CHAPTERS:
+        for i, v in enumerate(c["failure"]["ladder"]):
+            assert v <= SABOTAGE_CEILING[i], (
+                f"chapter {c['key']} rung {i+1}: {v} exceeds Sabotage's "
+                f"{SABOTAGE_CEILING[i]}")
 
 
-@pytest.mark.parametrize("reply", [
-    "which of the five have you ruled out — power and the rule and so on?",
-    "the five: power, the rule, and the rest",
-    "have you done power and sensor, or the others?",
-    "which of the five tests — power and sensor?",
-])
-def test_r10_set_convicts_the_act_not_the_phrasing(reply):
-    """'and so on' was the observed form. 'and the rest', 'the others', and
-    naming two of five with no marker at all are the same defect. A check
-    scoring phrases goes green when the claim changes clothes — which the
-    frequency detector did twice in one day."""
-    c = _call("step05_fixture_enumeration.json", "11", "L1")
-    assert qc.r10_set(reply, "11", _ctx_of(c)), f"{reply!r} must convict"
+def test_L3_each_ladder_strictly_increases():
+    """A flat pair would collapse two rungs into one and hide the region again,
+    which is the defect this order exists to close."""
+    for c in corpus.CHAPTERS:
+        a, b, d = c["failure"]["ladder"]
+        assert a < b < d, f"chapter {c['key']}: {[a, b, d]} is not strictly increasing"
 
 
-@pytest.mark.parametrize("reply", [
-    "Which of the five have you ruled out?",
-    "power, sensor, rule, output, sequence — which have you cleared?",
-    "What's the display doing right now?",
-])
-def test_r10_set_stays_green_where_it_should(reply):
-    """The step's own question is complete in itself — Milo is not naming the
-    set, the step is. Naming all five is complete. A reply that never refers to
-    the set is not in scope."""
-    c = _call("step05_fixture_enumeration.json", "11", "L1")
-    assert qc.r10_set(reply, "11", _ctx_of(c)) is None, f"false positive: {reply!r}"
+@pytest.mark.parametrize("key", [c["key"] for c in corpus.CHAPTERS])
+def test_L4_every_chapter_resolves_to_L2_at_some_clock(key):
+    """The check that would have caught the original defect, and the reason the
+    order exists: before the ladders it failed in thirteen places. L2 is the
+    middle rung of the whole mentoring model and it happened in one chapter."""
+    f = corpus.BY_KEY[key]["failure"]
+    a, b, d = f["ladder"]
+    now = time.monotonic()
+    reached = {runtime.level(runtime.Turn(f["says"][0], key, now - ago, 0))
+               for ago in (a + 1, b + 1, d + 1, d + 100_000)}
+    assert "L2" in reached, f"chapter {key} never resolves to L2: saw {sorted(reached)}"
 
 
-def test_the_authored_set_is_derived_from_the_corpus():
-    """Not hardcoded. One chapter of fourteen hands the child a named set, so
-    the check is inert elsewhere rather than assuming every chapter enumerates —
-    11/L2 at 0% completeness may not be a defect at all, and this check does not
-    decide that by being built."""
-    assert qc.authored_set("11") == ("power", "sensor", "rule", "output", "sequence")
-    assert [c["key"] for c in corpus.CHAPTERS if qc.authored_set(c["key"])] == ["11"]
+def test_L5_the_harness_clocks_derive_from_each_chapters_rungs():
+    """Thirteen chapters took the [silence] * 3 branch, so their mid and late
+    clocks were the same number three times and no clock position could reach
+    L2. After the ladders, none do."""
+    fallback = [c["key"] for c in corpus.CHAPTERS if not c["failure"].get("ladder")]
+    assert not fallback, f"still on the [silence]*3 branch: {fallback}"
