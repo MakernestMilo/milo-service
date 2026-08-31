@@ -145,3 +145,17 @@ def test_restore_aliases_reach_the_prompt_at_every_level(key):
         for w in words:
             assert w.lower() in prompt, \
                 f"chapter {key}: restore alias {w!r} missing from the prompt at {lvl}"
+
+
+def test_production_serves_every_authored_block():
+    """SERVED_BLOCKS is a measurement seam, not a feature flag. Its default must
+    serve everything, and no path in the service may narrow it — a prompt that
+    serves fewer blocks in production is the thing this seam exists to measure,
+    not to enable."""
+    assert assembler.SERVED_BLOCKS == ("absence", "list")
+    turn = runtime.Turn("the number isn't changing", "11", None, 0)
+    prompt = assembler.assemble(turn, "L1").stage["prompt"]
+    assert "WHEN A RUNG HAS NO MATERIAL" in prompt
+    assert "WHEN THE STEP GIVES A LIST" in prompt
+    main_src = pathlib.Path("main.py").read_text(encoding="utf-8")
+    assert "SERVED_BLOCKS" not in main_src, "the service must never set the seam"
