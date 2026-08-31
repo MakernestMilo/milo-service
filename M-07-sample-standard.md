@@ -134,3 +134,30 @@ removing the negative example turned a hedge into a flat assertion.
 
 **Second piece of evidence that authored prose pressures these behaviours rather
 than removing them.** Worth more than the pass or fail it replaced.
+
+## A limit on the standard, found by using it
+
+Two samples of five, on **byte-identical prompts**, at 11/L4:
+
+| sample | premise rate |
+|---|---|
+| `absenceonly` arm | **0%** — 0 of 5 |
+| `production` (same config, shipped) | **60%** — 3 of 5 |
+| pooled | **30%** — 3 of 10 |
+
+The prompts were compared and are identical: 7,214 chars, 3,636 input tokens.
+This is not a configuration difference. It is n=5 hitting its own limit.
+
+**n=5 was chosen to distinguish 67% from 33%, which it does. It cannot
+distinguish 0% from 60%** — both samples are consistent with one underlying rate
+near 30%.
+
+**So a zero at n=5 is not evidence of absence.** That mistake was made
+immediately: `absence-only` was reported at "0% premise on every rung" and called
+the best result the project had produced, on one sample of five per rung. Ten
+draws later, one of those rungs is around 30% and the rest are unreplicated.
+
+**The rule this adds: a rate that decides something needs two independent
+fives, not one.** The list-block ruling survives precisely because it rests on
+11/L1 and 11/L3, where both arms were measured twice and both reproduced at 0% —
+which happened by accident rather than design, and should now be the design.
