@@ -1,0 +1,21 @@
+{
+  "_why": "M-07 step 04. Additive, like the aliases: content/source is fingerprinted and stays unedited, so the thirteen ladders arrive alongside it rather than inside it. '11' is absent by design — Sabotage was already set in the ported corpus and is the ceiling the other thirteen were written under.",
+  "_invariant_1": "ladder[0] equals the chapter's authored silence, in all fourteen. The ladder never contradicts the number the chapter was authored with; it only says what happens after it.",
+  "_invariant_2": "No rung exceeds Sabotage's corresponding rung [300, 720, 1320]. Sabotage is the only chapter whose subject is the waiting itself.",
+  "_not_here": "No L4. Rescue is not on a clock — it is reached by the direct-ask count and the escalation path. No change to any authored silence, ask, region or fix.",
+  "ladder": {
+    "01": [180, 360, 600],
+    "02": [180, 420, 720],
+    "03": [150, 300, 480],
+    "04": [240, 600, 1020],
+    "05": [210, 510, 900],
+    "06": [210, 480, 840],
+    "07": [240, 480, 780],
+    "08": [210, 450, 780],
+    "D":  [300, 600, 960],
+    "09": [210, 450, 780],
+    "10": [180, 420, 720],
+    "12": [240, 660, 1020],
+    "G":  [300, 540, 840]
+  }
+}
