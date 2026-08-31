@@ -291,9 +291,15 @@ def _assertions(reply):
         s = sentence.strip()
         if not s:
             continue
-        m = _QUESTION_HEAD.search(s)
-        if m:
-            s = s[:m.start()]
+        # Only trim at a question head when the sentence is actually a question.
+        # "where", "what" and "how" are relative pronouns as often as
+        # interrogatives, and trimming a declarative at one cut the claim out of
+        # "this is the point where plenty of builds get stuck" — the detector
+        # then read 0% on a rung carrying the defect in three of five draws.
+        if s.rstrip().endswith("?"):
+            m = _QUESTION_HEAD.search(s)
+            if m:
+                s = s[:m.start()]
         s = s.strip(" -—,:;")
         if s and not s.endswith("?"):
             out.append(s)
@@ -320,9 +326,25 @@ def _claims(span, ctx, utterance):
                       "the child never said which test; the context names five "
                       "and states none as current"))
 
-    m = re.search(r"\b(almost always|usually|nearly always|tends to be|"
-                  r"catches nearly everyone|the classic break|nine times out of ten)",
-                  span, re.I)
+    # Two claim shapes, not one list of phrases. The first version matched a
+    # fixed set — almost always, usually, catches nearly everyone — and the
+    # model moved to 'trips people up all the time', 'plenty of builds get
+    # stuck', 'a lot of builds get stuck'. The rate read 0% while three of five
+    # draws carried the defect. A rule scoring the phrasing rather than the
+    # claim goes green when the claim changes clothes, which is R3's failure
+    # and was caught in the fault detector two hours earlier and not carried
+    # across this file.
+    m = (
+        # how often it happens
+        re.search(r"\b(almost always|usually|nearly always|tends to|all the time|"
+                  r"most of the time|more often than not|nine times out of ten|"
+                  r"the classic break|commonly|a common)\b", span, re.I)
+        # how many it catches
+        or re.search(r"\b(catches|trips up|trips \w+ up|stumps|gets)\s+"
+                     r"(nearly everyone|everyone|most people|a lot of|plenty of|lots of|"
+                     r"many|loads of)", span, re.I)
+        or re.search(r"\b(plenty of|a lot of|lots of|loads of|many|most)\s+"
+                     r"(builds|people|kids|children|beginners)\b", span, re.I))
     if m:
         found.append(("how often the fault occurs", m.group(0),
                       "no frequency for any fault is served anywhere in the context"))

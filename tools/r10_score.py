@@ -75,8 +75,39 @@ def rates(pattern, label):
         print(f"  {k[0]}/{k[1]}: R10 convicts {sum(v)}/{len(v)} = {sum(v)/len(v)*100:3.0f}%")
 
 
+def compare_to_baseline(tag):
+    """A tagged arm against the baseline, per rung. Acceptance is the rate."""
+    def per(pattern):
+        out = defaultdict(list)
+        for f in sorted(glob.glob(pattern)):
+            for c in json.loads(pathlib.Path(f).read_text())["calls"]:
+                out[(c["chapter"], c["level"])].append(bool(score(c)))
+        return out
+    base = per("step05_baseline_run*.json")
+    arm = per(f"step05_transcripts_{tag}_run*.json")
+    if not arm:
+        sys.exit(f"no files matching step05_transcripts_{tag}_run*.json")
+    print(f"\n=== R10 rate · baseline vs {tag} · n={len(arm[list(arm)[0]])} each ===")
+    print("  rung    baseline    " + f"{tag:<12}" + "move")
+    for k in sorted(base):
+        b, a = base[k], arm.get(k, [])
+        if not a:
+            continue
+        rb, ra = sum(b) / len(b) * 100, sum(a) / len(a) * 100
+        d = ra - rb
+        note = ""
+        if abs(d) >= 40:
+            note = f"   {d:+.0f} — carries"
+        elif abs(d) >= 1:
+            note = f"   {d:+.0f} — one draw, does not carry"
+        print(f"  {k[0]}/{k[1]}   {rb:6.0f}%     {ra:6.0f}%{note}")
+
+
 if __name__ == "__main__":
-    fixtures()
-    if "--fixtures" not in sys.argv:
-        rates("step05_baseline_run*.json", "WITH the guards (baseline)")
-        rates("step05_transcripts_noguards_run*.json", "WITHOUT the guards")
+    if "--tag" in sys.argv:
+        compare_to_baseline(sys.argv[sys.argv.index("--tag") + 1])
+    else:
+        fixtures()
+        if "--fixtures" not in sys.argv:
+            rates("step05_baseline_run*.json", "WITH the guards (baseline)")
+            rates("step05_transcripts_noguards_run*.json", "WITHOUT the guards")

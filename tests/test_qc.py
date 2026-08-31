@@ -259,3 +259,30 @@ def test_no_authored_block_contains_a_cause_word():
                 bad.append(f"{name} contains {word!r}, a cause word of "
                            f"chapter {','.join(causes[word])}")
     assert not bad, "authored block carries a cause word:\n  " + "\n  ".join(sorted(set(bad)))
+
+
+@pytest.mark.parametrize("run_index", [0, 1, 2])
+def test_r10_frequency_detector_convicts_the_phrasings_that_slipped_past(run_index):
+    """The third frozen fixture. R10's first frequency detector matched a fixed
+    phrase list, so when the absolution clause moved the model to 'trips people
+    up all the time', 'plenty of builds get stuck' and 'a lot of builds get
+    stuck', the rate read 0% while three of five draws carried the defect.
+
+    A rule scoring the phrasing rather than the claim goes green when the claim
+    changes clothes. Frozen so the gap cannot reopen under later tuning."""
+    import json
+    d = json.loads(pathlib.Path("step05_fixture_frequency.json").read_text(encoding="utf-8"))
+    c = d["calls"][run_index]
+    hits = qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])
+    assert any(k == "how often the fault occurs" for k, _, _ in hits), \
+        f"{c['_slipped_past']!r} must convict"
+
+
+def test_r10_leaves_comfort_that_needs_no_statistic_green():
+    """The clause's whole point: absolution about the child, not about the
+    fault. This must not become a false positive when the detector widens."""
+    c = _call("step05_fixture_faultclaim.json", "11", "L4")
+    for text in ("You haven't done anything wrong here — stopping to ask for help "
+                 "is a completely normal place to land, not a failure.",
+                 "This is a genuinely tricky step, and getting stuck is normal."):
+        assert qc.r10(text, _ctx_of(c), c["utterance"]) is None, f"false positive: {text!r}"
