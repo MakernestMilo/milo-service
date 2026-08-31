@@ -193,7 +193,13 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # C-08. What the level does not permit is not assembled.
     L.append("\nKNOWN FAILURE MODES FOR THIS STEP (this is what actually goes wrong):")
     e = "- symptom: " + " / ".join(f.get("says") or [])
-    if f.get("ask"):
+    # The narrowing question is L1's material and was served ungated, so the
+    # L0 and L1 prompts differed by one character — the rung label. ctx.ask has
+    # always gated at n >= 1; the artefact did not, and the artefact is what the
+    # model reads. Milo was told to observe and handed a narrow, and bundled
+    # both into one breath. Now gated to match ctx.ask, and to match how region
+    # and fix already behave.
+    if n >= 1 and f.get("ask"):
         e += "\n  narrow: " + f["ask"]
     if n >= 2 and f.get("region"):
         e += "\n  region: " + f["region"]
