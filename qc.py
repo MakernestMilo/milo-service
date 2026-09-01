@@ -484,8 +484,16 @@ _RATE = re.compile(
     r"most (?:people|builds|kids|children|beginners)|"
     # universal quantifiers over people. Also closed class, and the frozen
     # fixture's own claim: "This one catches nearly everyone in this chapter."
-    r"(?:nearly |almost )?(?:everyone|everybody)|"
-    r"(?:hardly |almost )?(?:nobody|no one))\b", re.I)
+    # 24 occurrences across the record, every one an incidence claim.
+    #
+    # "nobody" and "no one" were in this line and came out. Five occurrences
+    # across 430 recorded replies and all five are Milo DISCLAIMING knowledge —
+    # "I don't know which of the five it is, nobody told me, so I can't guess"
+    # — which is the behaviour the guard exists to produce. The quantifier there
+    # ranges over people who told Milo, not over instances of a fault. A closed
+    # class is still a class of words, and a word can belong to it
+    # grammatically while never carrying the claim in this corpus.
+    r"(?:nearly |almost )?(?:everyone|everybody))\b", re.I)
 
 # Two grammatical frames where a rate word quantifies a SERVED PARAMETER rather
 # than asserting an incidence, and the constraint that made this real work:
