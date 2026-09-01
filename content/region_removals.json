@@ -1,0 +1,14 @@
+{
+ "_why": "M-08. Chapter 11's region named fault 5's path — 'It is somewhere between the sensor and the number' — and was served at L2, L3 and L4. The book authors five faults in its back matter, of which the port carried one, so the field that names a LOCATION was holding a FAULT IDENTITY, and it was wrong four times in five. A child given fault 1, 2, 3 or 4 was pointed at the one place their fault is not, at the rungs where they are furthest in.",
+
+ "_ruling": "The book's helper page for this chapter ends: 'Never the fault. Ever. Not at forty minutes, not at ninety, not if they are upset.' Milo may know the five tests, may know that five faults exist, and must not know which one was used — it cannot, because the adult who chose it left the room. The rung narrows by elimination from what the child says they have ruled out; it does not assert a location.",
+
+ "_guard": "The removal names the text it removes, verbatim. If the source ever changes under it, the load fails rather than silently removing a line that is no longer the one that was ruled on.",
+
+ "remove": {
+  "11": {
+   "field": "region",
+   "was": "It is somewhere between the sensor and the number."
+  }
+ }
+}

@@ -16,6 +16,7 @@ def _load():
     _ladders(chapters)
     _fixes(chapters)
     _asks(chapters)
+    _removals(chapters)
     return chapters, withheld, _alias(raw["alias"]), raw["teach"]
 
 
@@ -71,6 +72,38 @@ def _ladders(chapters):
             f"chapter {ch['key']}: ladder[0] {rungs[0]} != authored silence "
             f"{f.get('silence')} — invariant one")
         f["ladder"] = list(rungs)
+
+
+def _removals(chapters):
+    """Fields the port carried that the book does not license.
+
+    Chapter 11's region named fault 5's path and was served at L2, L3 and L4.
+    The book authors five faults in back matter the port did not carry, so the
+    field that names a location was holding a fault identity, and it was wrong
+    four times in five.
+
+    The book's helper page ends "Never the fault. Ever." Milo may know the five
+    tests and that five faults exist, and must not know which one was used — it
+    cannot, because the adult who chose it left the room.
+
+    Removal rather than replacement: the absence of rung material is already a
+    supported state, and the guard block tells Milo what to do with it. Inventing
+    a generic region here would be the engineer authoring, and a region that says
+    nothing is worse than no region at all.
+    """
+    add = json.loads((CONTENT / "region_removals.json").read_text(
+        encoding="utf-8"))["remove"]
+    for ch in chapters:
+        entry = add.get(ch["key"])
+        if entry is None:
+            continue
+        f = ch["failure"]
+        field = entry["field"]
+        assert f.get(field) == entry["was"], (
+            f"chapter {ch['key']}: the {field} in the source is not the one this "
+            f"removal was ruled on.\n  source: {f.get(field)!r}\n"
+            f"  expected: {entry['was']!r}")
+        f.pop(field, None)
 
 
 def _asks(chapters):

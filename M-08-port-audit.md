@@ -92,3 +92,63 @@ corpus holds a subset that its own text refers to as a whole.
 The decision that cannot be taken mechanically is what Milo may know of the five
 faults — because chapter 11's served material currently presumes fault 5, and
 that presumption reaches a child at three rungs.
+
+
+---
+
+# The region, removed — and what removing it exposes
+
+**Landed.** Chapter 11's region is gone, guarded by its verbatim text so the
+source cannot drift under the ruling. Harness green at 7,616, 281 tests passing.
+
+## Chapter 11 now serves one payload across four rungs
+
+Diffing the assembled prompt between levels, with the region gone:
+
+| | changed lines |
+|---|---|
+| L1 → L2 | **1** — `ESCALATION: L1` becomes `ESCALATION: L2` |
+| L2 → L3 | **1** — the same label |
+| L3 → L4 | **1** — the same label |
+
+Chapter 11 has no fix by design and now has no region by ruling, so from five
+minutes to ninety the only thing that changes in what Milo is given is a rung
+label. That is not an argument against the removal — a region that is wrong four
+times in five is worse than none — but the ladder is now carrying no material in
+the chapter it was written for.
+
+## The book's third rung has no level to land on
+
+Chapter 11's ladder is `300 · 720 · 1320` — five, twelve and twenty-two minutes,
+which the architect confirms is the book's helper page exactly. `level()` reads
+it as:
+
+```
+at  4 min -> L0        silence
+at  6 min -> L1        which of the five have you ruled out?
+at 13 min -> L2        it isn't the output, so what does that leave?
+at 23 min -> L2        name the subsystem
+at 90 min -> L2
+```
+
+The third rung and everything past it return **L2**, by the line in `runtime.py`
+that says so. So the book's twenty-two-minute rung — *name the subsystem* — has
+never had a level of its own. It rendered identically to the twelve-minute rung
+even before the region was removed, and the region was the only thing that could
+have been read as subsystem-naming.
+
+## And the ruled behaviour cannot be built yet
+
+*Narrowing by elimination from what the child says they have ruled out* requires
+knowing what the child said on an earlier turn. That is conversation history,
+which decision AR defers behind T7 and the order places in M-09.
+
+Today the absence guard is what fills the gap, and it does not do elimination —
+it says name the part you are missing, then ask one question about what they can
+see. So the twelve-minute rung is honest now rather than wrong, and it is not yet
+what the book describes.
+
+**Three things follow, and all three are the architect's:** whether the third
+rung gets a level, what material the twelve-minute rung carries before history
+exists, and whether *five faults exist and I may not know which* is something
+Milo should be told in as many words.
