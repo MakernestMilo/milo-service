@@ -92,12 +92,22 @@ recorded here as artefacts so the next reader does not re-flag them.
 the two words that actually turned the harness red. A principle that misses half
 the case that motivated it is a patch wearing a policy's clothes.
 
-**Why it is still carried.** The disputed set has now cost three runs across
-three words — `instead`, `happens`, and `several` — and `several` collided
-through a mechanism the exclusion list does not address at all: it was published
-by the chapter's own authored fix, which `cause_words()` did not read. The lint
-stops each instance cheaply and prevents none of them.
+**Why it is still carried.** The disputed set has now cost **four** runs across
+**four** words — `instead`, `happens`, `several`, and `could` — and the last two
+collided through mechanisms the exclusion list does not address at all.
+`several` was published by the chapter's own authored fix, which
+`cause_words()` did not read. `could` arrived in an authored **ask** for chapter
+12, turning 416 rows red at every rung above L0.
 
-Three hours across three words, each found by a red harness rather than by the
-rule knowing its own subject, is the evidence that the underlying question is
+`could` is the sharper of the two, because it is the word both of the scoring
+tests agreed was doing no work: a modal in *"which part could they both point
+at"*, carrying none of the cause's mechanism. It was resolved by changing the
+word to `can`, on a ruling that refused both alternatives — the fix's precedent
+does not extend to the ask, because R3 confines a fix to L3 and L4 where the
+rung is licensed to give the fault, while an ask is served from L1 where
+withholding the cause is the whole point. Widening the guard there would be the
+guard's subject drifting to fit an inconvenience.
+
+Four runs across four words, each found by a red harness rather than by the rule
+knowing its own subject, is the evidence that the underlying question is
 unanswered.

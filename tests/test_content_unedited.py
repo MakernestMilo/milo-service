@@ -28,3 +28,38 @@ def test_no_chapters_fix_is_served_ungated():
     assert fixes_over_threshold() == [], (
         "a chapter's fix is served ungated at L0 again: "
         f"{fixes_over_threshold()}")
+
+
+def test_a_shared_span_that_only_names_a_thing_does_not_count():
+    """M-08 step 01. The ruling that extended the action/claim line to the
+    contiguous run, and the fixture it was ruled to need.
+
+    The measures apply to actions, not claims — and the run was reading
+    vocabulary exactly the way coverage was. "the number on the display" is a
+    noun phrase naming a thing, which is the ground chapter 09's ask was ruled
+    out on, and it put 01's rewritten ask back at rank 1 on a span that
+    publishes nothing.
+
+    Both halves matter. Widening a measure until nothing convicts is the same
+    failure as a rule that convicts on everything, so the pre-authored asks —
+    which really were their steps' own instructions — must stay dirty.
+    """
+    import json
+    import pathlib
+
+    import corpus
+    from tools.gate_publicity import score
+    was = json.loads(pathlib.Path("content/ask_additions.json").read_text(
+        encoding="utf-8"))["replace"]
+
+    # still dirty: the lines that were the step's own instruction
+    for key, floor in (("10", 4), ("01", 5), ("04", 5)):
+        n, _, run, _ = score(key, was[key]["was"])
+        assert n >= floor, (
+            f"{key}'s pre-authored ask must still rank dirty; got {n} ({run!r})")
+        assert any(w in run for w in ("take", "hold", "watch")), run
+
+    # clean now: the authored replacements, and 09, which was ruled an artefact
+    for key in ("01", "04", "06", "10", "12", "09"):
+        n, _, run, _ = score(key, corpus.BY_KEY[key]["failure"]["ask"])
+        assert n <= 2, f"{key}'s ask ranks dirty at {n} words ({run!r})"

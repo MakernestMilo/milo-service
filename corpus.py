@@ -15,6 +15,7 @@ def _load():
         chapters.append(ch)
     _ladders(chapters)
     _fixes(chapters)
+    _asks(chapters)
     return chapters, withheld, _alias(raw["alias"]), raw["teach"]
 
 
@@ -70,6 +71,31 @@ def _ladders(chapters):
             f"chapter {ch['key']}: ladder[0] {rungs[0]} != authored silence "
             f"{f.get('silence')} — invariant one")
         f["ladder"] = list(rungs)
+
+
+def _asks(chapters):
+    """Authored replacements for narrow lines that restated their own step.
+
+    M-08 step 00 ranked every gated field against the ungated prompt and put
+    five asks above every fix in the corpus — 01 and 04 at six contiguous words.
+    L1 was the more compromised rung, and it is the one a child reaches by the
+    clock alone rather than by asking outright.
+
+    Same shape and same guard as _fixes: each entry names the line it replaces,
+    verbatim, so a change under this file fails at load.
+    """
+    add = json.loads((CONTENT / "ask_additions.json").read_text(
+        encoding="utf-8"))["replace"]
+    for ch in chapters:
+        entry = add.get(ch["key"])
+        if entry is None:
+            continue
+        f = ch["failure"]
+        assert f.get("ask") == entry["was"], (
+            f"chapter {ch['key']}: the ask in the source is not the one this "
+            f"replacement was written against.\n  source: {f.get('ask')!r}\n"
+            f"  expected: {entry['was']!r}")
+        f["ask"] = entry["now"]
 
 
 def _alias(base):

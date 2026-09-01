@@ -59,13 +59,48 @@ def _content(s):
     return [w for w in _toks(s) if len(w) >= 4 and w not in STOP]
 
 
-def _longest_run(field_words, hay_words):
+_MACHINE_BLOCK = re.compile(
+    r"^(?:ON THE MACHINE|STILL IN THE BOX|WIRING FOR).*?(?=\n\n)", re.M | re.S)
+
+
+def _things(prompt):
+    """The words this prompt uses to NAME things: part names, the words a child
+    may call them by, and the wiring vocabulary. Harvested from the prompt, so a
+    chapter that opens a new part needs no edit here."""
+    text = " ".join(_MACHINE_BLOCK.findall(prompt)).lower()
+    return set(re.findall(r"[a-z]{4,}", text))
+
+
+def _carries_something(span, things):
+    """Does this shared span carry an action or a claim, or does it just name a
+    thing?
+
+    The ruling that added this, extending the one that kept overlap measures off
+    regions: the distinction applies to BOTH measures or to neither. The
+    contiguous run was reading vocabulary exactly the way coverage was — "the
+    number on the display" is a noun phrase naming a thing, which is the ground
+    chapter 09's ask was ruled out on, and it put 01's rewritten ask back at
+    rank 1 on a span that publishes nothing.
+
+    A span carries something when at least one of its words is neither a
+    function word nor a name for a thing. "take the body off" carries an action
+    because of "take"; "the number on the display" and "where the machine" carry
+    none, and neither does an all-function-word span like "which of the two".
+
+    This reproduces the 09 ruling mechanically rather than recording it as an
+    exception, which is the test of whether a rule has found its subject.
+    """
+    return any(w not in STOP and w not in things for w in span.split())
+
+
+def _longest_run(field_words, hay_words, things=frozenset()):
     hay = " " + " ".join(hay_words) + " "
     best = ""
     for i in range(len(field_words)):
         for j in range(i + 1, len(field_words) + 1):
             seg = " ".join(field_words[i:j])
-            if " " + seg + " " in hay and j - i > len(best.split()):
+            if (" " + seg + " " in hay and j - i > len(best.split())
+                    and _carries_something(seg, things)):
                 best = seg
     return best
 
@@ -88,10 +123,18 @@ def _surfaces(key):
 def measure(key, field):
     """(contiguous words, coverage, the run, which surface) or None."""
     text = corpus.BY_KEY[key]["failure"].get(field)
-    if not text:
-        return None
+    return score(key, text) if text else None
+
+
+def score(key, text):
+    """Measure any candidate line against a chapter's ungated prompt.
+
+    Split out from measure() so a fixture can score a line the corpus no longer
+    holds — the pre-authored asks, which have to stay dirty under the widened
+    run or the widening has gutted the measure rather than sharpened it.
+    """
     prompt, current, done = _surfaces(key)
-    run = _longest_run(_toks(text), _toks(prompt))
+    run = _longest_run(_toks(text), _toks(prompt), _things(prompt))
     words = _content(text)
     def cov(hay):
         h = " ".join(_toks(hay))
