@@ -172,6 +172,40 @@ def main(runs=1, tag="", plan="all"):
     out = []
     cases = PLANS[plan]
 
+    def _write(partial=False):
+        name = f"step05_transcripts{tag}.json" + (".partial" if partial else "")
+        dest = pathlib.Path(__file__).resolve().parents[1] / name
+        if dest.exists() and "--force" not in sys.argv:
+            sys.exit(f"{name} already exists. Use a different --tag, or --force "
+                     f"to overwrite deliberately.")
+        dest.write_text(json.dumps({
+            "model": service.MODEL, "max_tokens": service.MAX_TOKENS,
+            "plan": plan, "partial": partial, "calls": out,
+            "totals": {
+                "calls": len(out),
+                "input_tokens": sum(c["input_tokens"] for c in out),
+                "output_tokens": sum(c["output_tokens"] for c in out),
+                "latency_seconds": round(sum(c["latency_seconds"] for c in out), 3),
+            },
+        }, indent=2), encoding="utf-8")
+        return dest
+
+    try:
+        _run(cases, client, out)
+    except BaseException:
+        # Every call already made was paid for. The runner used to write only at
+        # the end, so a failure on the last call of a run discarded the whole
+        # run — three calls of chapter 11 were lost that way to a billing 400.
+        # A measurement that throws away measurements it has already bought is
+        # not a measurement.
+        if out:
+            print(f"\n  interrupted after {len(out)} call(s) — wrote {_write(True)}")
+        raise
+    print(f"\nwrote {_write()}")
+
+
+def _run(cases, client, out):
+    import time
     for key, target, text, ago, asks in cases:
         seen_at = None if ago is None else time.monotonic() - ago
         turn = Turn(text, key, seen_at, asks)
@@ -223,29 +257,6 @@ def main(runs=1, tag="", plan="all"):
               f"stop={reply.stop_reason}  text_blocks={sum(1 for b in reply.content if getattr(b,'type',None)=='text')}"
               + ("   <-- NO TEXT" if not answer.strip() else ""))
 
-    name = f"step05_transcripts{tag}.json"
-    dest = pathlib.Path(__file__).resolve().parents[1] / name
-    # Refuse to overwrite a recorded set. The factorial's four arms were saved
-    # once by an auth error and nothing else; a measurement that can silently
-    # destroy the measurement it is compared against is not a measurement.
-    if dest.exists() and "--force" not in sys.argv:
-        sys.exit(f"{name} already exists. Use a different --tag, or --force to "
-                 f"overwrite deliberately.")
-    dest.write_text(json.dumps({
-        "model": service.MODEL, "max_tokens": service.MAX_TOKENS,
-        # Which rungs this file covers. Without it, a core-only run and an
-        # all run are told apart only by counting, and a missing rung reads
-        # the same as a rung that was called and came back empty.
-        "plan": plan,
-        "calls": out,
-        "totals": {
-            "calls": len(out),
-            "input_tokens": sum(c["input_tokens"] for c in out),
-            "output_tokens": sum(c["output_tokens"] for c in out),
-            "latency_seconds": round(sum(c["latency_seconds"] for c in out), 3),
-        },
-    }, indent=2), encoding="utf-8")
-    print(f"\nwrote {dest}")
 
 
 if __name__ == "__main__":
