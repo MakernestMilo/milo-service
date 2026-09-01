@@ -25,6 +25,7 @@ a field that is the step's own words, and the content-word coverage catches one
 that is the step reworded. Chapter 06 has now been caught by coverage alone
 twice — its fix in M-07, its ask here.
 """
+import json
 import pathlib
 import re
 import sys
@@ -165,11 +166,26 @@ def fixes_over_threshold():
     return out
 
 
+def judgements():
+    """Rulings with their evidence, from content/gate_judgements.json.
+
+    A judged entry keeps its measured rank and prints its ruling beside it.
+    Lowering the rank would hide the evidence the ruling was made on, and a
+    ranking whose top entries have been quietly removed is a ranking nobody
+    reads twice.
+    """
+    path = pathlib.Path(__file__).resolve().parents[1] / "content" / "gate_judgements.json"
+    return {(j["chapter"], j["field"]): j
+            for j in json.loads(path.read_text(encoding="utf-8"))["judged"]}
+
+
 if __name__ == "__main__":
+    judged = judgements()
     print("  rank  ch  field   contig  coverage  surface    the run")
     for i, (key, field, n, cov, run, surface) in enumerate(ranked(), 1):
+        j = judged.get((key, field))
         print(f"   {i:>2}   {key:>2}  {field:<6}   {n:>2}      {cov * 100:3.0f}%    "
-              f"{surface:<9}  {run!r}")
+              f"{surface:<9}  {run!r}" + (f"   RULED {j['verdict'].upper()}" if j else ""))
     over = fixes_over_threshold()
     print(f"\n  fixes over M-07's thresholds: {', '.join(over) if over else 'none'}")
     print("  asks are ranked, not judged: the line is the architect's, and step 01")

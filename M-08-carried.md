@@ -79,8 +79,53 @@ naming the same action has published it, and overlap sees that. A `region` is a
 **claim about where the fault lives**. Publicity for a region means the step
 makes the same location claim, and no overlap measure can see a claim.
 
+**A second case now needs the same instrument.** `04/fix` shares an imperative
+stem with a completed step that instructs the **opposite value** — the step is
+the chapter's sabotage. A divergence test was proposed for it and failed to
+compute: one formulation separated the two known instances on a single word, the
+other did not separate them at all (04/fix covers 64% of its field by qualifying
+runs; 09/fix as it stood in M-07 covers 67%). What distinguishes them is a
+claim-level contradiction, which is exactly what this item exists for. It is
+ruled by judgement in `content/gate_judgements.json` in the meantime, with its
+evidence and the failed test recorded beside it.
+
 Ruled out of T1's mechanical half for that reason. The four flagged regions are
 recorded here as artefacts so the next reader does not re-flag them.
+
+---
+
+## 5. Completed steps are served without their sabotage marking
+
+**Corpus shape, and the architect's.** Every *Break it on purpose* stage tells
+the child to do something deliberately wrong, and says so **in prose**. Decision
+N serves the `do` list. The prose does not reach Milo.
+
+Chapter 04, stage 03:
+
+> **html:** Set the stop number to *exactly the same number as the start*. Yes,
+> deliberately.
+> **do:** Set the stop number to the same number as the start.
+
+Only the second line is served, presented among *"STEPS THEY HAVE ALREADY
+FINISHED (they have these)"* — a thing the child correctly did. A reader of the
+prompt alone would take it as the right setting. It is the fault.
+
+**Why it is structural rather than a chapter-04 quirk.** Every chapter has a dark
+stage and every dark stage has this shape. So **in every chapter where a child
+has passed a dark stage, Milo believes the sabotage was the build.** Chapter 04
+is only where it surfaced, because its fix inverts a single value and the
+inversion showed up in a ranking.
+
+**Why it comes back to the architect.** The remedy is corpus shape — whether a
+dark stage's `do` lines carry a marking that reaches the prompt, or whether the
+completed-steps block distinguishes what was built from what was broken. Neither
+is an engineering choice.
+
+**A related instance, same order, same chapter family.** Chapter 12's fix
+principle sits in stage 02's html — *"Stop is a different number, and it belongs
+to you"* is chapter 04's, and 12's equivalent is its own — authored, correct, and
+invisible to the ladder. That is the fourth instance in three orders of material
+that exists and has no mechanism reading it.
 
 ---
 
