@@ -15,9 +15,12 @@ import pytest
 import corpus
 import runtime
 from runtime import Turn
-from tools.step05_calls import PLANS, WIDE
+from tools.step05_calls import PLANS, WIDE, FIXES
 
-ALL = PLANS["all"]
+# Every case in every plan, deduped and in a stable order. A plan that is not
+# in "all" is still a plan someone will run, and the whole point of these tests
+# is that a drifted target is found before it costs a call rather than after.
+ALL = list(dict.fromkeys(c for plan in PLANS.values() for c in plan))
 RUNGS = {"L1": 0, "L2": 1}
 
 
@@ -67,3 +70,12 @@ def test_l4_is_still_only_reachable_where_the_corpus_holds_no_fix():
     at_l4 = {c[0] for c in ALL if c[1] == "L4"}
     no_fix = {c["key"] for c in corpus.CHAPTERS if not c["failure"].get("fix")}
     assert at_l4 == no_fix == {"11"}
+
+
+def test_the_fix_plan_covers_the_four_authored_chapters_at_l3():
+    """The rung that serves the fix, and the only one that can outside 11."""
+    assert sorted(c[0] for c in FIXES) == ["06", "07", "09", "G"]
+    assert {c[1] for c in FIXES} == {"L3"}
+    for key, _, _, _, _ in FIXES:
+        assert corpus.BY_KEY[key]["failure"].get("fix"), \
+            f"chapter {key} has no fix to serve"

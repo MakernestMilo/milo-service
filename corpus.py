@@ -14,7 +14,35 @@ def _load():
         ch["failure"] = failure
         chapters.append(ch)
     _ladders(chapters)
+    _fixes(chapters)
     return chapters, withheld, _alias(raw["alias"]), raw["teach"]
+
+
+def _fixes(chapters):
+    """Authored replacements for fixes that restated their own step.
+
+    Four chapters of thirteen served the substance of their L3 fix ungated at
+    L0 — G and 07 from the current step, 06 and 09 from a step already
+    finished. A rung that withholds a sentence the prompt publishes two
+    sections earlier withholds nothing, and the child who asks outright is read
+    the page back.
+
+    All four are replaced here. Each names the fix it replaces, verbatim, so a change
+    under this file fails at load rather than swapping out a sentence that is no
+    longer the one the architect read.
+    """
+    add = json.loads((CONTENT / "fix_additions.json").read_text(
+        encoding="utf-8"))["replace"]
+    for ch in chapters:
+        entry = add.get(ch["key"])
+        if entry is None:
+            continue
+        f = ch["failure"]
+        assert f.get("fix") == entry["was"], (
+            f"chapter {ch['key']}: the fix in the source is not the one this "
+            f"replacement was written against.\n  source: {f.get('fix')!r}\n"
+            f"  expected: {entry['was']!r}")
+        f["fix"] = entry["now"]
 
 
 def _ladders(chapters):

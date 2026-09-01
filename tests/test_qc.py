@@ -472,3 +472,26 @@ def test_L5_the_harness_clocks_derive_from_each_chapters_rungs():
     L2. After the ladders, none do."""
     fallback = [c["key"] for c in corpus.CHAPTERS if not c["failure"].get("ladder")]
     assert not fallback, f"still on the [silence]*3 branch: {fallback}"
+
+
+def test_a_word_the_corpus_publishes_in_its_own_fix_is_not_a_withheld_cause():
+    """The ruling that let a fix name its fault.
+
+    R2's subject is the model being told the cause before its rung. R3 already
+    guarantees the fix reaches the prompt only at L3 and L4, so at the rungs
+    where these words are served the rung is licensed to give the fault.
+    Treating the corpus's own L3 material as a leak was R2 scoring the wrong
+    object — and it cost 32 rows on the word "several" the first time a fix was
+    authored to describe its chapter's fault rather than instruct.
+
+    Asserted as a property over all fourteen rather than for chapter 06 alone:
+    a diagnostic fix reaches for the cause's vocabulary by construction, so
+    every future one would meet the same wall.
+    """
+    for ch in corpus.CHAPTERS:
+        fix = (ch["failure"] or {}).get("fix") or ""
+        overlap = [w for w in qc.cause_words(ch)
+                   if re.search(r"\b" + w + r"\b", fix.lower())]
+        assert not overlap, (
+            f"chapter {ch['key']}: {overlap} are guarded as withheld cause "
+            f"words while the chapter's own fix publishes them")

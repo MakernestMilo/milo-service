@@ -89,7 +89,22 @@ WIDE = [
     ("08", "L3", ASK, None, 1),
 ]
 
-PLANS = {"core": CORE, "wide": WIDE, "all": CORE + WIDE}
+# M-07. The four authored fixes, at the rung that serves them.
+#
+# G, 07, 06 and 09 each served the substance of their L3 fix ungated at L0 —
+# the ladder gating a sentence the prompt published two sections earlier, so a
+# child who asked outright was read the page back. All four were rewritten
+# against the chapter's fault instead. This plan puts the new material in front
+# of the model for the first time.
+#
+# L3 only. The fix is served at L3 and L4, and L4 is unreachable outside
+# chapter 11, which has no fix at all. The rung is reached by a direct ask,
+# which needs no clock and is chapter-independent.
+FIXES = [(k, "L3", ASK, None, 1) for k in ("06", "07", "09", "G")]
+
+# "all" stays CORE + WIDE so the default does not silently change under a run
+# that was planned against it. The fixes are their own selection.
+PLANS = {"core": CORE, "wide": WIDE, "fixes": FIXES, "all": CORE + WIDE}
 
 
 def main(runs=1, tag="", plan="all"):
@@ -198,7 +213,9 @@ if __name__ == "__main__":
     # The widened utterances are read from the corpus, so print them: a run log
     # that does not say what the child said cannot be read back.
     for label_, phrase in (("07", REPORT_07), ("08", REPORT_08)):
-        if any(c[0] == label_ for c in PLANS[chosen]):
+        # only when this plan actually has a clock case for that chapter — the
+        # fixes plan reaches 07 by a direct ask and never says this line
+        if any(c[0] == label_ and c[4] == 0 for c in PLANS[chosen]):
             print(f"    {label_} reports: {phrase!r}")
     if "--blocks" in sys.argv:
         which = sys.argv[sys.argv.index("--blocks") + 1]

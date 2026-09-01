@@ -104,7 +104,22 @@ def cause_words(ch):
         + [" ".join(s.get("do") or []) for s in ch["stages"]]
         + [PART_WORDS, ch["sub"], ch["rung"], STANDING_RULE,
            BOILERPLATE, card_text(ch), parts_text(ch)]
-        + list((ch["failure"] or {}).get("says") or [])).lower()))
+        + list((ch["failure"] or {}).get("says") or [])
+        # The fix is published material, and reading it here is the whole of a
+        # ruling. R2's subject is the model being told the cause BEFORE its
+        # rung. R3 already guarantees the fix reaches the prompt only at L3 and
+        # L4, so at the only rungs where these words are served, the rung is
+        # licensed to give the fault — and treating the corpus's own L3
+        # material as a leak is R2 scoring the wrong object.
+        #
+        # It was harmless while fixes were instructions. It stopped being
+        # harmless the moment a fix was authored to NAME the fault, because a
+        # diagnostic fix reaches for the cause's vocabulary by construction: it
+        # is describing the cause. Chapter 06's authored fix says one slow
+        # opening is seen "as several" and its cause says the opening "is
+        # registered several times" — 32 rows red on one word, and any future
+        # diagnostic fix would have hit the same wall.
+        + [(ch["failure"] or {}).get("fix") or ""]).lower()))
     return [w for w in re.findall(r"[a-z]{5,}", corpus.cause(ch["key"]).lower())
             if w not in pub]
 
