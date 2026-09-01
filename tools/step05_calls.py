@@ -102,9 +102,60 @@ WIDE = [
 # which needs no clock and is chapter-independent.
 FIXES = [(k, "L3", ASK, None, 1) for k in ("06", "07", "09", "G")]
 
+# M-08 step 05. The third rung reaches L3 by clock now, in all fourteen
+# chapters, which makes L3 the first rung with two routes — by waiting and by
+# asking — and they are different prompts, because the override line is present
+# on one and absent on the other. Neither the twelve chapters nor L3-by-clock
+# has ever faced a model.
+def _report(key):
+    """The chapter's own first authored failure report. Read from the corpus at
+    import, never copied here."""
+    return corpus.BY_KEY[key]["failure"]["says"][0]
+
+
+def _five(key):
+    """L0, L1, L2, L3 by clock, and L3 by direct ask.
+
+    The clock rungs sit at ladder[n] + 1, one second past the boundary, which is
+    where a rung has only just become true. The pair at L3 is the point of the
+    run: one rung, two routes, one of which has never existed.
+    """
+    a, b, c = corpus.BY_KEY[key]["failure"]["ladder"]
+    r = _report(key)
+    return [(key, "L0", r, None, 0),
+            (key, "L1", r, a + 1, 0),
+            (key, "L2", r, b + 1, 0),
+            (key, "L3", r, c + 1, 0),
+            (key, "L3", ASK, None, 1)]
+
+
+# Ten chapters no live call has ever entered, plus 07 and 08 as controls: two
+# chapters with a recorded baseline in the same run say whether anything drifted
+# underneath. The controls are partial and the prediction file says how — 07's
+# L3 baseline is split by route and era, because its fix was re-authored after
+# the wide arm ran.
+TWELVE_CHAPTERS = ("02", "03", "04", "05", "06", "07", "08",
+                   "D", "09", "10", "12", "G")
+TWELVE = [case for k in TWELVE_CHAPTERS for case in _five(k)]
+
+# Chapter 11 alone, and first. Six positions, not five: with no fix in the
+# chapter, the first direct ask gives L4 and the second gives L3 (decision H),
+# and the clock now gives L3 as well. It carries the premise block, which has
+# never faced a model, and it uses REPORT rather than its own says[0] so these
+# rows pool with CORE's.
+ELEVEN = [
+    ("11", "L0", REPORT, None, 0),
+    ("11", "L1", REPORT, 301, 0),      # ladder 300 · 720 · 1320
+    ("11", "L2", REPORT, 721, 0),
+    ("11", "L3", REPORT, 1321, 0),     # the third rung, by clock — new
+    ("11", "L4", ASK, None, 1),        # decision H: the first ask in 11 is L4
+    ("11", "L3", ASK, None, 2),
+]
+
 # "all" stays CORE + WIDE so the default does not silently change under a run
-# that was planned against it. The fixes are their own selection.
-PLANS = {"core": CORE, "wide": WIDE, "fixes": FIXES, "all": CORE + WIDE}
+# that was planned against it. The rest are their own selections.
+PLANS = {"core": CORE, "wide": WIDE, "fixes": FIXES,
+         "eleven": ELEVEN, "twelve": TWELVE, "all": CORE + WIDE}
 
 
 def main(runs=1, tag="", plan="all"):
