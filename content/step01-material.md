@@ -1,35 +1,28 @@
 # M-08 step 01 — material for the six asks
 
-Written by the engineer for the architect to author against. Nothing here is
-composed: every line is the corpus's own text, read through `corpus.py` so the
-M-07 authored fixes appear rather than the ported originals.
-
-Chapters in the order step 00 ranked them. The measurement for each chapter's
-`ask` and `fix` is printed beside its stage text, with the step text the run
-was found in, so the evidence and the material sit on one screen.
+Regenerated after D-01: chapter 01's fix now names the signal wire by what it
+carries rather than by its colour. Nothing here is composed — every line is the
+corpus's own text, read through `corpus.py` so the authored fixes appear.
 
 
 ## The ranking, worst first
 
 | rank | ch | field | contig | coverage | surface | the run |
 |---|---|---|---|---|---|---|
-| 1 | 01 | ask | 6 | 67% | current | `hold sensor a in your fist` |
-| 2 | 04 | ask | 6 | 57% | current | `watch the number not the buzzer` |
-| 3 | 12 | ask | 4 | 83% | finished | `know it had worked` |
-| 4 | 10 | ask | 4 | 80% | current | `take the body off` |
-| 5 | 04 | fix | 4 | 67% | finished | `set the stop number` |
-| 6 | D | fix | 4 | 67% | finished | `write down what you` |
-| 7 | 06 | fix | 4 | 47% | finished | `set a settle time` |
-| 8 | 05 | ask | 4 | 33% | current | `which of the two` |
-| 9 | 06 | ask | 3 | 100% | finished | `and watch the` |
-| 10 | 08 | fix | 3 | 75% | finished | `lmp and run` |
-| 11 | 02 | fix | 3 | 71% | finished | `turn the dial` |
-| 12 | 01 | fix | 3 | 67% | finished | `the yellow wire` |
-| 13 | 09 | ask | 3 | 60% | current | `where the machine` |
-| 14 | 09 | fix | 3 | 44% | finished | `the numbers are` |
-
-Five asks sit above every fix.
-
+| 1 | 04 | fix | 4 | 67% | finished | `set the stop number` |
+| 2 | D | fix | 4 | 67% | finished | `write down what you` |
+| 3 | 06 | fix | 4 | 47% | finished | `set a settle time` |
+| 4 | 08 | fix | 3 | 75% | finished | `lmp and run` |
+| 5 | 02 | fix | 3 | 71% | finished | `number you set` |
+| 6 | 09 | fix | 3 | 44% | finished | `you were asked` |
+| 7 | 02 | ask | 2 | 75% | finished | `you set` |
+| 8 | 04 | ask | 2 | 60% | current | `your hand` |
+| 9 | 07 | fix | 2 | 54% | current | `look at` |
+| 10 | 06 | ask | 2 | 50% | finished | `the count` |
+| 11 | 11 | ask | 2 | 50% | current | `the five` |
+| 12 | 01 | fix | 2 | 45% | finished | `push the` |
+| 13 | 07 | ask | 2 | 43% | current | `look at` |
+| 14 | 03 | fix | 2 | 40% | current | `set it` |
 
 ---
 
@@ -42,10 +35,8 @@ Five asks sit above every fix.
 
 ## The measurement
 
-- **ask**: contiguous run 6, coverage 67%, on the **current** surface — `hold sensor a in your fist`
-  - found in: What this step is: Leave the machine running. Pull the yellow wire out. Just the yellow one. Watch the display for twenty seconds. Hold sensor A in your fist and keep wat
-- **fix**: contiguous run 3, coverage 67%, on the **finished** surface — `the yellow wire`
-  - found in: STEPS THEY HAVE ALREADY FINISHED (they have these):
+- **ask**: run 1, coverage 40%, finished surface — `say`
+- **fix**: run 2, coverage 45%, finished surface — `push the`
 
 ## Stages
 
@@ -155,9 +146,9 @@ Five asks sit above every fix.
 
 ```
 says   : "the number isn't changing" / "it's stuck" / "same number" / "not moving" / "frozen" / "nothing happens"
-ask    : Hold sensor A in your fist for ten seconds. Does the number move at all?
+ask    : Say the number on the display out loud. Is it the same one that was there before you pulled anything out?
 region : It is somewhere between the sensor and the number.
-fix    : Push the yellow wire back into A0 until it stops moving.
+fix    : Push the signal wire back into A0 until it stops moving — that is the one going to the sensor, whatever colour you used.
 silence: 180
 ladder : [180, 360, 600]
 CAUSE  : The yellow signal wire is out of A0, so the display is holding its last reading.
@@ -165,23 +156,6 @@ CAUSE  : The yellow signal wire is out of A0, so the display is holding its last
 
 **Sketchnote (card 01)**: Line 9 is the only line that touches the world. Line 12 is why a reading takes two seconds to change.
 
-**Sketch**
-
-```c
-const int SENSOR = A0;
-Display display;
-
-void setup() {
-  display.begin();
-}
-
-void loop() {
-  int raw = analogRead(SENSOR);
-  float degrees = toCelsius(raw);
-  display.show(degrees, 1);
-  delay(2000);
-}
-```
 
 ---
 
@@ -194,10 +168,8 @@ void loop() {
 
 ## The measurement
 
-- **ask**: contiguous run 6, coverage 57%, on the **current** surface — `watch the number not the buzzer`
-  - found in: What this step is: Hold your hand near the sensor, not touching it. Keep the reading hovering right on your number. Watch the number, not the buzzer, for twenty seconds.
-- **fix**: contiguous run 4, coverage 67%, on the **finished** surface — `set the stop number`
-  - found in: - 02. The one idea: Find the start number you set last week. Say what number you think it should stop at.
+- **ask**: run 2, coverage 60%, current surface — `your hand`
+- **fix**: run 4, coverage 67%, finished surface — `set the stop number`
 
 ## Stages
 
@@ -270,7 +242,7 @@ void loop() {
 
 ```
 says   : "it keeps going on and off" / "flapping" / "clicking" / "won't settle" / "sounds broken" / "stuttering"
-ask    : Watch the number, not the buzzer. What is the number doing when the alarm flicks?
+ask    : Does it flick when your hand is right on the sensor, or only when you hold it just off?
 region : The answer is in the two numbers you set, not in the sensor.
 fix    : Set the stop number two degrees away from the start number.
 silence: 240
@@ -280,23 +252,6 @@ CAUSE  : Start and stop are set to the same number, so a wobbling reading crosse
 
 **Sketchnote (card 04)**: Lines 8 and 9 are two separate decisions. Make lines 1 and 2 the same number and a wobble crosses both of them.
 
-**Sketch**
-
-```c
-int startAt = 24;   // your start number
-int stopAt  = 22;   // your stop number
-bool alarm  = false;
-
-void loop() {
-  float degrees = readSensor(A0);
-
-  if (!alarm && degrees < startAt) alarm = true;
-  if ( alarm && degrees > stopAt ) alarm = false;
-
-  buzzer.set(alarm);
-  delay(2000);
-}
-```
 
 ---
 
@@ -309,9 +264,8 @@ void loop() {
 
 ## The measurement
 
-- **ask**: contiguous run 4, coverage 83%, on the **finished** surface — `know it had worked`
-  - found in: - 02. The one idea: Say how you would know it had worked.
-- **fix**: contiguous run 2, coverage 17%, on the **current** surface — `the last`
+- **ask**: run 2, coverage 17%, current surface — `your sentence`
+- **fix**: run 2, coverage 17%, current surface — `the last`
 
 ## Stages
 
@@ -375,7 +329,7 @@ void loop() {
 
 ```
 says   : "I don't know if it worked" / "my idea is too big" / "I can't build it" / "it sort of works" / "I don't know what to build" / "it needs things I haven't got"
-ask    : Read your sentence out loud. What would you look at to know it had worked?
+ask    : Which part of your sentence would two people argue about, and which part can they both point at?
 region : It is in the sentence, not in the machine.
 fix    : Rewrite the last clause so it names something you can see or hear.
 silence: 240
@@ -385,16 +339,6 @@ CAUSE  : The third clause of the sentence does not name anything anybody could l
 
 **Sketchnote (card 12)**: The comment is written before the code, and the code is cut until it fits in one evening. What you delete is the part worth writing down.
 
-**Sketch**
-
-```c
-// It should ____________ when ____________,
-// and I will know it worked if ____________.
-
-void loop() {
-  // only the capabilities your sentence actually needs
-}
-```
 
 ---
 
@@ -407,9 +351,8 @@ void loop() {
 
 ## The measurement
 
-- **ask**: contiguous run 4, coverage 80%, on the **current** surface — `take the body off`
-  - found in: What this step is: Watch the number climb with the body sealed on. Take the body off for two minutes and watch it come back down. Cut exactly the holes your list needs. N
-- **fix**: contiguous run 2, coverage 50%, on the **finished** surface — `sensor a`
+- **ask**: run 1, coverage 38%, current surface — `only`
+- **fix**: run 1, coverage 50%, finished surface — `cut`
 
 ## Stages
 
@@ -478,7 +421,7 @@ void loop() {
 
 ```
 says   : "the number keeps going up" / "it's too warm now" / "the reading is wrong with the body on" / "it worked before I put the body on" / "the number climbs" / "it stopped being right"
-ask    : Take the body off and leave it off for two minutes. What does the number do?
+ask    : Since the body went on, has the number ever gone down, or has it only climbed?
 region : It is between the body and one of the parts underneath it.
 fix    : Cut a hole so sensor A sits in open air outside the body.
 silence: 180
@@ -488,15 +431,6 @@ CAUSE  : Sensor A is sealed inside the body next to a board that warms up, so it
 
 **Sketchnote (card 10)**: Line 2 does not know whether sensor A is in the room or shut inside a card box with a warm board. The sketch cannot tell. You can.
 
-**Sketch**
-
-```c
-void loop() {
-  float degrees = readSensor(A0);   // whatever is around sensor A
-  display.show(degrees, 1);
-  decide(degrees);
-}
-```
 
 ---
 
@@ -509,9 +443,8 @@ void loop() {
 
 ## The measurement
 
-- **ask**: contiguous run 3, coverage 100%, on the **finished** surface — `and watch the`
-  - found in: - 03. Build: Push the switch into the port marked SW. Stick the switch to the door frame with a pad. Stick the magnet to the part that moves, lined up so they nearly touc
-- **fix**: contiguous run 4, coverage 47%, on the **finished** surface — `set a settle time`
+- **ask**: run 2, coverage 50%, finished surface — `the count`
+- **fix**: run 4, coverage 47%, finished surface — `set a settle time`
 
 ## Stages
 
@@ -591,7 +524,7 @@ void loop() {
 
 ```
 says   : "it counts twice" / "the count is wrong" / "it counted three" / "it's not counting" / "the count jumps" / "it misses some"
-ask    : Open it once, as slowly as you can, and watch the display. By how much does the count go up?
+ask    : Does the count go wrong on every opening, or only on some of them?
 region : It is between the two parts you stuck on the door, and in the time you set.
 fix    : Watch what the count does while the door is still moving. If it climbs more than once from one opening, the magnet is sitting at the edge of what the switch can feel and the switch is seeing one slow opening as several. Move the magnet closer so it passes the switch cleanly, then set a settle time so anything arriving in the next couple of seconds is treated as part of the same opening.
 silence: 210
@@ -601,21 +534,6 @@ CAUSE  : The magnet lingers at the edge of what the switch can detect, so one sl
 
 **Sketchnote (card 06)**: Line 6 is the whole chapter. Without the second half of it, one slow opening runs line 7 three times.
 
-**Sketch**
-
-```c
-long count = 0;
-int settle = 2000;        // your settle time, in ms
-long lastCount = 0;
-
-void loop() {
-  if (switchOpened() && millis() - lastCount > settle) {
-    count = count + 1;
-    lastCount = millis();
-  }
-  display.show(count);
-}
-```
 
 ---
 
@@ -628,10 +546,8 @@ void loop() {
 
 ## The measurement
 
-- **ask**: contiguous run 3, coverage 60%, on the **current** surface — `where the machine`
-  - found in: What this step is: Standing where the machine now is, check you can read the display from somewhere useful. Check the charger reaches without a lead across a doorway. Che
-- **fix**: contiguous run 3, coverage 44%, on the **finished** surface — `the numbers are`
-  - found in: STEPS THEY HAVE ALREADY FINISHED (they have these):
+- **ask**: run 1, coverage 60%, current surface — `far`
+- **fix**: run 3, coverage 44%, finished surface — `you were asked`
 
 ## Stages
 
@@ -708,42 +624,3 @@ CAUSE  : It is mounted where the socket is rather than where the problem happens
 
 **Sketchnote (card 09)**: Nothing in this sketch says where the machine is standing, and that is the whole chapter. The same six lines answer a different question in a different place.
 
-**Sketch**
-
-```c
-void loop() {
-  float here = readSensor(A0);
-  float there = readSensor(A1);
-
-  log(here, there);
-  decide(here);
-}
-```
-
----
-
-# A note on rank 5, before it is read as a pattern
-
-`04/fix` — *"Set the stop number two degrees away from the start number."* — ranks
-fifth on a four-word run, `set the stop number`, drawn entirely from a completed
-step. Nothing of it is in the current step: the run against the current step is
-one word.
-
-The completed step it comes from is stage 03:
-
-> **do:** Set the stop number to the same number as the start.
-
-So the shared words are an **imperative stem**, and the fix's content is the
-*opposite* of what the step instructed. Stage 03 deliberately tells the child to
-set them equal — that is the chapter's sabotage — and the fix tells them to open
-a gap. A child reading stage 03 has not been given the fix; they have been given
-the fault.
-
-That makes rank 5 a candidate **third artefact class**, not a second instance of
-decision N's publicity: a shared verb phrase where the withheld content is the
-value, not the action. `09/fix` in M-07 was not this shape — its whole action,
-*mount it where the problem is* and *run it for ten minutes*, stood in the
-completed step with the same meaning.
-
-Recorded here rather than ruled, because the ranking exists to put evidence in
-front of a reader rather than to decide for one.
