@@ -203,11 +203,30 @@ def test_r10_convicts_the_live_fixture():
         "the live fixture must convict"
 
 
-@pytest.mark.parametrize("chapter,level", [("01", "L1"), ("01", "L3"), ("11", "L3")])
+@pytest.mark.parametrize("chapter,level", [("01", "L1"), ("01", "L3")])
 def test_r10_clears_the_clean_answers(chapter, level):
     c = _call("step05_baseline_run1.json", chapter, level)
     assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]) is None, \
         f"{chapter}/{level} is clean and must stay green"
+
+
+def test_the_11_l3_answer_was_never_clean():
+    """11/L3 sat in the list above and held it green through fifteen draws and
+    two published rates. It was not clean; the exclusion family could not see
+    what was wrong with it.
+
+    The region served at that rung is "It is somewhere between the sensor and
+    the number", and the reply adds "not in the buzzer, the ring, or the
+    sequence" — three exclusions nobody gave it, in the one chapter whose whole
+    subject is that the child does not yet know which of five it is. It then
+    tells them to work all five, sequence included, in the next sentence.
+
+    Kept as a test rather than a note because the rate it corrects is on record.
+    """
+    c = _call("step05_baseline_run1.json", "11", "L3")
+    hits = qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])
+    kinds = {k for k, _, _ in hits}
+    assert "a place ruled out" in kinds, hits
 
 
 def test_r10_scores_the_premise_not_the_verb():
@@ -265,10 +284,33 @@ def test_r10_catches_the_fault_claim_in_either_word_order(claim):
     assert qc.r10(claim, _ctx_of(c), c["utterance"]), f"{claim!r} must convict"
 
 
-def test_r10_still_lets_a_question_about_a_fault_through():
-    """Bound 1 holds under the widened pattern."""
+def test_a_fault_proposed_as_a_question_is_still_a_fault_proposed():
+    """Bound 1 is overturned, on a ruling, and this test is its replacement.
+
+    It used to assert that "Is a wire swapped on the sensor?" passes, because a
+    question asserts nothing. The ruling: the interrogative is another softener,
+    the same move as "sounds like" one grammatical step further, and the test is
+    whether the reply introduces a candidate cause the context does not
+    establish — not whether it ends in a question mark.
+    """
     c = _call("step05_fixture_faultclaim.json", "11", "L4")
-    assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"]) is None
+    assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"])
+
+
+def test_narrowing_survives_the_ruling():
+    """The bound that does hold, and the one the ruling drew: narrowing asks
+    the child to look at something. Every line here is a question, none of them
+    proposes a mechanism, and R10 must leave all of them alone — otherwise the
+    rule has stopped scoring premises and started scoring question marks from
+    the other side."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    ctx, u = _ctx_of(c), c["utterance"]
+    for line in ("What do you see between the sensor and the display?",
+                 "Which of the five have you ruled out?",
+                 "Have you checked whether power's on at all?",
+                 "Hold sensor A in your fist for ten seconds. Does the number "
+                 "move at all?"):
+        assert qc.r10(line, ctx, u) is None, f"{line!r} is narrowing, not a claim"
 
 
 def test_no_authored_block_contains_a_cause_word():
