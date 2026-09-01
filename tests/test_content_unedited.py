@@ -17,7 +17,14 @@ def test_no_chapters_fix_is_served_ungated():
     All four were authored against the fault instead, and the set is now empty.
     It stays a tripwire rather than a formality: the next fix authored cannot
     quietly join them, and a step rewritten under an existing fix fires it too.
+
+    Thresholded for `fix` alone, which is the field they were validated on.
+    M-08 step 00 found they do not transfer: on `ask` they cleared chapters 10
+    and 12, whose asks are their steps' own instructions and one of which comes
+    with the answer attached. Asks are ranked and read, not judged here, until
+    they are authored.
     """
-    from tools.fix_publicity import public
-    assert public() == [], (
-        "a chapter's fix is served ungated at L0 again: " f"{public()}")
+    from tools.gate_publicity import fixes_over_threshold
+    assert fixes_over_threshold() == [], (
+        "a chapter's fix is served ungated at L0 again: "
+        f"{fixes_over_threshold()}")

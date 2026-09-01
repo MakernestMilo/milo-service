@@ -57,6 +57,33 @@ rather than a fix, and the order had already spent its authoring.
 
 ---
 
+## 4. Publicity for a region needs a different instrument
+
+**The work.** Decide what it means for a `region` to be already public, and build
+the measure for it. Both existing measures are wrong for the job.
+
+**Why it is carried, from M-08 step 00.** Pointed at all fourteen chapters, the
+overlap measures flagged four regions — 02, 05, 09 and 12 — every one at 100%
+content-word coverage with a contiguous run of two to four words. All four are
+artefacts. A region's vocabulary *is* the chapter's own nouns, so coverage reads
+high on a region that publishes nothing:
+
+> `02/region` — *"It is in the two numbers, not in the ring."*
+> step 05 — *"Set the threshold to 30 degrees with the dial. Watch the ring…"*
+
+Same words, and the step never says the answer is in the numbers rather than the
+ring.
+
+**The distinction that decides it.** `fix` and `ask` are **actions**: a step
+naming the same action has published it, and overlap sees that. A `region` is a
+**claim about where the fault lives**. Publicity for a region means the step
+makes the same location claim, and no overlap measure can see a claim.
+
+Ruled out of T1's mechanical half for that reason. The four flagged regions are
+recorded here as artefacts so the next reader does not re-flag them.
+
+---
+
 ## 3. The cause-word set deserves a better answer than the lint
 
 **The ruling that stands.** The exclusion list was refused, on the grounds that
