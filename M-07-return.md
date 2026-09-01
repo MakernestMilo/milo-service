@@ -18,7 +18,7 @@ wrong and are corrected in place, both marked.
 | rules | **R10 reads questions**, and three families now score claims rather than forms |
 | harness | **7,616 checks · 7,616 pass · 0 fail** — 14 chapters × 136 bank utterances × 4 clock positions |
 | by level | L0 1792 · L1 1792 · L2 3584 · L3 416 · L4 32 |
-| tests | **263 passing** |
+| tests | **264 passing** |
 | live calls | **120 new in M-07**, on a record of 461 |
 
 ---
@@ -162,10 +162,11 @@ block each, no empty answers.
 |---|---|---|---|---|
 | 06 | 10 | 109–137 | 12–17 of 20 | 0/10 |
 | 07 | 10 | 91–120 | 4–9 of 11 | 0/10 |
-| 09 | 10 | 91–122 | 11–17 of 21 | 1/10 |
+| 09 | 10 | 91–122 | 11–17 of 21 | 0/10 |
 | G | 10 | 74–106 | 10–12 of 13 | 1/10 |
 
-Three tests, all passing at 40 of 40:
+Three tests, all passing at 40 of 40, and after the grounding ruling below,
+R10 convicts once in forty — G run 3, quoted above:
 
 - **The diagnosis survives.** Every reply carries it. 09's opening concession —
   *nothing is broken, and the numbers are real* — survives in ten of ten, which
@@ -198,18 +199,44 @@ checked; and the cause-word set, where the ruling against an exclusion list
 stands and the underlying question survives it after three runs lost to three
 words.
 
-**Awaiting a ruling, not carried.** 09/L3, second five, run 1:
+### Ruled and landed after the first draft of this return
+
+09/L3, second five, run 1:
 
 > Leave the machine mounted in the second place — the one where the trouble
 > actually happens, **not the one near the socket**.
 
-R10 convicts it as a place ruled out. I believe it is a false positive: the
-served fix says the spot is *"the convenient one rather than the one you were
-asked about"*, and the completed step 03 says that place is *near the socket*.
-Milo is delivering the fix in the step's own words. It fires because grounding
-reads the region line, the fix line and the child's words, and `socket` is in
-none of them. Widening grounding to the whole prompt would gut the family, so
-this needs a line drawn rather than a patch, and it is recorded unpatched.
+A false positive. The served fix says the spot is *"the convenient one rather
+than the one you were asked about"*, and completed step 03 says that place is
+*near the socket*. Milo is quoting the child's own book.
+
+**Ruled:** material Milo is licensed to speak is material Milo can be grounded
+against. Completed steps are served in full at L0 under sheet 1, so grounding
+takes the completed-steps block — not the whole prompt, and not the machine
+block or the parts list, which name things without licensing any claim about
+them.
+
+**Third time in two orders** that a guard fired on material the child can
+already read, and the third time the fix was the guard's notion of public rather
+than the material.
+
+**One condition was added to the ruling, and without it the widening ate the
+finding it was meant to leave standing.** Taken literally, grounding on
+completed steps cleared 11/L3 — the correction this order exists for. Chapter
+11's step 03 names the five tests, so excluding three of them read as quoting
+the book.
+
+It is not. The step names them as tests to **run**, and chapter 11 holds no fix,
+so nothing served licenses any exclusion at all. **Naming a thing is not
+licensing an exclusion of it.** So the completed steps ground an exclusion only
+where a fix is served at that rung: in 09 the exclusion comes from the fix and
+the step supplies only the wording; in 11 there is no fix in the chapter to come
+from.
+
+Verified blast radius: **one rate moves and nothing else does.** 09/L3 goes 1/10
+to 0/10; every other rung in all eight arms is unchanged. A fixture holds the
+family: 11/L3, 11/L3 in the absence-only arm, and 08/L2 must all stay red, and
+the test says so in those words.
 
 ---
 

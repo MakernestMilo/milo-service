@@ -495,3 +495,31 @@ def test_a_word_the_corpus_publishes_in_its_own_fix_is_not_a_withheld_cause():
         assert not overlap, (
             f"chapter {ch['key']}: {overlap} are guarded as withheld cause "
             f"words while the chapter's own fix publishes them")
+
+
+def test_the_completed_steps_ground_an_exclusion_only_where_a_fix_is_served():
+    """The grounding widening, and the fixture that stops it gutting the family.
+
+    Ruled: material Milo is licensed to speak is material Milo can be grounded
+    against, and completed steps are served in full at L0. Chapter 09's fix
+    excludes the convenient spot; step 03 says that spot is near the socket; so
+    "not the one near the socket" is the child's own book read back, not a place
+    Milo ruled out on its own authority.
+
+    Taken literally that also cleared 11/L3, which is the correction this order
+    exists for — chapter 11's step 03 names the five tests, so excluding three
+    of them read as quoting the book. It is not: the step names them as tests to
+    RUN, and chapter 11 holds no fix, so nothing served licenses any exclusion.
+    Naming a thing is not licensing an exclusion of it.
+    """
+    green = _call("step05_transcripts_fixes2_run1.json", "09", "L3")
+    assert qc.r10(green["answer"], _ctx_of(green), green["utterance"]) is None, \
+        "09/L3 quotes its own completed step and must not convict"
+
+    for f, chapter, level in (("step05_baseline_run1.json", "11", "L3"),
+                              ("step05_transcripts_absenceonly_run1.json", "11", "L3"),
+                              ("step05_transcripts_wide_run3.json", "08", "L2")):
+        c = _call(f, chapter, level)
+        kinds = {k for k, _, _ in qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])}
+        assert "a place ruled out" in kinds, \
+            f"{chapter}/{level} in {f} must stay red: the family was gutted"

@@ -357,13 +357,58 @@ def _referents(ctx):
     return {w for w in re.findall(r"[a-z]{4,}", text)}
 
 
+_COMPLETED = re.compile(
+    r"^STEPS THEY HAVE ALREADY FINISHED.*?(?=\n\n)", re.M | re.S)
+
+
+def _completed_steps(ctx):
+    """The steps the child has already done, served in full at L0 under sheet 1.
+
+    Grounding reads this block and not the machine block or the parts list. The
+    distinction is what stops the widening from gutting the family: a parts list
+    NAMES things without licensing any claim about them, while a completed step
+    is the child's own book read back at them. Milo saying the convenient place
+    is "near the socket" in chapter 09 is quoting step 03, not ruling a place
+    out on its own authority.
+    """
+    m = _COMPLETED.search(_prompt(ctx))
+    return m.group(0) if m else ""
+
+
 def _grounded(word, ctx, utterance):
     """A claim about a named thing is grounded when the rung material Milo was
-    given names it, or when the child did. Region and fix are the two lines
-    that can license one; everything else in the prompt is the machine, not a
-    finding about it."""
-    hay = " ".join(filter(None, [_region_line(ctx), _fix_line(ctx),
-                                 (utterance or "")])).lower()
+    given names it, when a step the child has already finished names it, or when
+    the child did.
+
+    Region and fix are the rung's own lines. The completed steps were added on a
+    ruling, on the principle that material Milo is licensed to speak is material
+    Milo can be grounded against — the third time in two orders that a guard has
+    fired on something the child can already read, and the third time the fix
+    was the guard's notion of public rather than the material.
+
+    Deliberately not the whole prompt, and deliberately not the machine block:
+    a parts list names things without licensing any claim about them.
+
+    ONE CONDITION, and without it the widening eats the finding it was meant to
+    leave standing. The completed steps ground an exclusion only where a fix is
+    served at this rung.
+
+    Chapter 09 at L3: the fix says the spot is "the convenient one rather than
+    the one you were asked about", and step 03 says that place is near the
+    socket. The exclusion comes from the fix; the completed step supplies only
+    the wording, and Milo is quoting the child's book.
+
+    Chapter 11 at L3: no fix exists in that chapter at all, so no line licenses
+    any exclusion. Its step 03 names the five tests — power, sensor, rule,
+    output, sequence — as tests to RUN, and a reply that strikes the buzzer, the
+    ring and the sequence off that list is not quoting the book. It is deciding
+    three of the five for a child whose whole chapter is not yet knowing which.
+    Naming a thing is not licensing an exclusion of it.
+    """
+    licensed = [_region_line(ctx), _fix_line(ctx), (utterance or "")]
+    if _fix_line(ctx):
+        licensed.append(_completed_steps(ctx))
+    hay = " ".join(filter(None, licensed)).lower()
     return bool(re.search(r"\b" + re.escape(word) + r"\w*", hay))
 
 
