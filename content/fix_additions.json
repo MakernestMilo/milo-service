@@ -21,6 +21,11 @@
    "was": "Mount it where the problem is, using the strap or the clip, and run it for ten minutes.",
    "now": "Nothing is broken, and the numbers are real. They are the numbers for the spot the machine is standing in, which is the convenient one rather than the one you were asked about. Look at what you wrote down from both places in stage three — the difference between those two sets is the answer. Leave it in the second place, where the trouble actually is.",
    "_why": "09's says list is the only one where the child does not think the machine is wrong — the numbers look fine, it says everything's ok — so the fix has to agree with them first and then relocate the problem. The old fix restated a step already finished: the child has mounted it in both places and compared, so telling them to mount it where the problem is gives them nothing. Pointing at the comparison they already made does. This is the one decision N made public, completed steps being served in full at L0."
+  },
+  "01": {
+   "was": "Push the yellow wire back into A0 until it stops moving.",
+   "now": "Push the signal wire back into A0 until it stops moving — that is the one going to the sensor, whatever colour you used.",
+   "_why": "D-01. Colour is a convention the corpus and the code both encode as a fact, and this is the only live exposure: chapter 01's fix is served at L3, and a child who wired the signal line with a spare of another colour is sent to look for a wire that is not on their machine — at the rung where they have asked for help outright and will trust the answer. Chapter 11 is not live: its fix is null and its cause is withheld at every rung, so no colour word reaches a child there. Names the wire by what it does rather than what it looks like; card 01 already asks the child to write what each of the three wires carries, so 'signal' is a word the book has given them. The trailing clause costs six words and makes the fix correct for the child who did wire it yellow. A0 does the identifying work regardless of colour, so the sentence still points at exactly one wire."
   }
  }
 }

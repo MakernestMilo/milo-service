@@ -447,12 +447,73 @@ def _unasserted(span, upto):
 # are about a named PART being excluded, so these are not their business.
 _WHOLE = {"machine", "build", "everything", "rest", "kit", "thing", "chain"}
 
+# Pin names are corpus data, not a vocabulary: every chapter's card lists them
+# and the prompt prints them under "Pins on this build".
+_PINS = r"3V|GND|A0|A1|DSP|DIAL|RING|BUZ|SW|LMP"
+_PAIRING = re.compile(
+    r"([a-z][a-z\' ]{0,28}?)\s+(?:into|in to|to|on|at|goes to|plugged into)\s+"
+    r"(?:the\s+)?(?:port\s+marked\s+)?(" + _PINS + r")\b", re.I)
+
 _STATE_OK = (r"fine|ok|okay|good|working|alright|healthy|dead|broken|faulty|"
              r"bad|fried|blown|(?:on|off)\b(?!\s+(?:the|a|an|your|its|it|this|that)\b)")
 
 _HEDGE = (r"\b(?:could|might|may|maybe|perhaps|probably|possibly|likely|i bet|"
           r"i'?d guess|my guess|chances are|i think|it seems|seems like|"
           r"sounds like)\b")
+
+# R10's frequency family, as a claim shape rather than a vocabulary.
+#
+# It had been widened three times and every widening was a longer list of the
+# phrasings the model happened to use that week — almost always, then trips
+# people up all the time, then plenty of builds get stuck. Each list went green
+# the moment the claim changed clothes, and a fourth escaped it in M-07:
+# "a window opening or heating kicking on is often quicker than your gap".
+#
+# The subject is a claim about how often a fault occurs, however worded, and no
+# frequency for any fault is served anywhere in any prompt. What is listed below
+# is therefore not a set of phrasings but a CLOSED GRAMMATICAL CLASS: the
+# frequency adverbs and proportion quantifiers of English. A closed class does
+# not grow when the model rephrases, which is the whole difference between this
+# and the three lists it replaces.
+#
+# Bare "always" and "never" are deliberately absent. Every one of their five
+# occurrences across 461 recorded replies is a specific event rather than an
+# incidence — "the machine was asleep through it and never caught it" is the
+# authored fix, and "a max value that never moves" describes a display. The
+# hedged forms "almost always" and "nearly always" are incidence and are kept.
+# "normally" is absent for the same reason: in this corpus it is manner —
+# "you should see it start reading normally".
+_RATE = re.compile(
+    r"\b(?:often|usually|commonly|typically|generally|frequently|rarely|seldom|"
+    r"almost always|nearly always|most of the time|more often than not|"
+    r"nine times out of ten|all the time|every time|tends? to|"
+    r"(?:plenty|a lot|lots|loads) of|"
+    r"most (?:people|builds|kids|children|beginners)|"
+    # universal quantifiers over people. Also closed class, and the frozen
+    # fixture's own claim: "This one catches nearly everyone in this chapter."
+    # 24 occurrences across the record, every one an incidence claim.
+    #
+    # "nobody" and "no one" were in this line and came out. Five occurrences
+    # across 430 recorded replies and all five are Milo DISCLAIMING knowledge —
+    # "I don't know which of the five it is, nobody told me, so I can't guess"
+    # — which is the behaviour the guard exists to produce. The quantifier there
+    # ranges over people who told Milo, not over instances of a fault. A closed
+    # class is still a class of words, and a word can belong to it
+    # grammatically while never carrying the claim in this corpus.
+    r"(?:nearly |almost )?(?:everyone|everybody))\b", re.I)
+
+# Two grammatical frames where a rate word quantifies a SERVED PARAMETER rather
+# than asserting an incidence, and the constraint that made this real work:
+# chapter 07's own stage 02 instruction is "Say how often you think it should
+# write a number down", and its whole subject is how often the machine writes.
+# A rule that convicted a chapter for speaking its own instruction would have
+# been the vocabulary problem again, one level up.
+#
+#   how often / how frequently  — interrogative: asks after a setting
+#   often enough / frequently enough — sufficiency: judges a setting
+_RATE_EXEMPT = re.compile(
+    r"\bhow (?:often|frequently)\b|\b(?:often|frequently) enough\b", re.I)
+
 
 # A relation between two things: a comparison, an excess, or a stated cause.
 _RELATION = (
@@ -483,17 +544,7 @@ def _claims(span, ctx, utterance):
     # claim goes green when the claim changes clothes, which is R3's failure
     # and was caught in the fault detector two hours earlier and not carried
     # across this file.
-    m = (
-        # how often it happens
-        re.search(r"\b(almost always|usually|nearly always|tends to|all the time|"
-                  r"most of the time|more often than not|nine times out of ten|"
-                  r"the classic break|commonly|a common)\b", span, re.I)
-        # how many it catches
-        or re.search(r"\b(catches|trips up|trips \w+ up|stumps|gets)\s+"
-                     r"(nearly everyone|everyone|most people|a lot of|plenty of|lots of|"
-                     r"many|loads of)", span, re.I)
-        or re.search(r"\b(plenty of|a lot of|lots of|loads of|many|most)\s+"
-                     r"(builds|people|kids|children|beginners)\b", span, re.I))
+    m = _RATE.search(_RATE_EXEMPT.sub(" _ ", span))
     if m:
         found.append(("how often the fault occurs", m.group(0),
                       "no frequency for any fault is served anywhere in the context"))
@@ -567,6 +618,35 @@ def _claims(span, ctx, utterance):
                               f"region excludes what it excludes and no more"))
                 break
 
+    # A procedure assembled. The seventh family, and the first whose subject is
+    # PROCEDURAL rather than propositional — which is why the other six miss it.
+    # They score claims; this is a set of instructions.
+    #
+    # Its fixture is chapter 11's 809-token L3-by-clock reply, which told a
+    # child to "check the three wires going into it: red into 3V, black into
+    # GND, yellow into A0". Chapter 11's prompt pairs no wire with any pin: its
+    # wiring block reads "SENSOR A on A0" and its parts list names the wires
+    # separately, so the mapping was assembled rather than read. In the chapter
+    # whose rule is that nothing is named, at a rung with no fix, to a child who
+    # asked for nothing — and the wire-to-pin relation it asserted is fault 5.
+    #
+    # Grounded on co-occurrence rather than on a list: a part-to-pin pairing is
+    # founded when some line of the prompt names both. Chapter 01's netlist does
+    # — "sensor A · S to board · A0 (yellow)" — so the same sentence there is
+    # green, which is the control that makes this a rule rather than a patch.
+    for m in _PAIRING.finditer(span):
+        left, pin = m.group(1).lower(), m.group(2).upper()
+        named = [w for w in re.findall(r"[a-z]{3,}", left) if w in refs]
+        if not named:
+            continue                      # not a part-to-pin pairing at all
+        lines = _prompt(ctx).splitlines()
+        if any(any(w in l.lower() for w in named)
+               and re.search(r"\b" + pin + r"\b", l, re.I) for l in lines):
+            continue                      # the prompt pairs them; Milo read it
+        found.append(("a procedure assembled", m.group(0).strip(),
+                      f"no line of the prompt pairs {named[-1]!r} with {pin} — "
+                      f"the wiring was assembled, not read"))
+
     # A cause proposed. The newest family, and the one the ruling added: a
     # mechanism offered for the child to confirm. "Could the gap be wider than
     # the event" is not narrowing — narrowing asks the child to look at
@@ -637,6 +717,26 @@ def _refers_to_the_set(reply, items):
     gestures = bool(re.search(r"\bthe (?:five|four|three|list|set)\b|"
                               r"\b(?:five|four|three) (?:tests|checks|places)\b", low))
     return named, (gestures or len(named) >= 2)
+
+
+def refers_to_set(reply, key):
+    """Did this reply take the obligation on?
+
+    The rule has always attached the obligation to the reference rather than to
+    the rung. The RATE had not: it was computed over every reply at a rung,
+    including the ones that never invoked the set and owed it nothing. That
+    pools two different things and understates the defect wherever Milo often
+    stays off the list — 11/L2 reads 45% over all replies and 91% over the
+    replies that referred to the set, and 11/L0's 2% is one reference, which was
+    incomplete.
+
+    Exposed so the scorer can use the same predicate the rule does, rather than
+    a second implementation of one decision.
+    """
+    items = authored_set(key)
+    if not items:
+        return None                      # no set in this chapter: not n/a, no set
+    return _refers_to_the_set(reply, items)[1]
 
 
 @reads(REPLY, "an authored set named incompletely in the reply")

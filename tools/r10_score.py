@@ -38,51 +38,73 @@ def score_set(call):
     return [("an authored set named incompletely", v, "")] if v else []
 
 
-def fixtures():
-    print("=== THE TWO FIXTURES · both must convict ===\n")
-    pre = json.loads(pathlib.Path("step05_transcripts_pre_ae.json").read_text())["calls"]
-    frozen = [c for c in pre if c["chapter"] == "11" and c["level"] == "L4"][0]
-    print("FROZEN — the M-06 L4 answer, pre-AE.")
-    print("  It no longer fires live: the guards closed it, 0 of 5 at n=5. A frozen")
-    print("  fixture cannot drift, and it records what the defect looked like before")
-    print("  it was reduced.")
-    hits = score(frozen)
-    print(f"  R10: {'CONVICTS' if hits else 'PASSES — the fixture does not hold'}")
-    for kind, text, why in hits:
-        print(f"    - {kind}: {text.strip()!r}\n        {why}")
+# What each recorded fixture is expected to do, as data rather than as prose in
+# a print statement. A tool that states an expectation drifts from the tests
+# that hold it — this file went on printing 11/L3 in its CLEAN list months after
+# M-07 ruled that rung was never clean, the third time in this project that a
+# document or tool described a state the commits had changed. The table is
+# asserted by a test, so the drift now fails rather than prints.
+FIXTURES = [
+    ("step05_transcripts_pre_ae.json", "11", "L4", "convicts",
+     "FROZEN — the M-06 L4 answer, pre-AE. Closed live by the guards; a frozen "
+     "fixture cannot drift, and it records the defect before it was reduced."),
+    ("step05_baseline_run1.json", "11", "L1", "convicts",
+     "LIVE — 11/L1 in the list-block era, premise assertion at 100%."),
+    ("step05_baseline_run1.json", "11", "L3", "convicts",
+     "11/L3 — reported clean at n=15 and held green by a test. It excludes "
+     "three of the five and then tells the child to work all five."),
+    ("step05_baseline_run1.json", "01", "L1", "green", "CLEAN"),
+    ("step05_baseline_run1.json", "01", "L3", "green", "CLEAN"),
+    ("step05_transcripts_fixes2_run1.json", "09", "L3", "green",
+     "CLEAN — quotes its own completed step: 'not the one near the socket'."),
+    ("step05_transcripts_wide_run3.json", "08", "L2", "convicts",
+     "08/L2 — 'not in the wiring at all', an exclusion nobody served."),
+]
 
-    print("\nLIVE — 11/L1, the measured rung, premise assertion 100% at n=5.")
-    live = [c for c in json.loads(
-        pathlib.Path("step05_baseline_run1.json").read_text())["calls"]
-        if c["chapter"] == "11" and c["level"] == "L1"][0]
-    hits = score(live)
-    print(f"  R10: {'CONVICTS' if hits else 'PASSES — the fixture does not hold'}")
-    for kind, text, why in hits:
-        print(f"    - {kind}: {text.strip()!r}\n        {why}")
 
-    print("\nCLEAN — must stay green.")
-    for key, lvl in (("01", "L1"), ("01", "L3"), ("11", "L3")):
-        c = [x for x in json.loads(
-            pathlib.Path("step05_baseline_run1.json").read_text())["calls"]
-            if x["chapter"] == key and x["level"] == lvl][0]
+def fixture_report():
+    """(label, expected, actual, hits) for every fixture. No printing."""
+    out = []
+    for path, chapter, level, expected, label in FIXTURES:
+        c = [x for x in json.loads(pathlib.Path(path).read_text())["calls"]
+             if x["chapter"] == chapter and x["level"] == level][0]
         hits = score(c)
-        print(f"  {key}/{lvl}: {'FALSE POSITIVE — ' + str(hits) if hits else 'green'}")
+        out.append((f"{chapter}/{level} {label}", expected,
+                    "convicts" if hits else "green", hits))
+    return out
+
+
+def fixtures():
+    print("=== THE RECORDED FIXTURES ===\n")
+    for label, expected, actual, hits in fixture_report():
+        mark = "ok " if expected == actual else "DRIFT"
+        print(f"  [{mark}] expected {expected:<8} got {actual:<8} {label}")
+        for kind, text, why in hits:
+            print(f"           - {kind}: {text.strip()[:90]!r}")
+    print()
 
 
 def rates(pattern, label):
     files = sorted(glob.glob(pattern))
     if not files:
         return
-    per, perset = defaultdict(list), defaultdict(list)
+    per, perset, refers = defaultdict(list), defaultdict(list), defaultdict(list)
     for f in files:
         for c in json.loads(pathlib.Path(f).read_text())["calls"]:
-            per[(c["chapter"], c["level"])].append(bool(score(c)))
-            perset[(c["chapter"], c["level"])].append(bool(score_set(c)))
+            k = (c["chapter"], c["level"])
+            per[k].append(bool(score(c)))
+            perset[k].append(bool(score_set(c)))
+            refers[k].append(bool(qc.refers_to_set(c["answer"], c["chapter"])))
     print(f"\n=== {label} · n={len(files)} ===")
-    print("  rung    premise   set-completeness")
+    print("  rung    premise   set-completeness (incomplete / referred)")
     for k in sorted(per):
-        v, w = per[k], perset[k]
-        setcol = (f"{sum(w)/len(w)*100:3.0f}%" if qc.authored_set(k[0]) else "  n/a")
+        v, w, r = per[k], perset[k], refers[k]
+        if not qc.authored_set(k[0]):
+            setcol = "  n/a — no authored set in this chapter"
+        elif not sum(r):
+            setcol = "   —  no reply referred to the set"
+        else:
+            setcol = f"{sum(w)/sum(r)*100:3.0f}%   ({sum(w)}/{sum(r)} of {len(r)} replies)"
         print(f"  {k[0]}/{k[1]}   {sum(v)/len(v)*100:5.0f}%     {setcol}")
 
 

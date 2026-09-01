@@ -55,7 +55,11 @@ MUTATIONS = [
     ("R3", lambda c, t, l: _add(c, _fix(t.chapter))
         if t.chapter != "11" and l not in ("L3", "L4") and _fix(t.chapter) else None),
     # R4: chapter 11's fix in the prompt at a level R3 permits, so only R4 fires.
-    ("R4", lambda c, t, l: _add(c, "  fix: solder the joint")
+    # The string was "solder the joint" until the clock reached L3. That put the
+    # mutation in front of all 136 bank utterances rather than the 8 override
+    # ones, and one of them is "do I solder this" — so R6 fired too and R4's
+    # isolation was lost. The word, not the rule, was the problem.
+    ("R4", lambda c, t, l: _add(c, "  fix: push it back in")
         if t.chapter == "11" and l in ("L3", "L4") else None),
     ("R5", "L0"),
     ("R6", lambda c, t, l: _add(c, "- motor \u2014 a part that is not in this kit")),
@@ -104,12 +108,22 @@ def test_the_ladder_lands_where_the_port_says_it_should():
 
     L3 and L4 rose because the eight override-tagged utterances resolve by
     direct ask rather than by clock, so they produce a row at every position.
-    See test_override_rows_are_duplicated_across_every_clock_position."""
+    See test_override_rows_are_duplicated_across_every_clock_position.
+
+    Moved a third time in M-08, and again legitimately. `level()` returned L2
+    for the third rung and everything past it, so the book's third rung had no
+    destination of its own — chapter 11's helper page reads five minutes, twelve
+    and twenty-two, and twelve and twenty-two rendered identically. The third
+    rung now returns L3, which moves the late clock's 1,792 non-override rows
+    and touches no other position.
+
+    The line was predicted in M-08-step04-prediction.md and committed before the
+    change was made, and the measurement matched it exactly."""
     from collections import Counter
     rows = qc.run(runtime.level, assembler.assemble)
     assert len(rows) == 7616, f"{len(rows)} rows — 4 positions x 1904 expected"
     assert Counter(r.lvl for r in rows) == {
-        "L0": 1792, "L1": 1792, "L2": 3584, "L3": 416, "L4": 32}
+        "L0": 1792, "L1": 1792, "L2": 1792, "L3": 2208, "L4": 32}
 
 
 def test_override_rows_are_duplicated_across_every_clock_position():
@@ -133,10 +147,27 @@ def test_override_rows_are_duplicated_across_every_clock_position():
         "an override row resolved by the clock, which the ladder must not allow"
 
 
-def test_the_clock_alone_never_reaches_l3_or_l4():
-    """L3 and L4 are override-only. No clock position produces them."""
+def test_the_clock_reaches_l3_and_stops_short_of_l4():
+    """Overturned, on a ruling, and this is its replacement.
+
+    It asserted that no clock position produces L3 or L4. The L3 half was a
+    defect carried as a property for three orders: sheet 4 says the clock
+    escalates without being asked, so silence has an end even for a child who
+    never says they are stuck, and its corollary is that any silence without an
+    end is a defect rather than a pedagogy. A child silent at the third rung is
+    owed the fix.
+
+    The L4 half stands, and is recorded with its premise open. Rescue is for a
+    child who is distressed, and distress is signalled by asking rather than by
+    waiting — which depends on ask-count being a proxy for distress, the thing
+    decision AL flags as unexamined.
+    """
     rows = qc.run(runtime.level, assembler.assemble)
-    assert not [r for r in rows if r.tag != "override" and r.lvl in ("L3", "L4")]
+    by_clock = [r for r in rows if r.tag != "override"]
+    assert [r for r in by_clock if r.lvl == "L3"], \
+        "the clock no longer reaches L3, and a silent child is owed the fix"
+    assert not [r for r in by_clock if r.lvl == "L4"], \
+        "the clock reached L4: rescue answers being asked, not waiting"
 
 
 @pytest.mark.parametrize("seen", [0, 0.0, -1.0, -100000.0])
@@ -332,7 +363,11 @@ def test_no_authored_block_contains_a_cause_word():
               "OPENING_WORD": A.OPENING_WORD,
               "OVERRIDE_LINE": A.OVERRIDE_LINE,
               "ESCALATION": A.ESCALATION,
-              "STANDING_RULE": A.STANDING_RULE}
+              "STANDING_RULE": A.STANDING_RULE,
+              # chapter-scoped, so only its own chapter's cause words can turn a
+              # row red — checked against all thirty-two anyway, because a block
+              # that is safe only by its scope is one refactor from not being.
+              **{f"CHAPTER_PREMISE[{k}]": v for k, v in A.CHAPTER_PREMISE.items()}}
     bad = []
     for name, text in blocks.items():
         for word in re.findall(r"[a-z]{4,}", text.lower()):
@@ -523,3 +558,155 @@ def test_the_completed_steps_ground_an_exclusion_only_where_a_fix_is_served():
         kinds = {k for k, _, _ in qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])}
         assert "a place ruled out" in kinds, \
             f"{chapter}/{level} in {f} must stay red: the family was gutted"
+
+
+@pytest.mark.parametrize("claim", [
+    "This one catches nearly everyone in this chapter.",
+    "this one trips people up all the time",
+    "plenty of builds get stuck here",
+    "that's the one that's usually off",
+    "this kind of fault tends to live in that stretch",
+    "the fault is almost always in the rule step",
+    "a window opening or heating kicking on is often quicker than your gap",
+])
+def test_the_frequency_family_scores_a_shape_not_a_vocabulary(claim):
+    """M-08 step 02. The family had been widened three times and each widening
+    was a longer list of the phrasings the model happened to use that week; a
+    fourth escaped in M-07 on `often`.
+
+    What replaces them is a closed grammatical class — the frequency adverbs and
+    proportion quantifiers of English — which does not grow when the model
+    rephrases. Every claim here is a different wording of one subject: how often
+    a fault occurs, for which no frequency is served in any prompt.
+    """
+    c = _call("step05_transcripts_pre_ae.json", "11", "L4")
+    assert qc.r10(claim, _ctx_of(c), c["utterance"]), f"{claim!r} must convict"
+
+
+@pytest.mark.parametrize("line", [
+    "Say how often you think it should write a number down.",
+    "It's in a decision you made on day one, when you set up how often it writes"
+    " a number down.",
+    "your first run just wasn't checking often enough to catch the moment",
+    "the machine was asleep through it and never caught it",
+    "is it something like 0 or a max value that never moves?",
+    "once it's seated you should see it start reading normally",
+])
+def test_the_frequency_family_does_not_convict_a_chapter_speaking_its_own_terms(line):
+    """The constraint that made this real work rather than a one-liner.
+
+    Chapter 07's stage 02 instruction is "Say how often you think it should
+    write a number down", and the whole chapter turns on how often the machine
+    writes. A rule convicting a chapter for speaking its own instruction would
+    be the vocabulary problem again, one level up. Two grammatical frames are
+    exempt — the interrogative "how often" and the sufficiency "often enough" —
+    and bare "always", "never" and "normally" are out of the class, because
+    every one of their occurrences in 461 recorded replies is a specific event
+    or a manner rather than an incidence.
+    """
+    c = _call("step05_transcripts_wide_run1.json", "07", "L3")
+    assert qc.r10(line, _ctx_of(c), c["utterance"]) is None, \
+        f"{line!r} must stay green"
+
+
+def test_the_tools_stated_expectations_match_what_the_rules_do():
+    """The check that replaces the habit.
+
+    tools/r10_score.py went on printing 11/L3 in its CLEAN list months after
+    M-07 ruled that rung was never clean — the third time in this project that a
+    document or tool described a state the commits had changed. Its expectations
+    are a table now, and this asserts them, so drift fails rather than prints.
+    """
+    from tools.r10_score import fixture_report
+    drifted = [(label, exp, got) for label, exp, got, _ in fixture_report()
+               if exp != got]
+    assert not drifted, "a tool's stated expectation no longer holds:\n  " + \
+        "\n  ".join(f"{l}: expected {e}, got {g}" for l, e, g in drifted)
+
+
+def test_set_completeness_is_measured_over_references_not_over_replies():
+    """M-08 step 03, T3. The obligation attaches to the reference, not to the
+    rung — that was already true of the rule and was not true of the rate.
+
+    The rate was computed over every reply at a rung, including the ones that
+    never invoked the set and owed it nothing, which pools two different things.
+    Across every recorded reply in chapter 11: 11/L2 reads 45% over all replies
+    and 91% over the replies that referred to the set, and 11/L0's 2% is a
+    single reference which was incomplete.
+    """
+    import glob
+    import json
+    import pathlib as _p
+    from tools.r10_score import ctx_of
+    seen = {"refers": 0, "replies": 0, "incomplete_without_reference": 0}
+    for f in sorted(glob.glob("step05_*.json")):
+        for c in json.loads(_p.Path(f).read_text()).get("calls", []):
+            if c["chapter"] != "11":
+                continue
+            seen["replies"] += 1
+            refers = qc.refers_to_set(c["answer"], "11")
+            seen["refers"] += bool(refers)
+            if not refers and qc.r10_set(c["answer"], "11", ctx_of(c)):
+                seen["incomplete_without_reference"] += 1
+    assert seen["replies"] > 200, seen
+    assert 0 < seen["refers"] < seen["replies"], (
+        "either every reply refers to the set or none does, and the "
+        "denominator would not matter: " + str(seen))
+    assert seen["incomplete_without_reference"] == 0, (
+        "a reply was judged incomplete without having referred to the set")
+
+
+def test_a_chapter_with_no_authored_set_is_not_scored_at_all():
+    """Inert elsewhere rather than assuming every chapter should enumerate.
+    One chapter of fourteen has a set today."""
+    with_sets = [c["key"] for c in corpus.CHAPTERS if qc.authored_set(c["key"])]
+    assert with_sets == ["11"], with_sets
+    for key in ("01", "07", "08", "G"):
+        assert qc.refers_to_set("power, sensor, rule and output", key) is None
+
+
+def test_the_seventh_family_convicts_an_assembled_wiring_procedure():
+    """M-08. The first family whose subject is procedural rather than
+    propositional, which is why the other six miss it: they score claims, and
+    this is a set of instructions.
+
+    Its fixture is chapter 11's 809-token L3-by-clock reply — the longest in the
+    record — which told a child to check "red into 3V, black into GND, yellow
+    into A0". Chapter 11's prompt pairs no wire with any pin. In the chapter
+    whose rule is that nothing is named, at a rung with no fix, to a child who
+    asked for nothing.
+
+    The first defect in three orders found by reading a token count rather than
+    a rate.
+    """
+    c = _call("step05_transcripts_eleven2_run3.json", "11", "L3")
+    kinds = [k for k, _, _ in qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])]
+    assert "a procedure assembled" in kinds, c["answer"][:200]
+
+
+def test_the_contrast_in_the_same_five_stays_green():
+    """Same rung, same prompt, same five, 60 tokens instead of 809: "Which of
+    the five tests have you actually run so far — power, sensor, rule, output,
+    or sequence?" A rule that cannot tell these two apart has not found its
+    subject."""
+    import json as _json
+    import pathlib as _pathlib
+    for c in _json.loads(_pathlib.Path("step05_transcripts_eleven2_run5.json")
+                         .read_text(encoding="utf-8"))["calls"]:
+        if c["level"] == "L3" and c["reached_by"] == "clock":
+            kinds = [k for k, _, _ in
+                     qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])]
+            assert "a procedure assembled" not in kinds, c["answer"][:200]
+
+
+def test_a_pairing_the_prompt_serves_is_not_an_assembled_procedure():
+    """The control that makes it a rule rather than a patch. Chapter 01's card
+    carries a netlist — "sensor A · S to board · A0 (yellow)" — so the same
+    sentence that convicts in chapter 11 is founded there. Grounded on
+    co-occurrence in the served prompt, not on a list of chapters."""
+    c = _call("step05_transcripts_production_run1.json", "01", "L3")
+    ctx = _ctx_of(c)
+    for line in ("push the yellow wire into A0",
+                 "the red wire goes to 3V"):
+        kinds = [k for k, _, _ in qc.r10_detail(line, ctx, c["utterance"])]
+        assert "a procedure assembled" not in kinds, line

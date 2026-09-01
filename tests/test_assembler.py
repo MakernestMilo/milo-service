@@ -162,3 +162,32 @@ def test_production_serves_every_authored_block():
     assert "WHEN THE STEP GIVES A LIST" not in prompt
     main_src = pathlib.Path("main.py").read_text(encoding="utf-8")
     assert "SERVED_BLOCKS" not in main_src, "the service must never set the seam"
+
+
+def test_the_chapter_premise_reaches_only_its_own_chapter():
+    """C-13's fifth authored block, and the first that is chapter-scoped.
+
+    Chapter 11's premise had never reached Milo: the word Sabotage arrived only
+    as a chapter title, and nothing said a person did it, that it was
+    deliberate, or that they left. A block that leaked into the other thirteen
+    would tell every child their machine had been sabotaged.
+    """
+    turn11 = runtime.Turn("nothing happens", "11", None, 0)
+    for lvl in LEVELS:
+        assert "WHAT HAPPENED IN THIS CHAPTER" in \
+            assembler.assemble(turn11, lvl).stage["prompt"], lvl
+    for key in [c["key"] for c in corpus.CHAPTERS if c["key"] != "11"]:
+        turn = runtime.Turn("what do I do now", key, None, 0)
+        for lvl in LEVELS:
+            assert "WHAT HAPPENED IN THIS CHAPTER" not in \
+                assembler.assemble(turn, lvl).stage["prompt"], f"{key} at {lvl}"
+
+
+def test_the_premise_stands_before_the_absence_guard():
+    """The guard explains the shape of a rung with no material; the premise
+    explains why this chapter's is empty. Reading the guard first would have a
+    child's mentor told what to do about an absence before it is told the
+    absence is the point."""
+    p = assembler.assemble(runtime.Turn("nothing happens", "11", None, 0),
+                           "L2").stage["prompt"]
+    assert p.index("WHAT HAPPENED IN THIS CHAPTER") < p.index("WHEN A RUNG HAS NO MATERIAL")

@@ -1,0 +1,32 @@
+{
+ "_why": "M-08 step 01. Five chapters served their L1 narrow line ungated at L0, because the ask restated the step the child was already on. Step 00 ranked them above every fix in the corpus — 01 and 04 at six contiguous words — which makes L1 the more compromised rung, and the one a child reaches by the clock alone rather than by asking outright. Authored by the architect against what the step does not say. Source stays fingerprinted and unedited; replacements live here, one screen, the same shape as the ladders and the fixes.",
+ "_guard": "Each entry names the ask it replaces, verbatim. A change under this file fails at load rather than silently replacing a line that is no longer there.",
+ "_not_here": "09 was ruled out. Its run — 'where the machine' — is a location phrase, and the step's action is checking display readability from that spot: shared vocabulary, unshared claim, the same artefact class as the four regions. Five asks, not six.",
+ "replace": {
+  "01": {
+   "was": "Hold sensor A in your fist for ten seconds. Does the number move at all?",
+   "now": "Say the number on the display out loud. Is it the same one that was there before you pulled anything out?",
+   "_why": "The step already has them holding the sensor. What it never says is that the number is plausible and stale at once."
+  },
+  "04": {
+   "was": "Watch the number, not the buzzer. What is the number doing when the alarm flicks?",
+   "now": "Does it flick when your hand is right on the sensor, or only when you hold it just off?",
+   "_why": "The step has them watching the number. The narrowing is steady contact versus hovering."
+  },
+  "10": {
+   "was": "Take the body off and leave it off for two minutes. What does the number do?",
+   "now": "Since the body went on, has the number ever gone down, or has it only climbed?",
+   "_why": "The step tells them to take the body off and what will happen. The narrowing is direction of travel."
+  },
+  "06": {
+   "was": "Open it once, as slowly as you can, and watch the display. By how much does the count go up?",
+   "now": "Does the count go wrong on every opening, or only on some of them?",
+   "_why": "The step has them opening slowly and watching. The narrowing is whether it fails every time. Checked against 06's authored fix before landing: two shared nouns and a two-word run, and the claims differ — the ask is about failure across openings, the fix about multiple counts within one."
+  },
+  "12": {
+   "was": "Read your sentence out loud. What would you look at to know it had worked?",
+   "now": "Which part of your sentence would two people argue about, and which part can they both point at?",
+   "_why": "The chapter asks 'would you know if this had worked' three times over. The narrowing is which clause is arguable. 'can' rather than 'could': could is a guarded cause word of this chapter and turned 416 rows red at every rung above L0. Not put into pub and not accepted by name — the ask is served from L1, and narrowing is explicitly not licensed to give the cause, so widening the guard to fit would be the guard's subject drifting to fit an inconvenience. The fourth disputed word to cost a run."
+  }
+ }
+}

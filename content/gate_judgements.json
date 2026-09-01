@@ -1,0 +1,16 @@
+{
+ "_why": "M-08 step 01. The ranking is mechanical and its top entries are not always defects. Two of them are artefacts of the measure rather than material a rung failed to withhold, and neither can be resolved by editing the measure — the same position the alias table reached in M-07, where uniqueness could not be reached by editing the table and every collision was either resolved or named here with a reason.",
+
+ "_rule": "Anything on this list is a ruling with its evidence attached. Anything not on it is a defect. A judgement recorded here does not lower a rank: the entry still appears at its measured position, with its ruling printed beside it, so a reader sees the evidence and the decision together rather than an absence.",
+
+ "judged": [
+  {
+   "chapter": "04",
+   "field": "fix",
+   "run": "set the stop number",
+   "verdict": "not public",
+   "why": "The run is an imperative stem drawn entirely from completed stage 03, whose do line reads 'Set the stop number to the same number as the start.' The fix reads 'Set the stop number two degrees away from the start number.' The four shared words are the whole of the run and the fifth is where they diverge — into opposites. Setting start and stop equal IS this chapter's sabotage, so the completed step gave the child the fault, not the fix. The withheld content is a value, not an action.",
+   "why_not_mechanical": "A divergence test was proposed and accepted, then failed to compute. Two formulations were measured against both instances the ranking has produced. Remainder-introduces-new-content separates them on a single word ('away'), because 'degrees' is already in the prompt via the dial's 'one click, one degree'. Fraction-of-the-field-covered-by-qualifying-runs does not separate them at all: 04/fix covers 64% and 09/fix as it stood in M-07 covers 67%. What distinguishes them is that the step instructs the OPPOSITE VALUE — a claim-level contradiction, which is the same thing no overlap measure can see for a region."
+  }
+ ]
+}
