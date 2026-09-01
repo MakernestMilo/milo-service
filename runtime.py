@@ -96,10 +96,24 @@ def level(turn: Turn) -> str:
             return "L1"
         if e < c:
             return "L2"
-        return "L2"          # the third rung and everything past it
+        # The third rung, and everything past it. It returned L2 for three
+        # orders, which meant the book's third rung had no destination of its
+        # own and never existed — chapter 11's helper page reads five minutes,
+        # twelve, twenty-two, and twelve and twenty-two rendered identically.
+        #
+        # Sheet 4: the clock escalates without being asked, so silence has an
+        # end even for a child who never says they are stuck. Its corollary:
+        # any silence without an end is a defect, not a pedagogy. A silent
+        # child at the third rung is owed the fix.
+        return "L3"
     if e < f["silence"]:
         return "L0"
-    return "L1"              # the clock alone never reaches L3
+    # The two-branch path, for a chapter with no ladder. There are none today —
+    # all fourteen carry one — so this is the shape the port arrived in rather
+    # than a live path. The comment that stood here said "the clock alone never
+    # reaches L3" and was read for three orders as a property to protect. It
+    # described a defect: see the third-rung branch above.
+    return "L1"
 
 
 def assemble(turn: Turn, lvl: str) -> Context:

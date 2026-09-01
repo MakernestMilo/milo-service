@@ -55,7 +55,11 @@ MUTATIONS = [
     ("R3", lambda c, t, l: _add(c, _fix(t.chapter))
         if t.chapter != "11" and l not in ("L3", "L4") and _fix(t.chapter) else None),
     # R4: chapter 11's fix in the prompt at a level R3 permits, so only R4 fires.
-    ("R4", lambda c, t, l: _add(c, "  fix: solder the joint")
+    # The string was "solder the joint" until the clock reached L3. That put the
+    # mutation in front of all 136 bank utterances rather than the 8 override
+    # ones, and one of them is "do I solder this" — so R6 fired too and R4's
+    # isolation was lost. The word, not the rule, was the problem.
+    ("R4", lambda c, t, l: _add(c, "  fix: push it back in")
         if t.chapter == "11" and l in ("L3", "L4") else None),
     ("R5", "L0"),
     ("R6", lambda c, t, l: _add(c, "- motor \u2014 a part that is not in this kit")),
@@ -104,12 +108,22 @@ def test_the_ladder_lands_where_the_port_says_it_should():
 
     L3 and L4 rose because the eight override-tagged utterances resolve by
     direct ask rather than by clock, so they produce a row at every position.
-    See test_override_rows_are_duplicated_across_every_clock_position."""
+    See test_override_rows_are_duplicated_across_every_clock_position.
+
+    Moved a third time in M-08, and again legitimately. `level()` returned L2
+    for the third rung and everything past it, so the book's third rung had no
+    destination of its own — chapter 11's helper page reads five minutes, twelve
+    and twenty-two, and twelve and twenty-two rendered identically. The third
+    rung now returns L3, which moves the late clock's 1,792 non-override rows
+    and touches no other position.
+
+    The line was predicted in M-08-step04-prediction.md and committed before the
+    change was made, and the measurement matched it exactly."""
     from collections import Counter
     rows = qc.run(runtime.level, assembler.assemble)
     assert len(rows) == 7616, f"{len(rows)} rows — 4 positions x 1904 expected"
     assert Counter(r.lvl for r in rows) == {
-        "L0": 1792, "L1": 1792, "L2": 3584, "L3": 416, "L4": 32}
+        "L0": 1792, "L1": 1792, "L2": 1792, "L3": 2208, "L4": 32}
 
 
 def test_override_rows_are_duplicated_across_every_clock_position():
@@ -133,10 +147,27 @@ def test_override_rows_are_duplicated_across_every_clock_position():
         "an override row resolved by the clock, which the ladder must not allow"
 
 
-def test_the_clock_alone_never_reaches_l3_or_l4():
-    """L3 and L4 are override-only. No clock position produces them."""
+def test_the_clock_reaches_l3_and_stops_short_of_l4():
+    """Overturned, on a ruling, and this is its replacement.
+
+    It asserted that no clock position produces L3 or L4. The L3 half was a
+    defect carried as a property for three orders: sheet 4 says the clock
+    escalates without being asked, so silence has an end even for a child who
+    never says they are stuck, and its corollary is that any silence without an
+    end is a defect rather than a pedagogy. A child silent at the third rung is
+    owed the fix.
+
+    The L4 half stands, and is recorded with its premise open. Rescue is for a
+    child who is distressed, and distress is signalled by asking rather than by
+    waiting — which depends on ask-count being a proxy for distress, the thing
+    decision AL flags as unexamined.
+    """
     rows = qc.run(runtime.level, assembler.assemble)
-    assert not [r for r in rows if r.tag != "override" and r.lvl in ("L3", "L4")]
+    by_clock = [r for r in rows if r.tag != "override"]
+    assert [r for r in by_clock if r.lvl == "L3"], \
+        "the clock no longer reaches L3, and a silent child is owed the fix"
+    assert not [r for r in by_clock if r.lvl == "L4"], \
+        "the clock reached L4: rescue answers being asked, not waiting"
 
 
 @pytest.mark.parametrize("seen", [0, 0.0, -1.0, -100000.0])

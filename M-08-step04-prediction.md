@@ -65,3 +65,27 @@ for. That reasoning depends on ask-count being a proxy for distress, which
 decision AL already flags as unexamined. So the ladder's clock tops out one rung
 below its ceiling, deliberately, on the brief's wording, with the premise still
 open.
+
+
+---
+
+# Measured
+
+```
+7616 checks · 7616 pass · 0 fail
+by level L0 ×1792  L1 ×1792  L2 ×1792  L3 ×2208  L4 ×32
+```
+
+**Exactly as predicted**, level for level. Predicted before the change was made
+and committed at `3190d0a`, before the harness saw it.
+
+## Three tests moved, and what each one was
+
+| test | what happened |
+|---|---|
+| `test_the_clock_alone_never_reaches_l3_or_l4` | **overturned.** It asserted the defect as a property. Replaced by `test_the_clock_reaches_l3_and_stops_short_of_l4`, which asserts the L3 half is now false and the L4 half still holds. |
+| `test_the_ladder_lands_where_the_port_says_it_should` | **updated**, third time and third legitimate move, with the reason recorded beside the previous two. |
+| `test_each_rule_can_convict[R4]` | **a fixture collision the change exposed.** R4's mutation put `fix: solder the joint` into chapter 11's prompt at L3 and L4. That used to reach 8 override-tagged utterances; it now reaches all 136, one of which is *"do I solder this"* — so R6 fired alongside R4 and R4's isolation was lost. The word was the problem, not the rule: the mutation is now `fix: push it back in`. |
+
+The third is worth keeping in view. Nothing about R4 or R6 changed; a rung
+window widened, and a test fixture that had been safe by accident stopped being.
