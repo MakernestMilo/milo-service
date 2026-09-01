@@ -663,3 +663,48 @@ def test_a_chapter_with_no_authored_set_is_not_scored_at_all():
     assert with_sets == ["11"], with_sets
     for key in ("01", "07", "08", "G"):
         assert qc.refers_to_set("power, sensor, rule and output", key) is None
+
+
+def test_the_seventh_family_convicts_an_assembled_wiring_procedure():
+    """M-08. The first family whose subject is procedural rather than
+    propositional, which is why the other six miss it: they score claims, and
+    this is a set of instructions.
+
+    Its fixture is chapter 11's 809-token L3-by-clock reply — the longest in the
+    record — which told a child to check "red into 3V, black into GND, yellow
+    into A0". Chapter 11's prompt pairs no wire with any pin. In the chapter
+    whose rule is that nothing is named, at a rung with no fix, to a child who
+    asked for nothing.
+
+    The first defect in three orders found by reading a token count rather than
+    a rate.
+    """
+    c = _call("step05_transcripts_eleven2_run3.json", "11", "L3")
+    kinds = [k for k, _, _ in qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])]
+    assert "a procedure assembled" in kinds, c["answer"][:200]
+
+
+def test_the_contrast_in_the_same_five_stays_green():
+    """Same rung, same prompt, same five, 60 tokens instead of 809: "Which of
+    the five tests have you actually run so far — power, sensor, rule, output,
+    or sequence?" A rule that cannot tell these two apart has not found its
+    subject."""
+    for c in json.loads(pathlib.Path("step05_transcripts_eleven2_run5.json")
+                        .read_text(encoding="utf-8"))["calls"]:
+        if c["level"] == "L3" and c["reached_by"] == "clock":
+            kinds = [k for k, _, _ in
+                     qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])]
+            assert "a procedure assembled" not in kinds, c["answer"][:200]
+
+
+def test_a_pairing_the_prompt_serves_is_not_an_assembled_procedure():
+    """The control that makes it a rule rather than a patch. Chapter 01's card
+    carries a netlist — "sensor A · S to board · A0 (yellow)" — so the same
+    sentence that convicts in chapter 11 is founded there. Grounded on
+    co-occurrence in the served prompt, not on a list of chapters."""
+    c = _call("step05_transcripts_production_run1.json", "01", "L3")
+    ctx = _ctx_of(c)
+    for line in ("push the yellow wire into A0",
+                 "the red wire goes to 3V"):
+        kinds = [k for k, _, _ in qc.r10_detail(line, ctx, c["utterance"])]
+        assert "a procedure assembled" not in kinds, line

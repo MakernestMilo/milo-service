@@ -108,6 +108,7 @@ CHAPTER_PREMISE = {
 }
 
 SERVED_BLOCKS = ("absence",)
+FORCE_OVERRIDE_LINE = False
 
 # Piece B, and the first rung-conditional voice line in this system — a new
 # shape, recorded as one. It is not a C-13 block: it is served at L0 only, where
@@ -299,7 +300,15 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     restore_words = aliases_for("restore")
     if restore_words:
         L.append("they may call it: " + " / ".join(restore_words))
-    if turn.direct_asks:
+    # FORCE_OVERRIDE_LINE is a measurement seam, not a feature flag — the same
+    # shape as SERVED_BLOCKS. L3 became reachable two ways this week, and the
+    # two routes produced opposite behaviour: asked, Milo says it does not know
+    # which of the five, ten times in ten; unasked at the same rung, it names a
+    # test six times in ten. The override line is the only difference in the
+    # prompt, and observation cannot separate the line from having been asked,
+    # because in the corpus they always co-occur. This serves the line where
+    # nobody asked, which is the only way to tell them apart.
+    if turn.direct_asks or FORCE_OVERRIDE_LINE:
         L.append(OVERRIDE_LINE)
     return "\n".join(L)
 

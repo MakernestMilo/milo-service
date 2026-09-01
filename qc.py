@@ -447,6 +447,13 @@ def _unasserted(span, upto):
 # are about a named PART being excluded, so these are not their business.
 _WHOLE = {"machine", "build", "everything", "rest", "kit", "thing", "chain"}
 
+# Pin names are corpus data, not a vocabulary: every chapter's card lists them
+# and the prompt prints them under "Pins on this build".
+_PINS = r"3V|GND|A0|A1|DSP|DIAL|RING|BUZ|SW|LMP"
+_PAIRING = re.compile(
+    r"([a-z][a-z\' ]{0,28}?)\s+(?:into|in to|to|on|at|goes to|plugged into)\s+"
+    r"(?:the\s+)?(?:port\s+marked\s+)?(" + _PINS + r")\b", re.I)
+
 _STATE_OK = (r"fine|ok|okay|good|working|alright|healthy|dead|broken|faulty|"
              r"bad|fried|blown|(?:on|off)\b(?!\s+(?:the|a|an|your|its|it|this|that)\b)")
 
@@ -610,6 +617,35 @@ def _claims(span, ctx, utterance):
                               f"nothing served at this rung excludes {w!r} — the "
                               f"region excludes what it excludes and no more"))
                 break
+
+    # A procedure assembled. The seventh family, and the first whose subject is
+    # PROCEDURAL rather than propositional — which is why the other six miss it.
+    # They score claims; this is a set of instructions.
+    #
+    # Its fixture is chapter 11's 809-token L3-by-clock reply, which told a
+    # child to "check the three wires going into it: red into 3V, black into
+    # GND, yellow into A0". Chapter 11's prompt pairs no wire with any pin: its
+    # wiring block reads "SENSOR A on A0" and its parts list names the wires
+    # separately, so the mapping was assembled rather than read. In the chapter
+    # whose rule is that nothing is named, at a rung with no fix, to a child who
+    # asked for nothing — and the wire-to-pin relation it asserted is fault 5.
+    #
+    # Grounded on co-occurrence rather than on a list: a part-to-pin pairing is
+    # founded when some line of the prompt names both. Chapter 01's netlist does
+    # — "sensor A · S to board · A0 (yellow)" — so the same sentence there is
+    # green, which is the control that makes this a rule rather than a patch.
+    for m in _PAIRING.finditer(span):
+        left, pin = m.group(1).lower(), m.group(2).upper()
+        named = [w for w in re.findall(r"[a-z]{3,}", left) if w in refs]
+        if not named:
+            continue                      # not a part-to-pin pairing at all
+        lines = _prompt(ctx).splitlines()
+        if any(any(w in l.lower() for w in named)
+               and re.search(r"\b" + pin + r"\b", l, re.I) for l in lines):
+            continue                      # the prompt pairs them; Milo read it
+        found.append(("a procedure assembled", m.group(0).strip(),
+                      f"no line of the prompt pairs {named[-1]!r} with {pin} — "
+                      f"the wiring was assembled, not read"))
 
     # A cause proposed. The newest family, and the one the ruling added: a
     # mechanism offered for the child to confirm. "Could the gap be wider than

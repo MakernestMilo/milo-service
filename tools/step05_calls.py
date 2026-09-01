@@ -268,6 +268,10 @@ if __name__ == "__main__":
         # fixes plan reaches 07 by a direct ask and never says this line
         if any(c[0] == label_ and c[4] == 0 for c in PLANS[chosen]):
             print(f"    {label_} reports: {phrase!r}")
+    if "--override-line" in sys.argv:
+        assembler.FORCE_OVERRIDE_LINE = True
+        print("    serving the override line at every rung, including where "
+              "nobody asked")
     if "--blocks" in sys.argv:
         which = sys.argv[sys.argv.index("--blocks") + 1]
         assembler.SERVED_BLOCKS = () if which == "none" else tuple(which.split(","))
