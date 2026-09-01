@@ -1,7 +1,11 @@
-"""M-06 step 05 — the eight live calls. Q3 as amended.
+"""M-06 step 05 — the live calls. Q3 as amended, widened in M-07.
 
-Chapter 11 at L0-L4, the only chapter that can reach five rungs; chapter 01 at
-L0, L1 and L3, its three reachable ones.
+The core eight: chapter 11 at L0-L4, the only chapter that can reach five
+rungs; chapter 01 at L0, L1 and L3, its three reachable ones.
+
+The widened eight: chapters 07 and 08, at L0, L1, L2 and L3 each. Select with
+--plan core|wide|all (default all); the choice is recorded in the file, so a
+transcript can never be read as covering rungs it never called.
 
 Decision Y: the rungs are reached by injecting the clock at the function
 boundary, never by posting level inputs. Nothing here goes over the wire — the
@@ -36,8 +40,17 @@ import main as service          # MODEL and MAX_TOKENS live there, visibly
 REPORT = "the number isn't changing"
 ASK = "just tell me"
 
+# The widened chapters report their own failure. REPORT describes neither of
+# them — 07's failure is a flat chart, 08's is a sequence that stops short — and
+# a child who says "the number isn't changing" in those chapters is a different
+# experiment from this one. These are says[0], read from the corpus at import
+# rather than copied here, so a phrase cannot drift out of the corpus and go on
+# living in the runner. Not composed: authored text, taken verbatim.
+REPORT_07 = corpus.BY_KEY["07"]["failure"]["says"][0]
+REPORT_08 = corpus.BY_KEY["08"]["failure"]["says"][0]
+
 # (chapter, target rung, utterance, seconds since the failure was seen, asks)
-PLAN = [
+CORE = [
     ("11", "L0", REPORT, None, 0),
     ("11", "L1", REPORT, 301, 0),
     ("11", "L2", REPORT, 721, 0),
@@ -48,8 +61,38 @@ PLAN = [
     ("01", "L3", ASK, None, 1),
 ]
 
+# M-07, the widening. The thirteen ladders made L2 reachable in twelve chapters
+# no live call had ever entered, and the two that had been sampled — 01 and 11 —
+# carry the same region sentence as each other, byte for byte, and it is the one
+# region in the corpus with no exclusion clause. So the dominant L2 shape, "it
+# is in A, not in B", had never been put to the model once.
+#
+# 08 opens a part: the lamp, which makes it the first chapter where all three
+# claimants of a light word are on the machine at the same time. Its region
+# enumerates without naming — "one of the three steps, not in the sensor" — so
+# it is the L2 that R10_SET and the ruled-out family both have something to say
+# about. 07 opens nothing and inherits fifteen parts, the largest machine of the
+# early chapters to arrive with no local anchor, and its region points at a past
+# decision of the child's rather than at any part.
+#
+# Neither reaches L4. First-ask rescue binds on a chapter holding no fix, and
+# that is still exactly chapter 11 — C-17 doing its work rather than the
+# widening diluting it.
+WIDE = [
+    ("07", "L0", REPORT_07, None, 0),
+    ("07", "L1", REPORT_07, 241, 0),     # ladder 240 · 480 · 780
+    ("07", "L2", REPORT_07, 481, 0),
+    ("07", "L3", ASK, None, 1),
+    ("08", "L0", REPORT_08, None, 0),
+    ("08", "L1", REPORT_08, 211, 0),     # ladder 210 · 450 · 780
+    ("08", "L2", REPORT_08, 451, 0),
+    ("08", "L3", ASK, None, 1),
+]
 
-def main(runs=1, tag=""):
+PLANS = {"core": CORE, "wide": WIDE, "all": CORE + WIDE}
+
+
+def main(runs=1, tag="", plan="all"):
     """runs > 1 repeats the whole plan with nothing changed, so a rung's
     variance across identical configurations can be measured. Every conclusion
     in step 00 so far rests on one sample per rung; this is what says whether
@@ -61,8 +104,9 @@ def main(runs=1, tag=""):
     import anthropic
     client = anthropic.Anthropic(api_key=os.environ["MODEL_API_KEY"])
     out = []
+    cases = PLANS[plan]
 
-    for key, target, text, ago, asks in PLAN:
+    for key, target, text, ago, asks in cases:
         seen_at = None if ago is None else time.monotonic() - ago
         turn = Turn(text, key, seen_at, asks)
 
@@ -123,6 +167,10 @@ def main(runs=1, tag=""):
                  f"overwrite deliberately.")
     dest.write_text(json.dumps({
         "model": service.MODEL, "max_tokens": service.MAX_TOKENS,
+        # Which rungs this file covers. Without it, a core-only run and an
+        # all run are told apart only by counting, and a missing rung reads
+        # the same as a rung that was called and came back empty.
+        "plan": plan,
         "calls": out,
         "totals": {
             "calls": len(out),
@@ -141,6 +189,17 @@ if __name__ == "__main__":
     label = ""
     if "--tag" in sys.argv:
         label = "_" + sys.argv[sys.argv.index("--tag") + 1]
+    chosen = "all"
+    if "--plan" in sys.argv:
+        chosen = sys.argv[sys.argv.index("--plan") + 1]
+        if chosen not in PLANS:
+            sys.exit(f"--plan must be one of {', '.join(PLANS)}")
+    print(f"    plan: {chosen} — {len(PLANS[chosen])} calls per run")
+    # The widened utterances are read from the corpus, so print them: a run log
+    # that does not say what the child said cannot be read back.
+    for label_, phrase in (("07", REPORT_07), ("08", REPORT_08)):
+        if any(c[0] == label_ for c in PLANS[chosen]):
+            print(f"    {label_} reports: {phrase!r}")
     if "--blocks" in sys.argv:
         which = sys.argv[sys.argv.index("--blocks") + 1]
         assembler.SERVED_BLOCKS = () if which == "none" else tuple(which.split(","))
@@ -148,4 +207,4 @@ if __name__ == "__main__":
     for i in range(1, n + 1):
         if n > 1:
             print(f"--- run {i} of {n} ---")
-        main(tag=(label + f"_run{i}") if n > 1 else label)
+        main(tag=(label + f"_run{i}") if n > 1 else label, plan=chosen)
