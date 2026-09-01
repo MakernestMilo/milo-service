@@ -104,7 +104,22 @@ def cause_words(ch):
         + [" ".join(s.get("do") or []) for s in ch["stages"]]
         + [PART_WORDS, ch["sub"], ch["rung"], STANDING_RULE,
            BOILERPLATE, card_text(ch), parts_text(ch)]
-        + list((ch["failure"] or {}).get("says") or [])).lower()))
+        + list((ch["failure"] or {}).get("says") or [])
+        # The fix is published material, and reading it here is the whole of a
+        # ruling. R2's subject is the model being told the cause BEFORE its
+        # rung. R3 already guarantees the fix reaches the prompt only at L3 and
+        # L4, so at the only rungs where these words are served, the rung is
+        # licensed to give the fault — and treating the corpus's own L3
+        # material as a leak is R2 scoring the wrong object.
+        #
+        # It was harmless while fixes were instructions. It stopped being
+        # harmless the moment a fix was authored to NAME the fault, because a
+        # diagnostic fix reaches for the cause's vocabulary by construction: it
+        # is describing the cause. Chapter 06's authored fix says one slow
+        # opening is seen "as several" and its cause says the opening "is
+        # registered several times" — 32 rows red on one word, and any future
+        # diagnostic fix would have hit the same wall.
+        + [(ch["failure"] or {}).get("fix") or ""]).lower()))
     return [w for w in re.findall(r"[a-z]{5,}", corpus.cause(ch["key"]).lower())
             if w not in pub]
 
@@ -286,32 +301,30 @@ def r9(ctx, key):
 # everyone the defect is gone. That is R3's failure, and this project has paid
 # for it once.
 
-_QUESTION_HEAD = re.compile(
-    r"\b(have you|has it|did you|do you|does it|are you|is it|is that|what'?s|"
-    r"what |which |where |when |how |can you|could you|any chance|tell me)", re.I)
+def _spans(reply):
+    """Every sentence of the reply, questions included.
 
+    This function used to keep declaratives only: it dropped any sentence
+    ending in "?" and trimmed the rest at the first question head. The ruling
+    that ended that: a cause proposed inside a question is a defect, and the
+    interrogative is another softener — the same move as "sounds like", one
+    grammatical step further. The test is whether the reply introduces a
+    candidate cause the context does not establish, not whether it ends in a
+    question mark. The guard block Milo is given says so in as many words:
+    "This binds on the premise, not on the wording."
 
-def _assertions(reply):
-    """Declarative spans only. Splits sentences, then trims each at the first
-    question head so 'that's the sensor test, have you...' keeps its claim."""
-    out = []
-    for sentence in re.split(r"(?<=[.!?])\s+|\n+", reply):
-        s = sentence.strip()
-        if not s:
-            continue
-        # Only trim at a question head when the sentence is actually a question.
-        # "where", "what" and "how" are relative pronouns as often as
-        # interrogatives, and trimming a declarative at one cut the claim out of
-        # "this is the point where plenty of builds get stuck" — the detector
-        # then read 0% on a rung carrying the defect in three of five draws.
-        if s.rstrip().endswith("?"):
-            m = _QUESTION_HEAD.search(s)
-            if m:
-                s = s[:m.start()]
-        s = s.strip(" -—,:;")
-        if s and not s.endswith("?"):
-            out.append(s)
-    return out
+    The rule was therefore scoring the wording, which is R3's failure and the
+    frequency detector's, for the third time in this file. What it cost is
+    exact: at 07/L2 a forty-seven word reply that restated the chapter's
+    withheld cause was handed to the detectors as the two words "Think about".
+
+    Consequence, and it is not small: every R10 rate recorded before this
+    change was measured with questions stripped. They are all understatements,
+    and none of them can be compared with a rate measured after it.
+    """
+    return [t for t in
+            (s.strip(" -—,:;") for s in re.split(r"(?<=[.!?])\s+|\n+", reply))
+            if t]
 
 
 def _fix_line(ctx):
@@ -319,10 +332,138 @@ def _fix_line(ctx):
     return m.group(1) if m else None
 
 
+_REGIONLINE = re.compile(r"^\s*region: *(.+)$", re.M)
+
+
+def _region_line(ctx):
+    m = _REGIONLINE.search(_prompt(ctx))
+    return m.group(1) if m else None
+
+
+_MACHINE_BLOCK = re.compile(
+    r"^(?:ON THE MACHINE|STILL IN THE BOX|WIRING FOR).*?(?=\n\n)", re.M | re.S)
+
+
+def _referents(ctx):
+    """The things this prompt lets Milo name: part names, the words a child may
+    call them by, and the wiring vocabulary — harvested from the prompt itself
+    rather than listed here, so a chapter that opens a new part needs no edit.
+
+    Used by the exclusion and part-state detectors, which are about claims
+    concerning a NAMED thing. A reply that says "not anything broken now" names
+    nothing and is not their business; one that says "not in the wiring" does.
+    """
+    text = " ".join(_MACHINE_BLOCK.findall(_prompt(ctx))).lower()
+    return {w for w in re.findall(r"[a-z]{4,}", text)}
+
+
+_COMPLETED = re.compile(
+    r"^STEPS THEY HAVE ALREADY FINISHED.*?(?=\n\n)", re.M | re.S)
+
+
+def _completed_steps(ctx):
+    """The steps the child has already done, served in full at L0 under sheet 1.
+
+    Grounding reads this block and not the machine block or the parts list. The
+    distinction is what stops the widening from gutting the family: a parts list
+    NAMES things without licensing any claim about them, while a completed step
+    is the child's own book read back at them. Milo saying the convenient place
+    is "near the socket" in chapter 09 is quoting step 03, not ruling a place
+    out on its own authority.
+    """
+    m = _COMPLETED.search(_prompt(ctx))
+    return m.group(0) if m else ""
+
+
+def _grounded(word, ctx, utterance):
+    """A claim about a named thing is grounded when the rung material Milo was
+    given names it, when a step the child has already finished names it, or when
+    the child did.
+
+    Region and fix are the rung's own lines. The completed steps were added on a
+    ruling, on the principle that material Milo is licensed to speak is material
+    Milo can be grounded against — the third time in two orders that a guard has
+    fired on something the child can already read, and the third time the fix
+    was the guard's notion of public rather than the material.
+
+    Deliberately not the whole prompt, and deliberately not the machine block:
+    a parts list names things without licensing any claim about them.
+
+    ONE CONDITION, and without it the widening eats the finding it was meant to
+    leave standing. The completed steps ground an exclusion only where a fix is
+    served at this rung.
+
+    Chapter 09 at L3: the fix says the spot is "the convenient one rather than
+    the one you were asked about", and step 03 says that place is near the
+    socket. The exclusion comes from the fix; the completed step supplies only
+    the wording, and Milo is quoting the child's book.
+
+    Chapter 11 at L3: no fix exists in that chapter at all, so no line licenses
+    any exclusion. Its step 03 names the five tests — power, sensor, rule,
+    output, sequence — as tests to RUN, and a reply that strikes the buzzer, the
+    ring and the sequence off that list is not quoting the book. It is deciding
+    three of the five for a child whose whole chapter is not yet knowing which.
+    Naming a thing is not licensing an exclusion of it.
+    """
+    licensed = [_region_line(ctx), _fix_line(ctx), (utterance or "")]
+    if _fix_line(ctx):
+        licensed.append(_completed_steps(ctx))
+    hay = " ".join(filter(None, licensed)).lower()
+    return bool(re.search(r"\b" + re.escape(word) + r"\w*", hay))
+
+
 # Each claim kind carries its own grounding predicate. A generic word search
 # would pass "that's the sensor test" because the word "sensor" is all over the
 # prompt — the claim is not that a sensor exists, it is that the child is
 # running that test, and nothing establishes which.
+# "on" and "off" are states of a part and also prepositions — "the lamp's on
+# the 1 m lead" is not a claim about the lamp's health. They stay in the list,
+# with a lookahead that requires them to be predicative: a determiner after
+# them means a place, not a state.
+# The cause/observation line, for the two families that score claims about a
+# NAMED thing. It is not the question exemption coming back — the fault and
+# cause families below score interrogative spans, which is where the ruling
+# bites. It is that some spans assert nothing about the thing they name:
+#
+#   asked      "Have you already ruled out power?"  — the corpus's own move,
+#              and the narrowing the ruling protects: it asks the child to look.
+#   disclaimed "I don't know which exact part is broken" — Milo saying the thing
+#              the guard block asks it to say. Convicting that taught the
+#              opposite of the rule.
+_UNASSERTED = re.compile(
+    r"\b(?:whether|if)\b"
+    r"|\b(?:have|has|had|did|do|does|can|could|will)\s+(?:you|it|they)\b"
+    r"|\bi (?:don'?t|do not|can'?t|cannot|couldn'?t) (?:know|say|tell)\b"
+    r"|\b(?:no idea|not sure|which exact|not certain)\b", re.I)
+
+
+def _unasserted(span, upto):
+    return bool(_UNASSERTED.search(span[:upto]))
+
+
+# Words that name the whole rather than a part. Excluding the whole is what a
+# region does — "somewhere between the sensor and the number, not the whole
+# machine" adds nothing to the region and invents nothing. The families below
+# are about a named PART being excluded, so these are not their business.
+_WHOLE = {"machine", "build", "everything", "rest", "kit", "thing", "chain"}
+
+_STATE_OK = (r"fine|ok|okay|good|working|alright|healthy|dead|broken|faulty|"
+             r"bad|fried|blown|(?:on|off)\b(?!\s+(?:the|a|an|your|its|it|this|that)\b)")
+
+_HEDGE = (r"\b(?:could|might|may|maybe|perhaps|probably|possibly|likely|i bet|"
+          r"i'?d guess|my guess|chances are|i think|it seems|seems like|"
+          r"sounds like)\b")
+
+# A relation between two things: a comparison, an excess, or a stated cause.
+_RELATION = (
+    r"\b(?:wider|longer|shorter|bigger|smaller|faster|slower|further|closer|"
+    r"more|less)\b[^.?!]{0,40}\bthan\b"
+    r"|\btoo\s+(?:long|short|wide|narrow|slow|fast|big|small|far|close|often|"
+    r"much|many)\b"
+    r"|\b(?:because|that'?s why|which is why|the reason|means (?:that|the|it|you)|"
+    r"caused by|down to|comes from)\b")
+
+
 def _claims(span, ctx, utterance):
     u = (utterance or "").lower()
     found = []
@@ -373,16 +514,71 @@ def _claims(span, ctx, utterance):
         found.append(("what the fault is", m.group(0),
                       "no fix line is served at this rung, so no fault is established"))
 
-    m = re.search(r"\b(power|the board|the display|the sensor)'?s?\s+(?:is\s+)?"
-                  r"(on|off|fine|good|working|dead|broken)\b", span, re.I)
-    if m and m.group(0).lower() not in u:
-        found.append(("a part's state", m.group(0),
-                      "the child did not report it and the context does not assert it"))
+    # The noun side was four literals — power, the board, the display, the
+    # sensor — so "that part's fine", said of the sensor, read green. The names
+    # now come from the prompt's own machine block, and the state words carry
+    # the claim. Grounding is the utterance or the fix line only: a region that
+    # says "not in the sensor" names a place to stop looking, not a part in
+    # good health, and reading it as the second was the error being closed.
+    refs = _referents(ctx)
+    fixline = (_fix_line(ctx) or "").lower()
+    _NAMED = r"(?:that|this|the)\s+(?:part|one|bit|machine|rest)|[a-z]+"
+    for m in re.finditer(
+            r"\b(" + _NAMED + r")(?:'s|s')\s*(?:" + _STATE_OK + r")\b"
+            r"|\b(" + _NAMED + r")\s+(?:is|are|looks|seems)\s+(?:all\s+)?"
+            r"(?:" + _STATE_OK + r")\b", span, re.I):
+        head = (m.group(1) or m.group(2) or "").lower().split()[-1]
+        named = head in ("part", "one", "bit", "machine", "rest") or head in refs
+        if (named and not _unasserted(span, m.start()) and m.group(0).lower() not in u
+                and head not in fixline):
+            found.append(("a part's state", m.group(0),
+                          "the child did not report it, and neither the region "
+                          "nor a fix line asserts the state of that part"))
 
-    m = re.search(r"(?:that\s+)?rules?\s+out\s+(?:the\s+)?([a-z ]{3,40})", span, re.I)
-    if m and not any(w in u for w in ("ruled out", "checked", "tried", "tested")):
-        found.append(("what has been ruled out", m.group(0),
-                      "the child reported no test as complete"))
+    # Was the single phrase "rules out". Every other family in this file was
+    # rewritten to score the claim rather than the phrasing after the frequency
+    # detector went green twice while the defect changed clothes; the exclusion
+    # family never was, and "not in the wiring at all" walked through it.
+    #
+    # The claim is: a named thing is excluded. It is grounded when the region
+    # Milo was given excludes it, when a fix line names it, or when the child
+    # said so. An exclusion that names nothing on the machine — "not anything
+    # broken now" — is a different defect and not this detector's business.
+    # A determiner is required between the negation and the thing. Without one
+    # the pattern read "not have found it alone" as excluding a referent named
+    # "have" — a verb reaching a vocabulary it had no business in. Excluding a
+    # place in the machine is "not the buzzer", "not in the wiring": the article
+    # is what makes it a thing rather than a verb.
+    for m in re.finditer(
+            r"\b(?:not|isn'?t|is not|aren'?t|nothing to do with|rules?\s+out|"
+            r"ruled\s+out)\s+(?:in|on|about|with)?\s*"
+            r"(?:the|a|an|your|any|it'?s|its|this|that)\s+"
+            r"((?:exact|specific|precise|particular)\s+)?([a-z]+(?:\s+[a-z]+)?)",
+            span, re.I):
+        # "that's the region, not the exact wire or line of code" excludes no
+        # place: it says how precisely Milo can locate one, which is the rung
+        # doing its job. A precision qualifier is not an exclusion.
+        if m.group(1) or _unasserted(span, m.start()):
+            continue
+        for w in re.findall(r"[a-z]{4,}", m.group(2).lower()):
+            if w in refs and w not in _WHOLE and not _grounded(w, ctx, utterance):
+                found.append(("a place ruled out", m.group(0).strip(),
+                              f"nothing served at this rung excludes {w!r} — the "
+                              f"region excludes what it excludes and no more"))
+                break
+
+    # A cause proposed. The newest family, and the one the ruling added: a
+    # mechanism offered for the child to confirm. "Could the gap be wider than
+    # the event" is not narrowing — narrowing asks the child to look at
+    # something, and this asks them to go and find evidence for a story Milo
+    # made up. A hedge alone is ordinary speech and a relation alone can be the
+    # child's own words repeated; together, with no fix served at this rung,
+    # they are a candidate cause the context does not establish.
+    if (re.search(_HEDGE, span, re.I) and re.search(_RELATION, span, re.I)
+            and not _fix_line(ctx)):
+        found.append(("a cause proposed", span,
+                      "no fix line is served at this rung, so no mechanism is "
+                      "established — a guess softened is still a guess"))
 
     return found
 
@@ -390,7 +586,7 @@ def _claims(span, ctx, utterance):
 @reads(REPLY, "a claim of fact in the reply that the context does not establish")
 def r10(reply, ctx, utterance):
     bad = []
-    for span in _assertions(reply):
+    for span in _spans(reply):
         bad.extend(_claims(span, ctx, utterance))
     if bad:
         return "R10 unfounded: " + " · ".join(f"{k} ({t.strip()!r})" for k, t, _ in bad)
@@ -398,7 +594,7 @@ def r10(reply, ctx, utterance):
 
 def r10_detail(reply, ctx, utterance):
     """Same subject, with the reason each claim could not be located."""
-    return [c for span in _assertions(reply) for c in _claims(span, ctx, utterance)]
+    return [c for span in _spans(reply) for c in _claims(span, ctx, utterance)]
 
 
 # R10's second subject: enumeration completeness.

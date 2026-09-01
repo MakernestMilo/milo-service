@@ -203,11 +203,30 @@ def test_r10_convicts_the_live_fixture():
         "the live fixture must convict"
 
 
-@pytest.mark.parametrize("chapter,level", [("01", "L1"), ("01", "L3"), ("11", "L3")])
+@pytest.mark.parametrize("chapter,level", [("01", "L1"), ("01", "L3")])
 def test_r10_clears_the_clean_answers(chapter, level):
     c = _call("step05_baseline_run1.json", chapter, level)
     assert qc.r10(c["answer"], _ctx_of(c), c["utterance"]) is None, \
         f"{chapter}/{level} is clean and must stay green"
+
+
+def test_the_11_l3_answer_was_never_clean():
+    """11/L3 sat in the list above and held it green through fifteen draws and
+    two published rates. It was not clean; the exclusion family could not see
+    what was wrong with it.
+
+    The region served at that rung is "It is somewhere between the sensor and
+    the number", and the reply adds "not in the buzzer, the ring, or the
+    sequence" — three exclusions nobody gave it, in the one chapter whose whole
+    subject is that the child does not yet know which of five it is. It then
+    tells them to work all five, sequence included, in the next sentence.
+
+    Kept as a test rather than a note because the rate it corrects is on record.
+    """
+    c = _call("step05_baseline_run1.json", "11", "L3")
+    hits = qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])
+    kinds = {k for k, _, _ in hits}
+    assert "a place ruled out" in kinds, hits
 
 
 def test_r10_scores_the_premise_not_the_verb():
@@ -265,10 +284,33 @@ def test_r10_catches_the_fault_claim_in_either_word_order(claim):
     assert qc.r10(claim, _ctx_of(c), c["utterance"]), f"{claim!r} must convict"
 
 
-def test_r10_still_lets_a_question_about_a_fault_through():
-    """Bound 1 holds under the widened pattern."""
+def test_a_fault_proposed_as_a_question_is_still_a_fault_proposed():
+    """Bound 1 is overturned, on a ruling, and this test is its replacement.
+
+    It used to assert that "Is a wire swapped on the sensor?" passes, because a
+    question asserts nothing. The ruling: the interrogative is another softener,
+    the same move as "sounds like" one grammatical step further, and the test is
+    whether the reply introduces a candidate cause the context does not
+    establish — not whether it ends in a question mark.
+    """
     c = _call("step05_fixture_faultclaim.json", "11", "L4")
-    assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"]) is None
+    assert qc.r10("Is a wire swapped on the sensor?", _ctx_of(c), c["utterance"])
+
+
+def test_narrowing_survives_the_ruling():
+    """The bound that does hold, and the one the ruling drew: narrowing asks
+    the child to look at something. Every line here is a question, none of them
+    proposes a mechanism, and R10 must leave all of them alone — otherwise the
+    rule has stopped scoring premises and started scoring question marks from
+    the other side."""
+    c = _call("step05_baseline_run1.json", "11", "L1")
+    ctx, u = _ctx_of(c), c["utterance"]
+    for line in ("What do you see between the sensor and the display?",
+                 "Which of the five have you ruled out?",
+                 "Have you checked whether power's on at all?",
+                 "Hold sensor A in your fist for ten seconds. Does the number "
+                 "move at all?"):
+        assert qc.r10(line, ctx, u) is None, f"{line!r} is narrowing, not a claim"
 
 
 def test_no_authored_block_contains_a_cause_word():
@@ -430,3 +472,54 @@ def test_L5_the_harness_clocks_derive_from_each_chapters_rungs():
     L2. After the ladders, none do."""
     fallback = [c["key"] for c in corpus.CHAPTERS if not c["failure"].get("ladder")]
     assert not fallback, f"still on the [silence]*3 branch: {fallback}"
+
+
+def test_a_word_the_corpus_publishes_in_its_own_fix_is_not_a_withheld_cause():
+    """The ruling that let a fix name its fault.
+
+    R2's subject is the model being told the cause before its rung. R3 already
+    guarantees the fix reaches the prompt only at L3 and L4, so at the rungs
+    where these words are served the rung is licensed to give the fault.
+    Treating the corpus's own L3 material as a leak was R2 scoring the wrong
+    object — and it cost 32 rows on the word "several" the first time a fix was
+    authored to describe its chapter's fault rather than instruct.
+
+    Asserted as a property over all fourteen rather than for chapter 06 alone:
+    a diagnostic fix reaches for the cause's vocabulary by construction, so
+    every future one would meet the same wall.
+    """
+    for ch in corpus.CHAPTERS:
+        fix = (ch["failure"] or {}).get("fix") or ""
+        overlap = [w for w in qc.cause_words(ch)
+                   if re.search(r"\b" + w + r"\b", fix.lower())]
+        assert not overlap, (
+            f"chapter {ch['key']}: {overlap} are guarded as withheld cause "
+            f"words while the chapter's own fix publishes them")
+
+
+def test_the_completed_steps_ground_an_exclusion_only_where_a_fix_is_served():
+    """The grounding widening, and the fixture that stops it gutting the family.
+
+    Ruled: material Milo is licensed to speak is material Milo can be grounded
+    against, and completed steps are served in full at L0. Chapter 09's fix
+    excludes the convenient spot; step 03 says that spot is near the socket; so
+    "not the one near the socket" is the child's own book read back, not a place
+    Milo ruled out on its own authority.
+
+    Taken literally that also cleared 11/L3, which is the correction this order
+    exists for — chapter 11's step 03 names the five tests, so excluding three
+    of them read as quoting the book. It is not: the step names them as tests to
+    RUN, and chapter 11 holds no fix, so nothing served licenses any exclusion.
+    Naming a thing is not licensing an exclusion of it.
+    """
+    green = _call("step05_transcripts_fixes2_run1.json", "09", "L3")
+    assert qc.r10(green["answer"], _ctx_of(green), green["utterance"]) is None, \
+        "09/L3 quotes its own completed step and must not convict"
+
+    for f, chapter, level in (("step05_baseline_run1.json", "11", "L3"),
+                              ("step05_transcripts_absenceonly_run1.json", "11", "L3"),
+                              ("step05_transcripts_wide_run3.json", "08", "L2")):
+        c = _call(f, chapter, level)
+        kinds = {k for k, _, _ in qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])}
+        assert "a place ruled out" in kinds, \
+            f"{chapter}/{level} in {f} must stay red: the family was gutted"

@@ -1,0 +1,26 @@
+{
+ "_why": "M-07. Four chapters served their L3 fix ungated at L0, because the fix restated the step the child was already on. A rung that gates a sentence the prompt publishes elsewhere gates nothing, and a child who asks outright gets the page read back — which sheet 1 names as the one thing Milo must not do. Authored by the architect, against the chapter's own fault rather than against its instruction. The source file is fingerprinted and stays unedited, so the replacements live here, in one screen, the same shape as decision S for VOICE and the ladders.",
+ "_guard": "Each entry names the fix it replaces, verbatim. If the ported source ever changes under it, the load fails loudly rather than silently replacing a sentence that is no longer there.",
+ "replace": {
+  "G": {
+   "was": "Ask them what is wrong with it and change that one thing, with them in the room.",
+   "now": "Read your three written answers again. The one written in your words rather than theirs is the one you answered for them. Ask that question again, take their answer exactly, and change the machine to match it.",
+   "_why": "G's cause is that the build served the problem the child heard rather than the one the person has. The specific failure is a question the child answered on their behalf, and the tell is an answer recorded in the child's own words. Stage 02 says to write every answer in their words; it never says that the one you didn't is the one you got wrong. That is the thing the step lacks."
+  },
+  "07": {
+   "was": "Run one afternoon at a much shorter interval and watch the same kind of event appear.",
+   "now": "Look at the interval you wrote on card 07, and think about how long the thing itself lasted — a window open, the heating coming on. If the event is shorter than the gap between two of your points, the machine was asleep through it. Set the interval shorter than the event and run the afternoon again.",
+   "_why": "The old fix was stage 05's third do with the verb changed: it told the child what to do and never said what went wrong. The fault is that the interval chosen on day one is longer than the event, so nothing was written while it was happening. That comparison — event length against sampling gap — is what the chapter is about and appears nowhere in the step. 'Shorter than the event' rather than the corpus's 'much shorter': much was a hedge standing in for the relation that actually matters."
+  },
+  "06": {
+   "was": "Move the magnet closer to the switch, then set a settle time on the dial.",
+   "now": "Watch what the count does while the door is still moving. If it climbs more than once from one opening, the magnet is sitting at the edge of what the switch can feel and the switch is seeing one slow opening as several. Move the magnet closer so it passes the switch cleanly, then set a settle time so anything arriving in the next couple of seconds is treated as part of the same opening.",
+   "_why": "The old fix gave two actions and no reason. The reason exists in the book — stage 05's prose and the sketchnote both name it — but neither reaches Milo, so the diagnosis was authored, published to the child, and invisible to the ladder. The mirror of 07 rather than the same fault: a chapter can have its fault written and still have nothing to say at L3."
+  },
+  "09": {
+   "was": "Mount it where the problem is, using the strap or the clip, and run it for ten minutes.",
+   "now": "Nothing is broken, and the numbers are real. They are the numbers for the spot the machine is standing in, which is the convenient one rather than the one you were asked about. Look at what you wrote down from both places in stage three — the difference between those two sets is the answer. Leave it in the second place, where the trouble actually is.",
+   "_why": "09's says list is the only one where the child does not think the machine is wrong — the numbers look fine, it says everything's ok — so the fix has to agree with them first and then relocate the problem. The old fix restated a step already finished: the child has mounted it in both places and compared, so telling them to mount it where the problem is gives them nothing. Pointing at the comparison they already made does. This is the one decision N made public, completed steps being served in full at L0."
+  }
+ }
+}
