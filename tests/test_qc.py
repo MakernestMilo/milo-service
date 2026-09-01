@@ -689,8 +689,10 @@ def test_the_contrast_in_the_same_five_stays_green():
     the five tests have you actually run so far — power, sensor, rule, output,
     or sequence?" A rule that cannot tell these two apart has not found its
     subject."""
-    for c in json.loads(pathlib.Path("step05_transcripts_eleven2_run5.json")
-                        .read_text(encoding="utf-8"))["calls"]:
+    import json as _json
+    import pathlib as _pathlib
+    for c in _json.loads(_pathlib.Path("step05_transcripts_eleven2_run5.json")
+                         .read_text(encoding="utf-8"))["calls"]:
         if c["level"] == "L3" and c["reached_by"] == "clock":
             kinds = [k for k, _, _ in
                      qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])]
