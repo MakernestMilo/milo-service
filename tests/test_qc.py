@@ -523,3 +523,52 @@ def test_the_completed_steps_ground_an_exclusion_only_where_a_fix_is_served():
         kinds = {k for k, _, _ in qc.r10_detail(c["answer"], _ctx_of(c), c["utterance"])}
         assert "a place ruled out" in kinds, \
             f"{chapter}/{level} in {f} must stay red: the family was gutted"
+
+
+@pytest.mark.parametrize("claim", [
+    "This one catches nearly everyone in this chapter.",
+    "this one trips people up all the time",
+    "plenty of builds get stuck here",
+    "that's the one that's usually off",
+    "this kind of fault tends to live in that stretch",
+    "the fault is almost always in the rule step",
+    "a window opening or heating kicking on is often quicker than your gap",
+])
+def test_the_frequency_family_scores_a_shape_not_a_vocabulary(claim):
+    """M-08 step 02. The family had been widened three times and each widening
+    was a longer list of the phrasings the model happened to use that week; a
+    fourth escaped in M-07 on `often`.
+
+    What replaces them is a closed grammatical class — the frequency adverbs and
+    proportion quantifiers of English — which does not grow when the model
+    rephrases. Every claim here is a different wording of one subject: how often
+    a fault occurs, for which no frequency is served in any prompt.
+    """
+    c = _call("step05_transcripts_pre_ae.json", "11", "L4")
+    assert qc.r10(claim, _ctx_of(c), c["utterance"]), f"{claim!r} must convict"
+
+
+@pytest.mark.parametrize("line", [
+    "Say how often you think it should write a number down.",
+    "It's in a decision you made on day one, when you set up how often it writes"
+    " a number down.",
+    "your first run just wasn't checking often enough to catch the moment",
+    "the machine was asleep through it and never caught it",
+    "is it something like 0 or a max value that never moves?",
+    "once it's seated you should see it start reading normally",
+])
+def test_the_frequency_family_does_not_convict_a_chapter_speaking_its_own_terms(line):
+    """The constraint that made this real work rather than a one-liner.
+
+    Chapter 07's stage 02 instruction is "Say how often you think it should
+    write a number down", and the whole chapter turns on how often the machine
+    writes. A rule convicting a chapter for speaking its own instruction would
+    be the vocabulary problem again, one level up. Two grammatical frames are
+    exempt — the interrogative "how often" and the sufficiency "often enough" —
+    and bare "always", "never" and "normally" are out of the class, because
+    every one of their occurrences in 461 recorded replies is a specific event
+    or a manner rather than an incidence.
+    """
+    c = _call("step05_transcripts_wide_run1.json", "07", "L3")
+    assert qc.r10(line, _ctx_of(c), c["utterance"]) is None, \
+        f"{line!r} must stay green"

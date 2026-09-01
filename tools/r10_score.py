@@ -60,8 +60,13 @@ def fixtures():
     for kind, text, why in hits:
         print(f"    - {kind}: {text.strip()!r}\n        {why}")
 
+    # 11/L3 was in this list and was not clean. M-07 found it excludes three of
+    # the five tests and then tells the child to work all five; the exclusion
+    # family could not see a claim wearing a negation. It is asserted as a
+    # conviction in the tests now, and printing it here as a false positive was
+    # this tool still holding the old expectation.
     print("\nCLEAN — must stay green.")
-    for key, lvl in (("01", "L1"), ("01", "L3"), ("11", "L3")):
+    for key, lvl in (("01", "L1"), ("01", "L3")):
         c = [x for x in json.loads(
             pathlib.Path("step05_baseline_run1.json").read_text())["calls"]
             if x["chapter"] == key and x["level"] == lvl][0]

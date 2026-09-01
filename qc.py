@@ -454,6 +454,52 @@ _HEDGE = (r"\b(?:could|might|may|maybe|perhaps|probably|possibly|likely|i bet|"
           r"i'?d guess|my guess|chances are|i think|it seems|seems like|"
           r"sounds like)\b")
 
+# R10's frequency family, as a claim shape rather than a vocabulary.
+#
+# It had been widened three times and every widening was a longer list of the
+# phrasings the model happened to use that week — almost always, then trips
+# people up all the time, then plenty of builds get stuck. Each list went green
+# the moment the claim changed clothes, and a fourth escaped it in M-07:
+# "a window opening or heating kicking on is often quicker than your gap".
+#
+# The subject is a claim about how often a fault occurs, however worded, and no
+# frequency for any fault is served anywhere in any prompt. What is listed below
+# is therefore not a set of phrasings but a CLOSED GRAMMATICAL CLASS: the
+# frequency adverbs and proportion quantifiers of English. A closed class does
+# not grow when the model rephrases, which is the whole difference between this
+# and the three lists it replaces.
+#
+# Bare "always" and "never" are deliberately absent. Every one of their five
+# occurrences across 461 recorded replies is a specific event rather than an
+# incidence — "the machine was asleep through it and never caught it" is the
+# authored fix, and "a max value that never moves" describes a display. The
+# hedged forms "almost always" and "nearly always" are incidence and are kept.
+# "normally" is absent for the same reason: in this corpus it is manner —
+# "you should see it start reading normally".
+_RATE = re.compile(
+    r"\b(?:often|usually|commonly|typically|generally|frequently|rarely|seldom|"
+    r"almost always|nearly always|most of the time|more often than not|"
+    r"nine times out of ten|all the time|every time|tends? to|"
+    r"(?:plenty|a lot|lots|loads) of|"
+    r"most (?:people|builds|kids|children|beginners)|"
+    # universal quantifiers over people. Also closed class, and the frozen
+    # fixture's own claim: "This one catches nearly everyone in this chapter."
+    r"(?:nearly |almost )?(?:everyone|everybody)|"
+    r"(?:hardly |almost )?(?:nobody|no one))\b", re.I)
+
+# Two grammatical frames where a rate word quantifies a SERVED PARAMETER rather
+# than asserting an incidence, and the constraint that made this real work:
+# chapter 07's own stage 02 instruction is "Say how often you think it should
+# write a number down", and its whole subject is how often the machine writes.
+# A rule that convicted a chapter for speaking its own instruction would have
+# been the vocabulary problem again, one level up.
+#
+#   how often / how frequently  — interrogative: asks after a setting
+#   often enough / frequently enough — sufficiency: judges a setting
+_RATE_EXEMPT = re.compile(
+    r"\bhow (?:often|frequently)\b|\b(?:often|frequently) enough\b", re.I)
+
+
 # A relation between two things: a comparison, an excess, or a stated cause.
 _RELATION = (
     r"\b(?:wider|longer|shorter|bigger|smaller|faster|slower|further|closer|"
@@ -483,17 +529,7 @@ def _claims(span, ctx, utterance):
     # claim goes green when the claim changes clothes, which is R3's failure
     # and was caught in the fault detector two hours earlier and not carried
     # across this file.
-    m = (
-        # how often it happens
-        re.search(r"\b(almost always|usually|nearly always|tends to|all the time|"
-                  r"most of the time|more often than not|nine times out of ten|"
-                  r"the classic break|commonly|a common)\b", span, re.I)
-        # how many it catches
-        or re.search(r"\b(catches|trips up|trips \w+ up|stumps|gets)\s+"
-                     r"(nearly everyone|everyone|most people|a lot of|plenty of|lots of|"
-                     r"many|loads of)", span, re.I)
-        or re.search(r"\b(plenty of|a lot of|lots of|loads of|many|most)\s+"
-                     r"(builds|people|kids|children|beginners)\b", span, re.I))
+    m = _RATE.search(_RATE_EXEMPT.sub(" _ ", span))
     if m:
         found.append(("how often the fault occurs", m.group(0),
                       "no frequency for any fault is served anywhere in the context"))
