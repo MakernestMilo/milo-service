@@ -675,6 +675,26 @@ def _refers_to_the_set(reply, items):
     return named, (gestures or len(named) >= 2)
 
 
+def refers_to_set(reply, key):
+    """Did this reply take the obligation on?
+
+    The rule has always attached the obligation to the reference rather than to
+    the rung. The RATE had not: it was computed over every reply at a rung,
+    including the ones that never invoked the set and owed it nothing. That
+    pools two different things and understates the defect wherever Milo often
+    stays off the list — 11/L2 reads 45% over all replies and 91% over the
+    replies that referred to the set, and 11/L0's 2% is one reference, which was
+    incomplete.
+
+    Exposed so the scorer can use the same predicate the rule does, rather than
+    a second implementation of one decision.
+    """
+    items = authored_set(key)
+    if not items:
+        return None                      # no set in this chapter: not n/a, no set
+    return _refers_to_the_set(reply, items)[1]
+
+
 @reads(REPLY, "an authored set named incompletely in the reply")
 def r10_set(reply, key, ctx):
     items = authored_set(key)

@@ -572,3 +572,59 @@ def test_the_frequency_family_does_not_convict_a_chapter_speaking_its_own_terms(
     c = _call("step05_transcripts_wide_run1.json", "07", "L3")
     assert qc.r10(line, _ctx_of(c), c["utterance"]) is None, \
         f"{line!r} must stay green"
+
+
+def test_the_tools_stated_expectations_match_what_the_rules_do():
+    """The check that replaces the habit.
+
+    tools/r10_score.py went on printing 11/L3 in its CLEAN list months after
+    M-07 ruled that rung was never clean — the third time in this project that a
+    document or tool described a state the commits had changed. Its expectations
+    are a table now, and this asserts them, so drift fails rather than prints.
+    """
+    from tools.r10_score import fixture_report
+    drifted = [(label, exp, got) for label, exp, got, _ in fixture_report()
+               if exp != got]
+    assert not drifted, "a tool's stated expectation no longer holds:\n  " + \
+        "\n  ".join(f"{l}: expected {e}, got {g}" for l, e, g in drifted)
+
+
+def test_set_completeness_is_measured_over_references_not_over_replies():
+    """M-08 step 03, T3. The obligation attaches to the reference, not to the
+    rung — that was already true of the rule and was not true of the rate.
+
+    The rate was computed over every reply at a rung, including the ones that
+    never invoked the set and owed it nothing, which pools two different things.
+    Across every recorded reply in chapter 11: 11/L2 reads 45% over all replies
+    and 91% over the replies that referred to the set, and 11/L0's 2% is a
+    single reference which was incomplete.
+    """
+    import glob
+    import json
+    import pathlib as _p
+    from tools.r10_score import ctx_of
+    seen = {"refers": 0, "replies": 0, "incomplete_without_reference": 0}
+    for f in sorted(glob.glob("step05_*.json")):
+        for c in json.loads(_p.Path(f).read_text()).get("calls", []):
+            if c["chapter"] != "11":
+                continue
+            seen["replies"] += 1
+            refers = qc.refers_to_set(c["answer"], "11")
+            seen["refers"] += bool(refers)
+            if not refers and qc.r10_set(c["answer"], "11", ctx_of(c)):
+                seen["incomplete_without_reference"] += 1
+    assert seen["replies"] > 200, seen
+    assert 0 < seen["refers"] < seen["replies"], (
+        "either every reply refers to the set or none does, and the "
+        "denominator would not matter: " + str(seen))
+    assert seen["incomplete_without_reference"] == 0, (
+        "a reply was judged incomplete without having referred to the set")
+
+
+def test_a_chapter_with_no_authored_set_is_not_scored_at_all():
+    """Inert elsewhere rather than assuming every chapter should enumerate.
+    One chapter of fourteen has a set today."""
+    with_sets = [c["key"] for c in corpus.CHAPTERS if qc.authored_set(c["key"])]
+    assert with_sets == ["11"], with_sets
+    for key in ("01", "07", "08", "G"):
+        assert qc.refers_to_set("power, sensor, rule and output", key) is None
