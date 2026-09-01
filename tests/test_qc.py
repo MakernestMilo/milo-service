@@ -332,7 +332,11 @@ def test_no_authored_block_contains_a_cause_word():
               "OPENING_WORD": A.OPENING_WORD,
               "OVERRIDE_LINE": A.OVERRIDE_LINE,
               "ESCALATION": A.ESCALATION,
-              "STANDING_RULE": A.STANDING_RULE}
+              "STANDING_RULE": A.STANDING_RULE,
+              # chapter-scoped, so only its own chapter's cause words can turn a
+              # row red — checked against all thirty-two anyway, because a block
+              # that is safe only by its scope is one refactor from not being.
+              **{f"CHAPTER_PREMISE[{k}]": v for k, v in A.CHAPTER_PREMISE.items()}}
     bad = []
     for name, text in blocks.items():
         for word in re.findall(r"[a-z]{4,}", text.lower()):

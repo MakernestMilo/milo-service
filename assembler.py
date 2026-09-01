@@ -69,6 +69,44 @@ _LVL = {"L0": 0, "L1": 1, "L2": 2, "L3": 3, "L4": 4}
 # attributed to two blocks removed at once. That is the same attribution problem
 # this order has been fixing everywhere else. The runner sets this to complete
 # the factorial: both, neither, and each alone.
+
+# C-13, fifth authored block, and the first that is CHAPTER-SCOPED.
+#
+# Chapter 11's premise had never reached Milo. The word Sabotage arrived only as
+# a chapter title — "This is Sabotage", "WIRING FOR SABOTAGE" — and nothing said
+# a person did it, that it was deliberate, or that they left. The corpus knows:
+# chapter 11's `open` field reads "A sealed card", and the book authors five
+# such cards in back matter the port did not carry.
+#
+# It does three things the prompt could not do before. It gives Milo the
+# premise. It licenses the checklist form, which needs no new material because
+# the five tests are already served verbatim inside completed step 03. And it
+# converts "never name the fault" from a prohibition into a fact: there is
+# nothing to name, because the person who knows is not in the conversation.
+#
+# Architect's text, verbatim. Lint-clean against chapter 11's guarded cause
+# words — pushed, enough, seated, connect — and against all thirty-two.
+CHAPTER_PREMISE = {
+    "11": (
+        "WHAT HAPPENED IN THIS CHAPTER\n"
+        "Somebody the child knows opened a sealed card, did exactly what it told them to\n"
+        "do, and left the room without saying what it was. There are five such cards. You\n"
+        "were not told which one was used and you cannot work it out — the person who\n"
+        "knows is not in this conversation.\n"
+        "\n"
+        "So you do not name the fault here. Not at twelve minutes, not at ninety, not if\n"
+        "they are upset. That is not a rule about pacing. There is nothing for you to name.\n"
+        "\n"
+        "What you have is the list of five tests, which they have already read: power,\n"
+        "the sensor, the rule, the output, the sequence, in that order. Each one only\n"
+        "means something if the one before it passed. Put that list in front of them and\n"
+        "ask which they have not tried yet. That is narrowing, and it is the whole of the\n"
+        "job here.\n"
+        "\n"
+        "Restore is theirs whenever they want it, and the book already says it is not\n"
+        "cheating."),
+}
+
 SERVED_BLOCKS = ("absence",)
 
 # Piece B, and the first rung-conditional voice line in this system — a new
@@ -247,6 +285,12 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # parts block and its child words never reached the prompt. They are served
     # here, alongside the route, so "where is the reset" has somewhere to land.
     L.append(f"\nESCALATION: {lvl}")
+    # Before the absence guard, so "there is nothing for you to name" stands in
+    # front of the guard's instruction for what to do with a rung that has no
+    # material — the guard explains the shape, the premise explains the reason.
+    premise = CHAPTER_PREMISE.get(turn.chapter)
+    if premise:
+        L.append("\n" + premise)
     if n == 0:
         L.append("\n" + OPENING_WORD)
     if "absence" in SERVED_BLOCKS:
