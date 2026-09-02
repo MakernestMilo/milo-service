@@ -61,3 +61,67 @@ If it fails, L2's exclusion is not reachable by prose either. At that point
 **two rungs, in two different chapters' worth of attempts, say something general
 about prose as a mechanism** — and that finding is worth more than a fourth
 block. Written down before the run so it is not decided after seeing the number.
+
+
+---
+
+# Result — both halves carry
+
+| | n | exclusions | mean L2 length |
+|---|---|---|---|
+| baseline | 60 | **12/60 = 20%** | 64.8 |
+| with the block | 60 | **6/60 = 10%** | **62.6** |
+
+Against the prediction committed at `dcceef2`:
+
+| | threshold | measured | |
+|---|---|---|---|
+| exclusion rate | ≤ 8/60 | **6/60** | carries |
+| mean L2 length | < 63 | **62.6** | carries |
+| L0, L1, L3 unmoved | — | prompts byte-identical, +0 tokens | settled at the wire |
+
+**The first block in three orders that moved a rate the way it was predicted
+to.** The two before it — the override line and the quiet block — raised the
+rate they were aimed at by 40 and 50 points.
+
+## Three things that keep it honest
+
+**The permutation test reads p = 0.099**, not 0.01. Halving 12 to 6 across n=60
+is a real drop and a modest one: it clears the threshold set before the run and
+it would not clear a conventional significance bar. Both numbers belong in the
+record.
+
+**Chapter 03 did not move at all** — 3/5 before, 3/5 after, and the largest
+single contributor to the remaining six. Its region is *"It is in what you chose
+on the output screen"*, and all three replies exclude the sensor or the wiring.
+The block did nothing there.
+
+**Chapter D went 0/5 to 1/5** — one draw, and the only chapter that got worse.
+
+## Where the drop came from
+
+| chapter | before | after |
+|---|---|---|
+| 06 | 3/5 | **0/5** |
+| 08 | 2/5 | **0/5** |
+| 10 | 1/5 | **0/5** |
+| G | 1/5 | **0/5** |
+| 03 | 3/5 | 3/5 |
+| 05, 12 | 1/5 | 1/5 |
+| D | 0/5 | **1/5** |
+| 02, 04, 07, 09 | 0/5 | 0/5 |
+
+**It cleared the chapters whose regions name parts, and did nothing for chapter
+03.** That unevenness is the finding to carry rather than the headline rate.
+
+## What the run cost, and why it was that cheap
+
+Twelve calls. The arm was assembled from work already bought: three complete
+runs of the twelve plan, a fourth run recovered from a `.partial` written when
+an interrupted run would previously have discarded everything it had already
+paid for, and one run of the L2-only plan.
+
+The L2-only plan exists because the control half of the prediction was settled
+at the wire — L0, L1 and L3 prompts proven byte-identical rather than measured
+and hoped equal — so the remaining calls went where the change was. Sixty L2
+rows for twelve calls rather than three hundred.
