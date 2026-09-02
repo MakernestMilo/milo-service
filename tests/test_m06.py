@@ -202,3 +202,70 @@ def test_no_store_configured_and_a_broken_store_are_told_apart():
 
     body = client.get("/health").json()
     assert "session_store" in body and "session_store_degraded_from" in body
+
+
+def test_a_real_absence_does_not_advance_the_rung():
+    """U6, and AT. The clock measures time in the conversation.
+
+    A child reports a failure, leaves for two hours, and comes back. Before AT
+    the store made that a child returning to L4 having asked nothing and having
+    been absent for the entire escalation — the rungs were set against how long
+    a child sits with a fault, and chapter 11's twenty-two minutes means
+    twenty-two minutes in front of the machine.
+    """
+    import store
+    client.post("/turn", json={"message": "the number isn't changing",
+                               "session": "away", "chapter": "01"})
+    s = main.SESSIONS.get("away")
+    two_hours = 2 * 60 * 60
+    s.failure_seen_at -= two_hours          # the failure was seen two hours ago
+    s.last_turn_at -= two_hours             # and so was their last word
+    main.SESSIONS.put("away", s)
+
+    r = client.post("/turn", json={"message": "still stuck", "session": "away"})
+    assert r.json()["level"] == "L0", \
+        "two hours away advanced the rung, which is time on the wall not in the room"
+    banked = main.SESSIONS.get("away").absent_seconds
+    assert banked > two_hours - 60, f"the gap was not banked as absence: {banked}"
+
+
+def test_a_child_who_stays_and_says_nothing_still_escalates():
+    """U6's converse, and the half that matters more.
+
+    Sheet 4's corollary is not repealed by AT: silence at the table still has an
+    end. A child sitting stuck without typing must still reach the rungs — the
+    pause rule subtracts absence, never presence.
+    """
+    client.post("/turn", json={"message": "the number isn't changing",
+                               "session": "quiet", "chapter": "01"})
+    s = main.SESSIONS.get("quiet")
+    a, b, c = rungs("01")
+    seen = []
+    for back in (a + 1, b + 1, c + 1):
+        s.failure_seen_at = time.time() - back
+        s.last_turn_at = time.time() - 30     # they are here, just not typing
+        main.SESSIONS.put("quiet", s)
+        seen.append(client.post("/turn", json={"message": "still nothing",
+                                               "session": "quiet"}).json()["level"])
+    assert seen == ["L1", "L2", "L3"], seen
+
+
+def test_a_gap_under_the_threshold_is_thinking_not_leaving():
+    """Nine minutes is a child reading the book or fetching a screwdriver. The
+    corpus's own silence windows run 150 to 300 seconds, so the ladder already
+    treats several minutes as thinking; ten minutes is twice the longest."""
+    import store
+    client.post("/turn", json={"message": "the number isn't changing",
+                               "session": "think", "chapter": "01"})
+    s = main.SESSIONS.get("think")
+    nine_minutes = 9 * 60
+    s.failure_seen_at -= nine_minutes
+    s.last_turn_at -= nine_minutes
+    main.SESSIONS.put("think", s)
+    client.post("/turn", json={"message": "still nothing", "session": "think"})
+    assert main.SESSIONS.get("think").absent_seconds == 0, \
+        "a nine-minute gap was banked as absence; the threshold is ten"
+
+
+def test_the_pause_threshold_is_reported():
+    assert client.get("/health").json()["pause_seconds"] == 600

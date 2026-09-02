@@ -124,15 +124,27 @@ def advance(session: Session, text: str) -> runtime.Turn:
     This is the function boundary the tests inject the clock at. Nothing here
     reads the request body beyond the words the child typed.
     """
+    now = time.time()
+    # AT, and it happens before anything else reads the clock. A gap longer than
+    # the threshold is the child leaving the table, and it is banked as absence
+    # rather than counted toward the rung. The order matters: bank the gap this
+    # turn opened, THEN resolve the level, or the child who has just come back
+    # from two hours away is answered at the rung their absence bought.
+    if session.last_turn_at is not None:
+        gap = now - session.last_turn_at
+        if gap > store.PAUSE_SECONDS:
+            session.absent_seconds += gap
+    session.last_turn_at = now
+
     if runtime.OVERRIDE.search(text):
         session.direct_asks += 1
     if session.failure_seen_at is None and runtime.matched(text, session.chapter):
         # Epoch, not monotonic. A monotonic reading counts from a per-process
         # origin and means nothing to the worker that reads it back out of the
         # store — see store.py.
-        session.failure_seen_at = time.time()
-    return runtime.Turn(text, session.chapter,
-                        session.failure_seen_at, session.direct_asks)
+        session.failure_seen_at = now
+    return runtime.Turn(text, session.chapter, session.failure_seen_at,
+                        session.direct_asks, session.absent_seconds)
 
 
 class ModelUnavailable(RuntimeError):
@@ -256,6 +268,7 @@ def health():
         # deployment reading "memory" with no reason was never configured; one
         # with a reason is degraded and says so.
         "session_store_degraded_from": getattr(SESSIONS, "degraded_from", None),
+        "pause_seconds": store.PAUSE_SECONDS,
     }
 
 

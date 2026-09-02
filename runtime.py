@@ -13,6 +13,11 @@ class Turn:
     chapter: str
     failure_seen_at: float | None = None
     direct_asks: int = 0
+    # AT. Seconds this session spent away from the table, accumulated across
+    # turns and subtracted from the clock. Zero for a turn with no history —
+    # which is every row the harness builds, and the reason the by-level line
+    # does not move when this ships.
+    absent_seconds: float = 0.0
 
 
 @dataclass
@@ -69,7 +74,17 @@ def elapsed(turn: Turn):
     # rather than deleted — the port's behaviour is still the port's, and a
     # future clock change could make it live again.
     if turn.failure_seen_at:
-        return round(time.time() - turn.failure_seen_at)
+        # AT: time in the conversation, not time on the wall. The rungs were set
+        # against how long a child sits with a fault — chapter 11's twenty-two
+        # minutes means twenty-two minutes in front of the machine, from the
+        # book's own helper page. A durable store made the difference live: a
+        # child who leaves for two hours would otherwise return to L4 having
+        # asked nothing and been absent for the whole escalation.
+        #
+        # Absence is subtracted, never the reverse, so a child who stays and
+        # says nothing still escalates. Sheet 4's corollary is not repealed by
+        # this: silence at the table still has an end.
+        return round(time.time() - turn.failure_seen_at - turn.absent_seconds)
     return None
 
 
