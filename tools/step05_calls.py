@@ -207,7 +207,7 @@ def main(runs=1, tag="", plan="all"):
 def _run(cases, client, out):
     import time
     for key, target, text, ago, asks in cases:
-        seen_at = None if ago is None else time.monotonic() - ago
+        seen_at = None if ago is None else time.time() - ago
         turn = Turn(text, key, seen_at, asks)
 
         lvl = runtime.level(turn)                    # the real ladder decides

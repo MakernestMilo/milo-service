@@ -58,10 +58,18 @@ def matched(text: str, chapter: str) -> bool:
 
 
 def elapsed(turn: Turn):
-    # Verbatim: a falsy test, so a clock legitimately reading 0 is treated as
-    # never started. Property 3 of the port source.
+    # Epoch seconds since the failure was first seen. It was monotonic until
+    # T6: a monotonic reading counts from a per-process origin, so once the
+    # session lives in a shared store the number means nothing to the worker
+    # that reads it back — not stale, garbage.
+    #
+    # The falsy test is verbatim from the port: a clock legitimately reading 0
+    # counted as never started, which is property 3 of the source. Under epoch
+    # time that branch is unreachable rather than wrong, and it is left standing
+    # rather than deleted — the port's behaviour is still the port's, and a
+    # future clock change could make it live again.
     if turn.failure_seen_at:
-        return round(time.monotonic() - turn.failure_seen_at)
+        return round(time.time() - turn.failure_seen_at)
     return None
 
 

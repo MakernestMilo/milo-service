@@ -32,7 +32,7 @@ def test_every_case_resolves_to_the_rung_it_targets(case):
     """The runner's own assertion, run for free. A rung is never forced: the
     plan says where it expects to land and the real ladder decides."""
     key, target, text, ago, asks = case
-    seen_at = None if ago is None else time.monotonic() - ago
+    seen_at = None if ago is None else time.time() - ago
     assert runtime.level(Turn(text, key, seen_at, asks)) == target
 
 

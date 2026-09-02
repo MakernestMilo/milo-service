@@ -803,7 +803,7 @@ def run(level_fn, assemble_fn):
     for ch in corpus.CHAPTERS:
         f = ch["failure"]
         rungs = f.get("ladder") or [f["silence"]] * 3
-        now = time.monotonic()
+        now = time.time()
         # Four positions, one per rung the clock can reach. The sampler took
         # three — cold, rungs[1]+1, rungs[2]+100000 — which for a laddered
         # chapter resolve to L0, L2, L2. No position ever landed inside an L1

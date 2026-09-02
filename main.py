@@ -15,6 +15,8 @@ corpus.verify()
 
 import assembler
 import runtime
+import store
+from store import Session
 
 
 app = FastAPI()
@@ -106,28 +108,14 @@ class TurnRequest(BaseModel):
     chapter: str | None = None
 
 
-@dataclass
-class Session:
-    """Decision Y. In memory, keyed by session, lost on restart and openly so.
-    M-07 replaces the dictionary; it does not change the contract."""
-    chapter: str
-    failure_seen_at: float | None = None
-    direct_asks: int = 0
-
-
-# This dictionary is coherent only in a single process, and that is a
-# deployment fact rather than a property of the code: WEB_CONCURRENCY=1 is set
-# explicitly in Render's environment for this service. With more than one
-# worker the requests of one session round-robin across processes, so a child's
-# second turn can land on a worker that never saw their first — failure_seen_at
-# unset, ask count zero, the ladder silently back at L0. That is the standing
-# brief's corollary on sheet 4 exactly: a path where a child asks, waits, and
-# never arrives at L3, which is a defect and not a pedagogy.
+# Decision AQ / T6. The dictionary is gone: sessions live in a store with a
+# time to live, so the service is no longer coherent only in one process.
+# WEB_CONCURRENCY=1 was the deployment fact that made the dictionary safe, and
+# it comes out with this change rather than before or after it.
 #
-# So M-07 is not replacing a dictionary with a database for tidiness. It is
-# replacing the one thing that makes this service unable to scale past a single
-# worker, and the setting comes out only when the store goes in.
-SESSIONS: dict[str, Session] = {}
+# Session itself moved to store.py unchanged — decision Y's contract is the same
+# three fields; only where they live has changed.
+SESSIONS = store.from_env()
 
 
 def advance(session: Session, text: str) -> runtime.Turn:
@@ -139,7 +127,10 @@ def advance(session: Session, text: str) -> runtime.Turn:
     if runtime.OVERRIDE.search(text):
         session.direct_asks += 1
     if session.failure_seen_at is None and runtime.matched(text, session.chapter):
-        session.failure_seen_at = time.monotonic()
+        # Epoch, not monotonic. A monotonic reading counts from a per-process
+        # origin and means nothing to the worker that reads it back out of the
+        # store — see store.py.
+        session.failure_seen_at = time.time()
     return runtime.Turn(text, session.chapter,
                         session.failure_seen_at, session.direct_asks)
 
@@ -258,6 +249,9 @@ def health():
         "build": BUILD_ID,
         "uptime": time.monotonic() - START_TIME,
         "chapters": len(corpus.CHAPTERS),
+        # Named rather than assumed: a deployment that lost its store reports
+        # "memory" here, instead of working until the second worker arrives.
+        "session_store": SESSIONS.name,
     }
 
 
@@ -283,18 +277,19 @@ async def turn(payload: TurnRequest):
                 content={"detail": "A new session must name its chapter."},
             )
         session = Session(chapter=payload.chapter)
-        SESSIONS[payload.session] = session
     elif payload.chapter and payload.chapter != session.chapter:
         # The child moved on. The clock belongs to the failure they were
         # looking at, so it does not follow them into the next chapter.
         session = Session(chapter=payload.chapter)
-        SESSIONS[payload.session] = session
 
     if session.chapter not in corpus.BY_KEY:
         return JSONResponse(status_code=400,
                             content={"detail": "Unknown chapter."})
 
     turn = advance(session, payload.message)
+    # Written back on every turn: advance() mutates the clock and the ask count,
+    # and a store the mutation never reaches is a dictionary with extra steps.
+    SESSIONS.put(payload.session, session)
     lvl = runtime.level(turn)
     ctx = assembler.assemble(turn, lvl)
     system = assembler.VOICE + "\n\n=== CONTEXT ===\n" + ctx.stage["prompt"]
