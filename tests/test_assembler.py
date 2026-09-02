@@ -160,8 +160,29 @@ def test_production_serves_every_authored_block():
     # premise defect it sat beside, +80 at 11/L1 and +40 at 11/L3, and failed at
     # its own purpose — 80% incomplete with it against 20% without.
     assert "WHEN THE STEP GIVES A LIST" not in prompt
-    main_src = pathlib.Path("main.py").read_text(encoding="utf-8")
-    assert "SERVED_BLOCKS" not in main_src, "the service must never set the seam"
+    # The subject is that the service never SETS the seam, and this used to be a
+    # substring check for the name — which a comment in main.py referring to the
+    # seam was enough to trip, while an assignment written as
+    # `setattr(assembler, "SERVED_BLOCKS", ...)` would have passed. Testing
+    # mention rather than assignment is the wrong-instrument pattern this
+    # project has found five times, so it now reads the syntax tree.
+    import ast
+    tree = ast.parse(pathlib.Path("main.py").read_text(encoding="utf-8"))
+    for node in ast.walk(tree):
+        targets = []
+        if isinstance(node, ast.Assign):
+            targets = node.targets
+        elif isinstance(node, (ast.AugAssign, ast.AnnAssign)):
+            targets = [node.target]
+        for target in targets:
+            name = (target.attr if isinstance(target, ast.Attribute)
+                    else getattr(target, "id", None))
+            assert name not in ("SERVED_BLOCKS", "FORCE_OVERRIDE_LINE"), \
+                "the service sets a measurement seam"
+        if (isinstance(node, ast.Call) and getattr(node.func, "id", "") == "setattr"
+                and len(node.args) > 1 and isinstance(node.args[1], ast.Constant)):
+            assert node.args[1].value not in ("SERVED_BLOCKS", "FORCE_OVERRIDE_LINE"), \
+                "the service sets a measurement seam through setattr"
 
 
 def test_the_chapter_premise_reaches_only_its_own_chapter():

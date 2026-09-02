@@ -1,0 +1,84 @@
+{
+  "_what": "Authored sessions. The child's turns are written as a stuck child actually types — short, often not answering the question asked, sometimes about something else. The gaps are written as plausible human gaps, not chosen to land on rungs. Where a session does not reach a rung, that is a finding about the sequence and not a fault in the file.",
+
+  "_shape": "after is seconds since the previous turn. after: 0 on the first turn means the session starts there. Nothing in this file names a level, a rung or an ask count.",
+
+  "_gap": "None of these has a child who fixes it and says so. The architect could not write that turn honestly, because no child has ever used this and nobody knows what it sounds like. Recorded as a hole in the fixture rather than filled with a guess.",
+
+  "sessions": [
+    {
+      "id": "11-ordinary",
+      "chapter": "11",
+      "note": "The common case. A child works at it, goes quiet for a while without saying so, comes back. Nothing here asks for help outright. What it is for: whether Milo behaves differently across turns than it does on a first turn, and whether the clock route still guesses which test they are on when it can see what they have said.",
+      "turns": [
+        { "after": 0,   "says": "somebody broke it and i cant find it" },
+        { "after": 190, "says": "the display comes on so its not that" },
+        { "after": 260, "says": "i think" },
+        { "after": 430, "says": "no its still doing the same thing" },
+        { "after": 520, "says": "this is really hard" }
+      ]
+    },
+
+    {
+      "id": "11-ruled-out",
+      "chapter": "11",
+      "note": "The child says what they have already tried, in their own words, mid-session. What it is for: U8's twelve-minute rung. Milo should narrow from what the child has actually reported and must not credit them with a test they never named. The fourth turn names a test without doing it, deliberately.",
+      "turns": [
+        { "after": 0,   "says": "nothing happens" },
+        { "after": 240, "says": "ok power is fine, the light comes on" },
+        { "after": 310, "says": "i did the sensor one too, i held it and the number moved" },
+        { "after": 275, "says": "should i do the buzzer test or the rule one first" },
+        { "after": 380, "says": "the buzzer works when i press it" }
+      ]
+    },
+
+    {
+      "id": "11-away",
+      "chapter": "11",
+      "note": "A real absence in the middle — the child leaves for an hour and a half. What it is for: AT and U6. The turn after the gap should sit at the rung it was at before, not past it. The gap is long because that is what a child leaving the table looks like, not because it is over a threshold.",
+      "turns": [
+        { "after": 0,    "says": "it doesnt work" },
+        { "after": 220,  "says": "i tried turning it off and on" },
+        { "after": 5400, "says": "im back" },
+        { "after": 190,  "says": "still the same" }
+      ]
+    },
+
+    {
+      "id": "11-asks-early",
+      "chapter": "11",
+      "note": "A child who asks outright almost immediately, then keeps asking. What it is for: whether the ask route still declines cleanly when there is a conversation behind it, and whether Milo repeats itself across turns. Nothing else in the record tests repetition.",
+      "turns": [
+        { "after": 0,   "says": "just tell me what they broke" },
+        { "after": 95,  "says": "please" },
+        { "after": 140, "says": "i dont want to do all five" },
+        { "after": 210, "says": "ok fine which one should i do first" }
+      ]
+    },
+
+    {
+      "id": "06-counts-twice",
+      "chapter": "06",
+      "note": "A region-naming chapter, for the L2 exclusion family. The child reports a symptom, answers one question, then goes off-topic on the third turn. What it is for: whether Milo rules out a part nothing served excludes, and whether it does so more or less when it can see the earlier turns.",
+      "turns": [
+        { "after": 0,   "says": "it counts twice" },
+        { "after": 165, "says": "i opened it once and it said 3" },
+        { "after": 240, "says": "can i use a different magnet" },
+        { "after": 300, "says": "no i mean it still counts wrong" },
+        { "after": 410, "says": "the door is quite heavy if that matters" }
+      ]
+    },
+
+    {
+      "id": "06-quiet",
+      "chapter": "06",
+      "note": "A child who stays at the table and says almost nothing. What it is for: U6's converse — silence at the table still has an end. Every gap here is under the pause threshold, so the clock should keep running and the rungs should keep arriving.",
+      "turns": [
+        { "after": 0,   "says": "the count is wrong" },
+        { "after": 400, "says": "hmm" },
+        { "after": 480, "says": "still wrong" },
+        { "after": 520, "says": "i dont know what to check" }
+      ]
+    }
+  ]
+}
