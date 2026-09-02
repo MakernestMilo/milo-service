@@ -208,3 +208,34 @@ def test_no_block_is_defined_that_nothing_serves():
         for lvl in LEVELS:
             assert "NOBODY HAS ASKED YOU FOR ANYTHING" not in \
                 assembler.assemble(turn, lvl).stage["prompt"]
+
+
+def test_point_and_stop_is_served_at_l2_and_only_where_a_region_exists():
+    """C-13's sixth block, rung-scoped rather than chapter-scoped.
+
+    Gated on the chapter serving a region, which is thirteen of fourteen —
+    chapter 11's was removed as a fault identity, so it would receive an opening
+    sentence, "You have been given the region", that is false. The gate is a
+    data condition and not a chapter name, so C-17 holds.
+
+    The prediction on record says L0, L1 and L3 must be unmoved, so a leak past
+    L2 would make the run say nothing about the block rather than something weak
+    about it.
+    """
+    import time
+    tag = "AT THIS RUNG, POINT AND STOP"
+
+    def prompt(key, ago):
+        seen = None if ago is None else time.time() - ago
+        turn = runtime.Turn(corpus.BY_KEY[key]["failure"]["says"][0], key, seen, 0)
+        return assembler.assemble(turn, runtime.level(turn)).stage["prompt"]
+
+    with_region = [c["key"] for c in corpus.CHAPTERS if c["failure"].get("region")]
+    assert len(with_region) == 13 and "11" not in with_region
+
+    for key in [c["key"] for c in corpus.CHAPTERS]:
+        a, b, c = corpus.BY_KEY[key]["failure"]["ladder"]
+        served_at_l2 = tag in prompt(key, b + 1)
+        assert served_at_l2 == (key in with_region), key
+        for ago in (None, a + 1, c + 1):          # L0, L1, L3
+            assert tag not in prompt(key, ago), f"{key} leaked past L2"

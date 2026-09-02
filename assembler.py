@@ -122,6 +122,31 @@ CHAPTER_PREMISE = {
 # "You are here because time passed", which is false where no failure has been
 # seen. That is an engineering call, recorded in the prediction file.
 
+
+# C-13, sixth authored block. Not chapter-scoped: RUNG-scoped, and gated on the
+# chapter serving a region — thirteen of fourteen. Chapter 11 has none since its
+# was removed as a fault identity, so it would receive an opening sentence that
+# is false. The gate is a data condition and not a chapter name, so C-17 holds.
+#
+# Written against a measurement rather than an intuition. At L2 across the
+# twelve chapters, replies that excluded a place averaged 72.1 tokens against
+# 63.0 for those that did not — p=0.010 over 20,000 shuffles, and longer in six
+# of the seven chapters where both occur. The floor is the finding: no reply
+# under 58 tokens excluded anything, while replies of 91 excluded nothing. So
+# length does not guarantee an exclusion and shortness prevents one, which is
+# why the only instruction here is a positive one about length.
+#
+# A draft carried a second imperative — "Do not add where the fault is not" —
+# and it was cut. Two blocks that named the behaviour they forbade raised the
+# rate they were aimed at by 40 and 50 points, and the stated reason to expect
+# this one to differ was that it does not do that. The text was corrected rather
+# than the reason.
+POINT_AND_STOP = (
+    "AT THIS RUNG, POINT AND STOP\n"
+    "You have been given the region. Say it in your own words, in one or two\n"
+    "sentences, and stop there. You were given one place, not a map — and a place\n"
+    "you rule out on your own authority is a place they stop looking on yours.")
+
 SERVED_BLOCKS = ("absence",)
 FORCE_OVERRIDE_LINE = False
 
@@ -307,6 +332,9 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     premise = CHAPTER_PREMISE.get(turn.chapter)
     if premise:
         L.append("\n" + premise)
+    # L2 only, and only where there is a region to point at.
+    if lvl == "L2" and f.get("region"):
+        L.append("\n" + POINT_AND_STOP)
     if n == 0:
         L.append("\n" + OPENING_WORD)
     if "absence" in SERVED_BLOCKS:

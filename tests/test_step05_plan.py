@@ -125,3 +125,20 @@ def test_the_twelve_plans_reports_are_the_chapters_own_words():
             continue
         assert text in corpus.BY_KEY[key]["failure"]["says"], f"{key}: {text!r}"
         assert runtime.matched(text, key), f"{key}: {text!r} starts no clock"
+
+
+def test_the_l2_plan_is_the_twelve_plans_l2_rows_exactly():
+    """Cheaper and better, not cheaper and weaker.
+
+    The block under test is served at L2 and nowhere else, verified at the wire:
+    +84 input tokens at every L2 row of the twelve arm and +0 at the other
+    forty-eight. So L0, L1 and L3 prompts are byte-identical to the baseline's,
+    and re-running them measures run-to-run noise rather than the block.
+
+    Identical to the twelve plan's L2 cases so the rows pool with them rather
+    than starting a new baseline.
+    """
+    from tools.step05_calls import TWELVE, L2_ONLY
+    assert len(L2_ONLY) == 12
+    assert all(c[1] == "L2" for c in L2_ONLY)
+    assert L2_ONLY == [c for c in TWELVE if c[1] == "L2"]
