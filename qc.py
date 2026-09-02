@@ -161,7 +161,32 @@ def reads(what, subject, history=None, note=""):
 
 
 def _prompt(ctx):
+    """What THIS TURN serves the model, and nothing the transcript carries.
+
+    M-09 step 02, and the whole of the restatement. T7 found that R2, R3 and R4
+    all ask whether something REACHED Milo, and that reaching becomes monotonic
+    the moment there is a transcript: a fix served legitimately at L3 is in the
+    conversation at every turn after it, including turns that resolve lower.
+    Asked of the whole text, all three would convict the service for remembering
+    something it was allowed to say.
+
+    So their subject names the turn. This accessor is the turn's own assembled
+    context; `_carried()` is what came before. The rules that restate read the
+    first and never the second — not because the transcript does not matter, but
+    because whether Milo may SAY a thing again is a different question from
+    whether it was allowed to say it once, and one rule cannot hold both.
+    """
     return ctx.stage.get("prompt") or ""
+
+
+def _carried(ctx):
+    """The transcript reaching the model alongside this turn's context.
+
+    Empty until history ships in step 03. Present here so the rules that restate
+    are written against the shape they will meet, and so their fixtures can
+    prove the distinction now rather than the day it starts mattering.
+    """
+    return ctx.stage.get("history") or ""
 
 
 _INSTR = re.compile(r"^What this step is: *(.*)$", re.M)
@@ -202,12 +227,18 @@ def _words(words):
 # so the blob includes it. Left exactly as it was — the one rule that did not
 # need correcting. It reads five context fields as well as the prompt, which is
 # wider than C-14 requires but not narrower, so it is not mis-instrumented.
-@reads(PROMPT + " (+ 5 context fields)", "cause words in what Milo sees",
-       history=RESTATES, note='A cause word legitimately served in a fix at L3 stays in the transcript for every later turn. The subject as written — cause words in what Milo sees — would convict the service for remembering something it was allowed to say. It has to become: a cause word reaching Milo BEFORE the rung that licenses it.')
+@reads(PROMPT + " (+ 5 context fields)",
+       "a cause word reaching Milo on a turn that does not license it",
+       history=PER_TURN, note='Restated in M-09 step 02. It read "cause words in what Milo sees", which was correct while Milo saw one turn: a cause word legitimately served in a fix at L3 stays in the transcript afterwards, so the old subject would convict the service for remembering something it was allowed to say. The subject now names the turn, and the rule reads this turn\'s context rather than the conversation.')
 def r2(ctx, words):
     if not words:
         return None
-    blob = json.dumps({"s": ctx.stage, "a": ctx.ask, "r": ctx.region,
+    # The transcript is dropped explicitly, not by luck. This rule serialises
+    # the whole stage dict, so history landing in it would be swallowed back in
+    # and the restatement would be a docstring rather than a behaviour — which
+    # is exactly what a fixture caught when the seam was built.
+    stage = {k: v for k, v in ctx.stage.items() if k != "history"}
+    blob = json.dumps({"s": stage, "a": ctx.ask, "r": ctx.region,
                        "f": ctx.fix, "u": ctx.rule, "n": ctx.next_stage}).lower()
     leak = sorted(set(_words(tuple(words)).findall(blob)))
     return "R2 cause words in context: " + ",".join(leak) if leak else None
@@ -216,8 +247,8 @@ def r2(ctx, words):
 # Decision Z. The subject is the corpus's fix string for the chapter in play,
 # matched exactly against the assembled prompt — never ctx.fix, which is None
 # below L3 and made this rule pass on nothing across 5,376 rows.
-@reads(PROMPT, "the fix reaching the model at a level that forbids it",
-       history=RESTATES, note="The same shape, and the sharper case. 'The fix reaching the model at a level that forbids it' is monotonic once there is history: a fix served at L3 is visible at every turn after, including turns that resolve lower. The subject becomes the fix reaching the model FIRST at a level that forbids it.")
+@reads(PROMPT, "the fix being served on a turn whose level forbids it",
+       history=PER_TURN, note="Restated in M-09 step 02, and the sharpest of the three. It read \"the fix reaching the model at a level that forbids it\", and reaching is monotonic once there is a transcript — a fix served at L3 is visible at every later turn, including turns that resolve lower. Serving is not: it happens on one turn or it does not. The subject now names the act rather than the presence.")
 def r3(ctx, lvl, key):
     # Decision G: a fix is legal at L3 and at L4, illegal everywhere else.
     fix = (corpus.BY_KEY[key]["failure"] or {}).get("fix")
@@ -228,8 +259,8 @@ def r3(ctx, lvl, key):
 # Chapter 11 has no fix in the corpus at all, so searching the prompt for its
 # fix string would be R3's vacuity one rule over. The subject is the fix line
 # the model is shown, whatever it says.
-@reads(PROMPT, "chapter 11 carrying a fix it must not have",
-       history=RESTATES, note='Chapter 11 carrying a fix it must not have. Under history the chapter can change mid-session, so a fix legitimately served in chapter 07 is in the transcript when the child moves to 11. The subject has to name the turn the fix was served on, not the text it survives in.')
+@reads(PROMPT, "chapter 11 being served a fix on this turn",
+       history=PER_TURN, note='Restated in M-09 step 02. It read "chapter 11 carrying a fix it must not have", and a chapter can change mid-session: a fix served legitimately in chapter 07 is in the transcript when the child moves to 11, so carrying and being served came apart. The subject now names the turn the fix was served on rather than the text it survives in.')
 def r4(ctx, key):
     if key != "11":
         return None
