@@ -175,6 +175,38 @@ which is what happened.
 
 ---
 
+## Two things landed after this return was first written
+
+**A store selector that could not reach its own fallback.** `from_env()`
+branched on whether `SESSION_STORE_URL` was **set**, never on whether the store
+**worked**, so a malformed URL raised at import and killed the service at boot —
+two failed Render deploys reporting only "Timed Out" — while `MemoryStore`, which
+exists precisely as the fallback, sat unreachable in the same file. It now
+degrades rather than dies, and says so in three places at once: an ERROR in the
+log, the store's name in `/health`, and the reason beside it. Still not a silent
+fallback, which was the original design and remains the point.
+
+**The first block in three orders that moved a rate the way it was predicted
+to.** The L2 exclusion rate across the twelve chapters falls **12/60 → 6/60**,
+and mean L2 reply length falls to **62.6** against a threshold of 63 — both
+halves of a prediction committed before the block existed in the tree.
+
+It was written against a measurement rather than an intuition. Excluding replies
+at L2 ran longer than non-excluding ones (72.1 against 63.0, p = 0.010), and the
+floor was the finding: **no reply under 58 tokens excluded anything**, while
+91-token replies excluded nothing. Length does not guarantee an exclusion;
+shortness prevents one. So the instruction was *say less*, not *do not exclude* —
+and a draft's second sentence, *"Do not add where the fault is not"*, was cut
+before landing because it was the same grammatical shape as the two blocks that
+made things worse.
+
+Three caveats travel with it: the permutation p is **0.099**, not 0.01; **chapter
+03 did not move at all** and is the largest contributor to what remains; and
+chapter D went 0/5 to 1/5. The drop came from the chapters whose regions name
+parts.
+
+---
+
 ## Open
 
 **The clock-route material**, now known to be chapter 11's rather than the
