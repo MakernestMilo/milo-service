@@ -344,17 +344,40 @@ _MACHINE_BLOCK = re.compile(
     r"^(?:ON THE MACHINE|STILL IN THE BOX|WIRING FOR).*?(?=\n\n)", re.M | re.S)
 
 
-def _referents(ctx):
-    """The things this prompt lets Milo name: part names, the words a child may
-    call them by, and the wiring vocabulary — harvested from the prompt itself
-    rather than listed here, so a chapter that opens a new part needs no edit.
+_PART_NAME = re.compile(r"^- ([a-z][a-z0-9 \']*?)(?: —|$)", re.M | re.I)
+_ALIAS_LINE = re.compile(r"^\s*they may call it: (.+)$", re.M | re.I)
+_WIRING_NAME = re.compile(r"^- (?:in|out): ([A-Z][A-Z ]*?) on ", re.M)
+_SECTION = re.compile(r"^(WIRING FOR .*|ON THE MACHINE.*|STILL IN THE BOX.*)$", re.M)
 
-    Used by the exclusion and part-state detectors, which are about claims
-    concerning a NAMED thing. A reply that says "not anything broken now" names
-    nothing and is not their business; one that says "not in the wiring" does.
+
+def _referents(ctx):
+    """The words this prompt lets Milo NAME: part names, the words a child may
+    call them by, the wiring block's module names, and the section headings.
+
+    Harvested from the prompt rather than listed here, so a chapter that opens a
+    new part needs no edit — but from the NAMING parts of it only, never from
+    the descriptions.
+
+    That distinction was found the hard way. The first version took every word
+    of four letters or more out of those blocks, which swept in the purpose
+    strings: "the yellow wire — carries the signal — the reading itself". So
+    `itself` became a referent, and "not the ring itself" convicted as the
+    exclusion of a named thing called `itself` — eleven times in one run of 300
+    calls, on replies whose actual exclusion was the region's own and grounded.
+    A reflexive pronoun is not a part.
+
+    It is the same rule that keeps these detectors off regions: a parts list
+    NAMES things, and prose about them does not.
     """
-    text = " ".join(_MACHINE_BLOCK.findall(_prompt(ctx))).lower()
-    return {w for w in re.findall(r"[a-z]{4,}", text)}
+    prompt = _prompt(ctx)
+    blocks = " ".join(_MACHINE_BLOCK.findall(prompt))
+    names = set()
+    for pat in (_PART_NAME, _ALIAS_LINE, _WIRING_NAME):
+        for m in pat.finditer(blocks):
+            names.update(re.findall(r"[a-z]{3,}", m.group(1).lower()))
+    for m in _SECTION.finditer(prompt):
+        names.update(re.findall(r"[a-z]{4,}", m.group(1).lower()))
+    return names
 
 
 _COMPLETED = re.compile(
