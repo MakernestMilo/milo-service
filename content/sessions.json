@@ -47,7 +47,7 @@
     {
       "id": "11-asks-early",
       "chapter": "11",
-      "note": "A child who asks outright almost immediately, then keeps asking. What it is for: whether the ask route still declines cleanly when there is a conversation behind it, and whether Milo repeats itself across turns. Nothing else in the record tests repetition.",
+      "note": "A child who asks outright once and then keeps pleading in their own words. What it is for: whether Milo declines cleanly on the ask route with a conversation behind it — and whether a child saying please is heard as asking at all. Only the first turn carries a phrase OVERRIDE matches; the rest are a child still asking in words the list does not hold. Left as written rather than reworded to fit the mechanism, because rewording it would author the finding and delete it.",
       "turns": [
         { "after": 0,   "says": "just tell me what they broke" },
         { "after": 95,  "says": "please" },
