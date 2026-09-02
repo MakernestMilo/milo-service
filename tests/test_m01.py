@@ -32,12 +32,17 @@ def test_the_four_key_contract_is_superseded():
     """M-01 returned reply, level, tasks_left and escalation from a stub.
     Decision Y deleted that stub in M-06 step 04. The old keys are asserted
     absent here, at the site of the old claim, rather than the test being
-    quietly removed."""
+    quietly removed.
+
+    `turns` joined the response in M-09 step 03, and it is not a return of the
+    stub. U4 requires that a session silently losing its history says so, and
+    the count of turns the model was actually given is the only place that can
+    be seen from outside. The old keys stay asserted absent."""
     r = client.post("/turn", json={"message": "Hello Milo", "session": "m01",
                                    "chapter": "01"})
     assert r.status_code == 200, r.text
     body = r.json()
-    assert set(body) == {"reply", "level", "session"}
+    assert set(body) == {"reply", "level", "session", "turns"}
     assert "tasks_left" not in body and "escalation" not in body
 
 

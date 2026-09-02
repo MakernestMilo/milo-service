@@ -37,7 +37,10 @@ def test_the_four_key_stub_is_gone():
     r = client.post("/turn", json={"message": "hello", "session": "s", "chapter": "01"})
     assert r.status_code == 200, r.text
     body = r.json()
-    assert set(body) == {"reply", "level", "session"}, body
+    # `turns` joined in M-09 step 03 for U4 — the count of turns the model was
+    # given, which is the only way a session losing its history is visible from
+    # outside. The stub's own keys stay asserted absent.
+    assert set(body) == {"reply", "level", "session", "turns"}, body
     assert "tasks_left" not in body and "escalation" not in body
 
 
@@ -269,3 +272,53 @@ def test_a_gap_under_the_threshold_is_thinking_not_leaving():
 
 def test_the_pause_threshold_is_reported():
     assert client.get("/health").json()["pause_seconds"] == 600
+
+
+def test_the_conversation_reaches_the_model_whole():
+    """AU and U4. A human mentor remembers the whole sitting.
+
+    Both sides of every turn join the conversation in order, and Milo's own
+    answers are in it as assistant turns — AV: if it said the fix at L3, the
+    child has it, and a ladder scoring otherwise is scoring a fiction.
+    """
+    for msg in ("the number isn't changing", "still nothing", "what now"):
+        r = client.post("/turn", json={"message": msg, "session": "h",
+                                       "chapter": "01"})
+    s = main.SESSIONS.get("h")
+    assert [t["who"] for t in s.turns] == ["child", "milo"] * 3, s.turns
+    assert [t["said"] for t in s.turns][::2] == \
+        ["the number isn't changing", "still nothing", "what now"]
+
+    kept, messages, rendered = main.history(s)
+    assert [m["role"] for m in messages] == ["user", "assistant"] * 3
+    assert rendered.startswith("CHILD: the number isn't changing")
+    assert "MILO: " in rendered
+
+
+def test_the_turn_count_is_reported_so_a_lost_history_says_so():
+    """U4. The count is what the model was GIVEN this turn, not what the session
+    holds — if the budget dropped the oldest turns, it is the smaller number."""
+    first = client.post("/turn", json={"message": "hello", "session": "c",
+                                       "chapter": "01"}).json()
+    assert first["turns"] == 0, "the first turn has no conversation behind it"
+    second = client.post("/turn", json={"message": "again", "session": "c"}).json()
+    assert second["turns"] == 2, second
+
+
+def test_the_budget_drops_the_oldest_turns_for_both_readers_together():
+    """AU's cap is an engineering guard, never a safety mechanism, and C-30 says
+    never truncate what a guard reads to make the guard pass.
+
+    So the model and the rules get the same text: if a turn is dropped for
+    budget it is dropped from both. Oldest first — the recent conversation is
+    the one a mentor would still have in mind.
+    """
+    import store
+    s = store.Session(chapter="01")
+    s.turns = [{"who": "child", "said": f"{i} " + "x" * 4000} for i in range(12)]
+    kept, messages, rendered = main.history(s)
+    assert len(kept) < len(s.turns), "nothing was dropped, so nothing was tested"
+    assert len(kept) == len(messages) == rendered.count("CHILD: "), \
+        "the model and the rules were given different amounts"
+    assert kept[-1]["said"].startswith("11 "), "the newest turn was dropped"
+    assert not any(t["said"].startswith("0 ") for t in kept), "the oldest survived"
