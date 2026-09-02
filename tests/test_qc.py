@@ -759,14 +759,86 @@ def test_every_rule_declares_whether_its_subject_survives_history():
         assert len(note) > 40, f"{name} declares {history!r} without a reason"
 
 
-def test_the_three_rules_that_cannot_widen_are_named():
-    """The finding T7 exists to surface, asserted so it cannot quietly change.
+def test_no_rule_is_left_waiting_to_be_restated():
+    """T7 found three rules whose subjects could not survive a transcript —
+    R2, R3 and R4, each asking whether something REACHED Milo, where reaching
+    becomes monotonic the moment there is history. M-09 step 02 restated all
+    three to name the turn rather than the text, so the set is empty.
 
-    R2, R3 and R4 all ask whether something REACHED Milo, and reaching becomes
-    monotonic the moment there is a transcript: a fix legitimately served at L3
-    is visible at every turn after it, including turns that resolve lower. Their
-    subjects have to name the turn rather than the text, which is a rewording
-    and not a bigger haystack.
+    Asserted as empty rather than deleted: a rule added later that cannot widen
+    should stop this test, which is the whole reason T7 made every rule declare.
     """
     restating = {n for n, _, _, h, _ in qc.declarations() if h == qc.RESTATES}
-    assert restating == {"R2", "R3", "R4"}, restating
+    assert restating == set(), (
+        f"{restating} declare that their subject cannot survive history, and "
+        f"step 02 was where that got fixed")
+    for name in ("R2", "R3", "R4"):
+        note = [d[4] for d in qc.declarations() if d[0] == name][0]
+        assert "Restated in M-09 step 02" in note, name
+
+
+# U3. Each restated rule needs two fixtures: the case the old subject convicted
+# must still convict, and what history legitimately carries must clear. A rule
+# that no longer convicts its original case is not restated, it is broken.
+
+def _with_history(ctx, transcript):
+    """The shape step 03 will build: this turn's context, and what came before."""
+    ctx.stage["history"] = transcript
+    return ctx
+
+
+def test_r3_still_convicts_a_fix_served_below_its_rung():
+    """The case the old subject convicted, unchanged."""
+    turn = runtime.Turn("the number isn't changing", "01", None, 0)
+    ctx = assembler.assemble(turn, "L2")
+    ctx.stage["prompt"] += "\n  fix: " + corpus.BY_KEY["01"]["failure"]["fix"]
+    assert qc.r3(ctx, "L2", "01"), "R3 no longer convicts the case it was built for"
+
+
+def test_r3_clears_a_fix_the_transcript_legitimately_carries():
+    """A fix served at L3 four turns ago is in the conversation at every turn
+    after it, including turns that resolve lower. The child has it. Convicting
+    that is convicting the service for remembering something it was allowed to
+    say — which is what the old subject would have done."""
+    turn = runtime.Turn("the number isn't changing", "01", None, 0)
+    ctx = _with_history(assembler.assemble(turn, "L2"),
+                        "MILO (turn 4, L3): " + corpus.BY_KEY["01"]["failure"]["fix"])
+    assert qc.r3(ctx, "L2", "01") is None, \
+        "R3 convicted the transcript rather than the turn"
+
+
+def test_r2_still_convicts_a_cause_word_served_this_turn():
+    turn = runtime.Turn("the number isn't changing", "01", None, 0)
+    ctx = assembler.assemble(turn, "L1")
+    words = qc.cause_words(corpus.BY_KEY["01"])
+    # a space, not a newline: R2 serialises to JSON, where "\n" becomes two
+    # characters and the escape swallows the word boundary before the word
+    ctx.stage["prompt"] += " " + words[0] + " "
+    assert qc.r2(ctx, words), "R2 no longer convicts a cause word in this turn"
+
+
+def test_r2_clears_a_cause_word_the_transcript_carries():
+    turn = runtime.Turn("the number isn't changing", "01", None, 0)
+    words = qc.cause_words(corpus.BY_KEY["01"])
+    ctx = _with_history(assembler.assemble(turn, "L1"),
+                        "MILO (turn 6, L3): the wire was " + words[0])
+    assert qc.r2(ctx, words) is None, "R2 convicted the transcript rather than the turn"
+
+
+def test_r4_still_convicts_a_fix_line_in_chapter_11():
+    turn = runtime.Turn("nothing happens", "11", None, 0)
+    ctx = assembler.assemble(turn, "L3")
+    ctx.stage["prompt"] += "\n  fix: push it back in"
+    assert qc.r4(ctx, "11"), "R4 no longer convicts the case it was built for"
+
+
+def test_r4_clears_a_fix_the_child_carried_in_from_another_chapter():
+    """A chapter can change mid-session. A fix served legitimately in chapter 07
+    is in the transcript when the child moves to 11, and chapter 11's rule is
+    about what 11 serves — not about what the child was told before they got
+    there."""
+    turn = runtime.Turn("nothing happens", "11", None, 0)
+    ctx = _with_history(assembler.assemble(turn, "L3"),
+                        "MILO (turn 3, chapter 07, L3): "
+                        + corpus.BY_KEY["07"]["failure"]["fix"])
+    assert qc.r4(ctx, "11") is None, "R4 convicted a fix from another chapter"
