@@ -172,9 +172,16 @@ def test_the_clock_reaches_l3_and_stops_short_of_l4():
 
 @pytest.mark.parametrize("seen", [0, 0.0, -1.0, -100000.0])
 def test_a_cold_boot_clock_does_not_crash_the_ladder(seen):
-    """monotonic() is small on a fresh boot, so failure_seen_at can be 0 or
-    negative. elapsed() uses a falsy test, so 0 reads as never started —
-    verbatim from the beta, and the reason this test exists."""
+    """A clock that is 0 or negative must not crash the ladder.
+
+    It existed because monotonic() is small on a fresh boot, so failure_seen_at
+    could legitimately be 0 or negative, and elapsed()'s falsy test read 0 as
+    never started — verbatim from the beta. T6 moved the clock to epoch seconds
+    for the store, so a real session can no longer produce those values and this
+    is now a robustness test rather than a live property. The falsy branch is
+    kept in elapsed() for the same reason this test is kept: the port's
+    behaviour is still the port's, and a future clock change could make it live
+    again."""
     turn = runtime.Turn("the number isn't changing", "01", seen, 0)
     lvl = runtime.level(turn)
     assert lvl in ("L0", "L1", "L2", "L3", "L4")
@@ -431,7 +438,7 @@ def test_the_generalisation_is_no_longer_inert_because_the_data_arrived():
     would resolve the thirteen differently from the data-driven one — which is
     the whole point of step 04, and the clearest evidence the mechanism was
     reading the corpus rather than the chapter name."""
-    now = time.monotonic()
+    now = time.time()
     differs = []
     for c in corpus.CHAPTERS:
         if c["key"] == "11":
@@ -491,7 +498,7 @@ def test_L4_every_chapter_resolves_to_L2_at_some_clock(key):
     middle rung of the whole mentoring model and it happened in one chapter."""
     f = corpus.BY_KEY[key]["failure"]
     a, b, d = f["ladder"]
-    now = time.monotonic()
+    now = time.time()
     reached = {runtime.level(runtime.Turn(f["says"][0], key, now - ago, 0))
                for ago in (a + 1, b + 1, d + 1, d + 100_000)}
     assert "L2" in reached, f"chapter {key} never resolves to L2: saw {sorted(reached)}"

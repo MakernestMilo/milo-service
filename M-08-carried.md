@@ -200,3 +200,35 @@ quiet, and quiet is not a question.*
 Authoring, and the architect's. It is the third thing chapter 11 has needed in
 one week, and it blocks `twelve`: three hundred calls are worth spending once
 the clock route has stopped producing fabricated wiring procedures, not before.
+
+
+---
+
+## 7. The clock measures wall time, and the store makes that a defect
+
+**Found while building T6, and it is the architect's.**
+
+`elapsed()` measures wall-clock seconds since the failure was first seen. While
+the session lived in one process and died with it, that was tolerable: a restart
+wiped the clock, and a child who left for hours came back to nothing.
+
+**The store removes the thing that was hiding it.** Sessions now survive for six
+hours, and the clock runs the whole time — including while the child is not
+there. A child who leaves for two hours and comes back gets **L4 on their first
+message**, having asked nothing and having been absent for the entire
+escalation.
+
+That inverts what the ladder measures. The rungs were set against how long a
+child *sits with a fault*: chapter 11's twenty-two minutes came from the book's
+helper page, and it means twenty-two minutes in front of the machine, not
+twenty-two minutes of calendar.
+
+**The shape of the fix**, from the architect: elapsed has to be time in the
+conversation rather than time on the wall. The simplest correct form is a clock
+that **pauses on absence** — a gap beyond some threshold does not count toward
+the rung.
+
+**Why it is not in T6.** That is a change to the ladder's input, which makes it
+the architect's, and landing it alongside the store would confound two changes
+whose effects on the rungs would then be impossible to separate. T6 ships the
+store and the epoch move; `elapsed()` is untouched and this is ruled on its own.

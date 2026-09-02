@@ -57,10 +57,10 @@ def clean():
 def drive(chapter, ago, asks, utterance):
     """Reach the rung through session state — the function boundary — and never
     by posting a field."""
-    main.SESSIONS["s"] = main.Session(
+    main.SESSIONS.put("s", main.Session(
         chapter=chapter,
-        failure_seen_at=None if ago is None else time.monotonic() - ago,
-        direct_asks=asks)
+        failure_seen_at=None if ago is None else time.time() - ago,
+        direct_asks=asks))
     return client.post("/turn", json={"message": utterance, "session": "s"})
 
 
@@ -84,7 +84,7 @@ def test_the_bank_never_says_more_than_the_level_permits(chapter, level,
     say something the prompt itself could not have carried. R3's property, one
     layer over."""
     turn = Turn(utterance, chapter,
-                None if ago is None else time.monotonic() - ago,
+                None if ago is None else time.time() - ago,
                 asks + (1 if runtime.OVERRIDE.search(utterance) else 0))
     lvl = runtime.level(turn)
     assert lvl == level
@@ -102,7 +102,7 @@ def test_the_bank_carries_the_step_instruction_at_every_level():
     whose call failed still learns what the step is."""
     for chapter, level, utterance, ago, asks in REACHABLE:
         turn = Turn(utterance, chapter,
-                    None if ago is None else time.monotonic() - ago,
+                    None if ago is None else time.time() - ago,
                     asks + (1 if runtime.OVERRIDE.search(utterance) else 0))
         ctx = assembler.assemble(turn, runtime.level(turn))
         text = main.bank(ctx, runtime.level(turn))
