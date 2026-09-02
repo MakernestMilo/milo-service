@@ -121,20 +121,6 @@ CHAPTER_PREMISE = {
 # Served when a clock is actually running, not at a cold L0: the block opens
 # "You are here because time passed", which is false where no failure has been
 # seen. That is an engineering call, recorded in the prediction file.
-CLOCK_ROUTE = {
-    "11": (
-        "NOBODY HAS ASKED YOU FOR ANYTHING\n"
-        "You are here because time passed, not because they said anything. They have been\n"
-        "quiet. Quiet is not a question, and it is not evidence about which of the five\n"
-        "they are on — a child who has stopped typing may be testing, or reading, or\n"
-        "away from the table, and you cannot tell which from silence.\n"
-        "\n"
-        "So say less here than you would if they had asked. You know exactly what you\n"
-        "knew a minute ago: the five tests, and nothing about their machine. Put the list\n"
-        "in front of them and ask which they have not tried. Do not open with a guess\n"
-        "about where they have got to, and do not fill the quiet with a procedure — if\n"
-        "they wanted the steps they would have asked for them."),
-}
 
 SERVED_BLOCKS = ("absence",)
 FORCE_OVERRIDE_LINE = False
@@ -321,12 +307,6 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     premise = CHAPTER_PREMISE.get(turn.chapter)
     if premise:
         L.append("\n" + premise)
-    # The clock route only: nobody asked, and a clock is running. Not a cold L0,
-    # where no failure has been seen and the block's first sentence would be
-    # false.
-    quiet = CLOCK_ROUTE.get(turn.chapter)
-    if quiet and not turn.direct_asks and turn.failure_seen_at:
-        L.append("\n" + quiet)
     if n == 0:
         L.append("\n" + OPENING_WORD)
     if "absence" in SERVED_BLOCKS:

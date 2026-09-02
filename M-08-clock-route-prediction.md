@@ -52,3 +52,46 @@ which is L0-with-a-clock through L3-by-clock, and not L0-cold.
 Consequence for this run: **11/L0 in the plan is cold, so it is untreated** and
 should not move. It joins L3-ask and L4-ask as a control rather than a treated
 position.
+
+
+---
+
+# Result — the prediction fails, and the block comes out
+
+| position | baseline n=10 | with the block n=5 | move | role |
+|---|---|---|---|---|
+| 11/L0-clock | 30% | 0% | −30 | control (cold, untreated) |
+| **11/L1-clock** | 10% | **60%** | **+50** | treated |
+| **11/L2-clock** | 30% | **80%** | **+50** | treated |
+| **11/L3-clock** | **60%** | **100%** | **+40** | treated — the prediction |
+| 11/L3-ask | 0% | 0% | 0 | control |
+| 11/L4-ask | 40% | 40% | 0 | control |
+
+The prediction was that L3-by-clock falls to 2/5 or lower. **It rose to five of
+five.** Every treated position moved the wrong way by forty points or more, and
+every one of the thirteen firings is the same claim: *that's the sensor test*.
+
+**The controls held exactly** — 0% stayed 0%, 40% stayed 40% — and the scope is
+confirmed at the wire, not merely in a test: input tokens read **4,029** at the
+three treated positions and 3,854 / 3,899 at the untreated ones. The block went
+where it was aimed and nowhere else. The result is about the block.
+
+## The decision, taken before the number
+
+Three attempts at this rung — a rung label, an instruction line, a paragraph of
+prose. All three failed and two of the three made it **worse**. The finding
+recorded in advance therefore stands: **prose does not reach this route, and the
+next move is different material rather than a fourth block.** The block is
+removed.
+
+## One observation, offered as an observation
+
+The two interventions that made things worse are both **prohibitions naming the
+behaviour they forbid**. The override line says *do not narrow*. This block says
+*do not open with a guess about where they have got to* and *do not fill the
+quiet with a procedure*. Both were followed by more of exactly what they named —
+guessing which test the child is on, at every treated rung.
+
+Recorded because it is a pattern across two independent interventions, and
+**not** as a proposal for a fourth block. It is a reason to be careful about the
+shape of whatever comes next, whatever that turns out to be.

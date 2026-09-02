@@ -193,40 +193,18 @@ def test_the_premise_stands_before_the_absence_guard():
     assert p.index("WHAT HAPPENED IN THIS CHAPTER") < p.index("WHEN A RUNG HAS NO MATERIAL")
 
 
-def test_the_clock_route_block_reaches_the_clock_route_only():
-    """C-13's sixth block, and the narrowest scope yet: chapter 11, no direct
-    ask, and a clock actually running.
+def test_no_block_is_defined_that_nothing_serves():
+    """The clock-route block was landed, measured, and removed on its result —
+    three attempts at that rung, and two of the three made the guessing worse.
 
-    The ask route must never see it. That is not tidiness — the prediction on
-    record says the ask controls must not move at all, so a leak past this
-    scope would make the run say nothing about the block rather than something
-    weak about it.
-
-    And not a cold L0: the block opens "You are here because time passed",
-    which is false where no failure has been seen.
+    Its text lives in M-08-clock-route-prediction.md with the numbers beside it.
+    It does not live in the assembler, because material in the tree that no
+    mechanism serves is the defect this project has found five times, and
+    keeping a failed block around "for reference" is how the sixth one starts.
     """
-    import time
-    served = "NOBODY HAS ASKED YOU FOR ANYTHING"
-
-    def prompt(key, ago, asks, text):
-        seen = None if ago is None else time.monotonic() - ago
-        turn = runtime.Turn(text, key, seen, asks)
-        return assembler.assemble(turn, runtime.level(turn)).stage["prompt"]
-
-    report, ask = "the number isn't changing", "just tell me"
-    # the clock route, where it belongs
-    for ago in (301, 721, 1321):
-        assert served in prompt("11", ago, 0, report), ago
-    # cold L0, where its first sentence would be false
-    assert served not in prompt("11", None, 0, report)
-    # the ask route, where the controls live
-    assert served not in prompt("11", None, 1, ask)
-    assert served not in prompt("11", None, 2, ask)
-    # every other chapter, at every rung the clock can reach
-    for c in corpus.CHAPTERS:
-        if c["key"] == "11":
-            continue
-        a, b, d = c["failure"]["ladder"]
-        for ago in (a + 1, b + 1, d + 1):
-            assert served not in prompt(c["key"], ago, 0,
-                                        c["failure"]["says"][0]), c["key"]
+    assert not hasattr(assembler, "CLOCK_ROUTE")
+    for key in [c["key"] for c in corpus.CHAPTERS]:
+        turn = runtime.Turn("the number isn't changing", key, None, 0)
+        for lvl in LEVELS:
+            assert "NOBODY HAS ASKED YOU FOR ANYTHING" not in \
+                assembler.assemble(turn, lvl).stage["prompt"]
