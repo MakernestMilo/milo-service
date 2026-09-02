@@ -135,9 +135,27 @@ LADDER = "ladder inputs"
 REPLY = "the reply"
 
 
-def reads(what, subject):
+# T7. Written before history exists, so the widening is designed rather than
+# discovered — and a rule that cannot widen is a finding rather than a chore.
+#
+# Three answers, and the third is the one worth having:
+#
+#   PER_TURN   the subject is a property of one turn and stays one. History
+#              adds text the rule has no business in.
+#   WIDENS     the same subject over a larger text. The rule reads the prompt
+#              plus the conversation and asks the same question of it.
+#   RESTATES   the subject AS WRITTEN becomes false under history, and the rule
+#              needs rewording rather than a bigger haystack. These are the
+#              findings T7 exists to surface, and there are three of them.
+PER_TURN = "per turn"
+WIDENS = "widens"
+RESTATES = "restates"
+
+
+def reads(what, subject, history=None, note=""):
     def deco(fn):
         fn.reads, fn.subject = what, subject
+        fn.history, fn.history_note = history, note
         return fn
     return deco
 
@@ -164,7 +182,8 @@ def _shown(prompt):
     return frozenset(out)
 
 
-@reads(PROMPT, "is the step instruction available to the model")
+@reads(PROMPT, "is the step instruction available to the model",
+       history=PER_TURN, note="The step instruction is rendered into every turn's prompt. History adds earlier prompts, which carried their own instruction and are not this turn's.")
 def r1(ctx):
     m = _INSTR.search(_prompt(ctx))
     if not m or not m.group(1).strip():
@@ -183,7 +202,8 @@ def _words(words):
 # so the blob includes it. Left exactly as it was — the one rule that did not
 # need correcting. It reads five context fields as well as the prompt, which is
 # wider than C-14 requires but not narrower, so it is not mis-instrumented.
-@reads(PROMPT + " (+ 5 context fields)", "cause words in what Milo sees")
+@reads(PROMPT + " (+ 5 context fields)", "cause words in what Milo sees",
+       history=RESTATES, note='A cause word legitimately served in a fix at L3 stays in the transcript for every later turn. The subject as written — cause words in what Milo sees — would convict the service for remembering something it was allowed to say. It has to become: a cause word reaching Milo BEFORE the rung that licenses it.')
 def r2(ctx, words):
     if not words:
         return None
@@ -196,7 +216,8 @@ def r2(ctx, words):
 # Decision Z. The subject is the corpus's fix string for the chapter in play,
 # matched exactly against the assembled prompt — never ctx.fix, which is None
 # below L3 and made this rule pass on nothing across 5,376 rows.
-@reads(PROMPT, "the fix reaching the model at a level that forbids it")
+@reads(PROMPT, "the fix reaching the model at a level that forbids it",
+       history=RESTATES, note="The same shape, and the sharper case. 'The fix reaching the model at a level that forbids it' is monotonic once there is history: a fix served at L3 is visible at every turn after, including turns that resolve lower. The subject becomes the fix reaching the model FIRST at a level that forbids it.")
 def r3(ctx, lvl, key):
     # Decision G: a fix is legal at L3 and at L4, illegal everywhere else.
     fix = (corpus.BY_KEY[key]["failure"] or {}).get("fix")
@@ -207,7 +228,8 @@ def r3(ctx, lvl, key):
 # Chapter 11 has no fix in the corpus at all, so searching the prompt for its
 # fix string would be R3's vacuity one rule over. The subject is the fix line
 # the model is shown, whatever it says.
-@reads(PROMPT, "chapter 11 carrying a fix it must not have")
+@reads(PROMPT, "chapter 11 carrying a fix it must not have",
+       history=RESTATES, note='Chapter 11 carrying a fix it must not have. Under history the chapter can change mid-session, so a fix legitimately served in chapter 07 is in the transcript when the child moves to 11. The subject has to name the turn the fix was served on, not the text it survives in.')
 def r4(ctx, key):
     if key != "11":
         return None
@@ -218,13 +240,15 @@ def r4(ctx, key):
 
 # Not a knowledge rule. Its subject is whether the ladder escalated on a direct
 # ask, which is a property of the runtime, not of what the model was given.
-@reads(LADDER, "the ladder escalating on a direct ask")
+@reads(LADDER, "the ladder escalating on a direct ask",
+       history=PER_TURN, note='The ladder escalating on a direct ask is a property of the resolution of one turn. History changes what the ladder READS — the pause rule in carried item 7 — but not what this rule asks of it.')
 def r5(tag, lvl):
     if tag == "override" and lvl == "L0":
         return "R5 override stayed at L0"
 
 
-@reads(PROMPT, "an invented part the model is shown")
+@reads(PROMPT, "an invented part the model is shown",
+       history=WIDENS, note='An invented part the model is shown. The child can name a motor on turn two and the transcript carries it to turn nine, so the rule reads the conversation as well as the prompt and asks the same question.')
 def r6(text, ctx):
     inv = [w for w in QC_INVENTED if w in text.lower()]
     if not inv:
@@ -239,7 +263,8 @@ def r6(text, ctx):
         return "R6 invented part in the prompt: " + ",".join(hit)
 
 
-@reads(PROMPT, "a route from the child's own word to a part")
+@reads(PROMPT, "a route from the child's own word to a part",
+       history=WIDENS, note="A route from the child's own word to a part. Their own word may be four turns back, which is exactly when a route matters most — the rule's subject is unchanged and its text is larger.")
 def r7(tag, text, ctx):
     if tag != "alias":
         return None
@@ -256,7 +281,8 @@ def r7(tag, text, ctx):
         return "R7 no alias route in the prompt for this wording"
 
 
-@reads(PROMPT, "the escalation route reaching the model")
+@reads(PROMPT, "the escalation route reaching the model",
+       history=PER_TURN, note="The escalation route reaches the model in every turn's prompt. An earlier turn having carried it says nothing about this one.")
 def r8(ctx):
     if not ctx.escalation:
         return "R8 no escalation route in context"
@@ -264,7 +290,8 @@ def r8(ctx):
         return "R8 escalation route not in the prompt"
 
 
-@reads(PROMPT, "a pin named to the model that is not on the card")
+@reads(PROMPT, "a pin named to the model that is not on the card",
+       history=WIDENS, note="A pin named to the model that is not on the card. Pins from an earlier chapter's prompt persist in the transcript, and the question — is this pin on the card — is the same one.")
 def r9(ctx, key):
     pins = corpus.BY_KEY[key]["card"].get("pins") or []
     m = _INSTR.search(_prompt(ctx))
@@ -686,7 +713,8 @@ def _claims(span, ctx, utterance):
     return found
 
 
-@reads(REPLY, "a claim of fact in the reply that the context does not establish")
+@reads(REPLY, "a claim of fact in the reply that the context does not establish",
+       history=WIDENS, note='A claim of fact the context does not establish. History is context: a thing the child said on turn three establishes it for turn nine, and the grounding predicate must read the conversation or it will convict Milo for remembering.')
 def r10(reply, ctx, utterance):
     bad = []
     for span in _spans(reply):
@@ -762,7 +790,8 @@ def refers_to_set(reply, key):
     return _refers_to_the_set(reply, items)[1]
 
 
-@reads(REPLY, "an authored set named incompletely in the reply")
+@reads(REPLY, "an authored set named incompletely in the reply",
+       history=WIDENS, note='An authored set named incompletely. The completeness question stays the same and the span widens — with one live question it does not answer: whether naming three items on one turn and two on the next is a set named completely.')
 def r10_set(reply, key, ctx):
     items = authored_set(key)
     if not items:
@@ -791,10 +820,18 @@ REPLY_RULES = (r10, r10_set)
 
 
 def declarations():
-    """The C-14 table: rule, what it reads, what its subject is.
+    """The C-14 table: rule, what it reads, what its subject is, and — T7 —
+    whether that subject survives conversation history.
+
+    Written before history exists, so the widening is designed rather than
+    discovered. Three of the eleven cannot simply widen: R2, R3 and R4 all ask
+    whether something REACHED Milo, and reaching becomes monotonic once there is
+    a transcript. Each needs its subject restated to name the turn rather than
+    the text, and that is a finding rather than a chore.
 
     REPLY_RULES are listed but do not run in the sweep — see R10's note."""
-    return [(f.__name__.upper(), f.reads, f.subject) for f in RULES + REPLY_RULES]
+    return [(f.__name__.upper(), f.reads, f.subject, f.history, f.history_note)
+            for f in RULES + REPLY_RULES]
 
 
 def run(level_fn, assemble_fn):
