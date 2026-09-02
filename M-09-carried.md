@@ -307,3 +307,47 @@ The first is the only one that cannot go stale.
 `tools/r10_score.py` already does the equivalent for a tool's expectations: it
 declares them as data and a test asserts them, after that file spent months
 printing a claim the commits had changed. Nothing does it for a return's counts.
+
+
+---
+
+## 10. OVERRIDE is a phrase list, and a phrase list goes green when the claim changes form
+
+**Found in a session written for something else**, which is how the port audit
+and the seventh R10 family were found too.
+
+`11-asks-early` was authored as *a child who asks outright and then keeps
+asking*. Only its first turn is heard as an ask:
+
+| the child types | `OVERRIDE` matches |
+|---|---|
+| just tell me what they broke | **yes** |
+| please | no |
+| i dont want to do all five | no |
+| ok fine which one should i do first | no |
+
+`OVERRIDE` is `just tell me · give up · please just say · tell me the answer ·
+say it · i'm crying`. A child pleading in words that list does not carry **waits
+on the clock like a child who said nothing.**
+
+**This is the standing property arriving in the ladder's input rather than in a
+rule.** C-27 says a detector matching forms goes green when the claim changes
+form, and that the only defence is scoring against what was served. `OVERRIDE` is
+exactly such a list, and it decides which rung a distressed child reaches — which
+is a heavier consequence than any detector's, because a detector being wrong
+produces a bad measurement and this produces a bad answer to a child.
+
+**It also touches decision AL's open premise.** L4 is override-only on the
+grounds that distress is signalled by asking rather than by waiting. If *please*
+is not heard as asking, then a distressed child who does not use one of six
+phrases is treated as a child who is merely quiet — and the proxy AL flagged as
+unexamined is narrower than it looked.
+
+**Whether it matters depends on the run**, and the architect has set the test: if
+Milo at a low rung answers *please* warmly and the child is fine, the gap is
+theoretical. If a visibly pleading child gets a narrowing question, it is not.
+
+**Not fixed here, and deliberately.** Widening a phrase list is the move this
+project has watched fail four times in the frequency family. Whatever replaces it
+has to score the claim — a child asking to be told — rather than the words, and
+that is an order's work rather than a step's.
