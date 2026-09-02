@@ -180,6 +180,9 @@ def bank(ctx, lvl: str) -> str:
     return "\n\n".join(p for p in parts if p)
 
 
+LAST_CALL: dict = {}
+
+
 def history(session: Session):
     """The conversation the model gets and the rules read, oldest first.
 
@@ -227,6 +230,15 @@ def call_model(system: str, utterance: str, prior=()) -> str:
         # is scoring a fiction.
         messages=[*prior, {"role": "user", "content": utterance}],
     )
+    # A measurement seam, the same kind as SERVED_BLOCKS: the endpoint returns
+    # only what a child needs, and a run needs to know what the call cost. The
+    # 809-token reply that became R10's seventh family was found by reading a
+    # token count, so the count is worth keeping reachable.
+    usage = getattr(reply, "usage", None)
+    if usage is not None:
+        LAST_CALL.update(input_tokens=usage.input_tokens,
+                         output_tokens=usage.output_tokens,
+                         stop_reason=getattr(reply, "stop_reason", None))
     text = "".join(b.text for b in reply.content
                    if getattr(b, "type", None) == "text")
     # A malformed response is a failed call. An empty string reaching a child
