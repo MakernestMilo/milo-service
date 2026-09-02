@@ -154,8 +154,22 @@ ELEVEN = [
 
 # "all" stays CORE + WIDE so the default does not silently change under a run
 # that was planned against it. The rest are their own selections.
+# L2 only, in the twelve chapters. The block being measured is served at L2 and
+# nowhere else, and that was verified at the wire rather than in a test: run 1
+# of the twelve arm carries +84 input tokens at every L2 row and +0 at all
+# forty-eight others, so the L0, L1 and L3 prompts are byte-identical to the
+# baseline arm's.
+#
+# Re-running identical prompts cannot measure the block; it can only measure
+# run-to-run noise. So the control half of the prediction is settled more firmly
+# by that comparison than a run could settle it — identical prompts proven,
+# rather than similar rates hoped for — and the calls are spent where the change
+# is. Twelve a run instead of sixty.
+L2_ONLY = [c for c in TWELVE if c[1] == "L2"]
+
 PLANS = {"core": CORE, "wide": WIDE, "fixes": FIXES,
-         "eleven": ELEVEN, "twelve": TWELVE, "all": CORE + WIDE}
+         "eleven": ELEVEN, "twelve": TWELVE, "l2": L2_ONLY,
+         "all": CORE + WIDE}
 
 
 def main(runs=1, tag="", plan="all"):
