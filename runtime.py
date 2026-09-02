@@ -18,6 +18,9 @@ class Turn:
     # which is every row the harness builds, and the reason the by-level line
     # does not move when this ships.
     absent_seconds: float = 0.0
+    # U8. The child's own utterances so far, oldest first — never Milo's. Empty
+    # for a turn with no history, which is every row the harness builds.
+    child_said: tuple = ()
 
 
 @dataclass
@@ -141,3 +144,42 @@ def level(turn: Turn) -> str:
 
 def assemble(turn: Turn, lvl: str) -> Context:
     raise NotImplementedError("M-05")
+
+
+# U8, and the first thing conversation history makes possible that nothing else
+# could. Chapter 11's twelve-minute rung in the book is "it isn't the output, so
+# what does that leave" — a sentence that needs to know what the child has
+# already ruled out, and so could not be built until they had said it.
+#
+# THE FRAME MATTERS MORE THAN THE WORD. Naming a test is not ruling it out: "I
+# tried the sensor test" and "the sensor is fine" are different claims, and only
+# the second is a result. So an item counts only inside a frame that reports one,
+# and only from the CHILD's turns — Milo saying "it isn't the output" is Milo's
+# guess, not the child's finding, and treating it as a finding would let a
+# fabricated exclusion harden into served material.
+# "tried", "tested", "did" and "checked" were in this pattern and came out. The
+# comment above names "I tried the sensor test" as the case that must NOT count,
+# and the first version counted it — attempting a test is not a result, and the
+# cost of the error runs one way: a false positive here has Milo tell a child
+# they have finished a test they never ran.
+_RULED = (
+    r"ruled out\s+(?:the\s+)?{item}\b"
+    r"|{item}\s+(?:is|was|looks|seems|'s)\s+(?:all\s+)?(?:fine|ok|okay|good|working|right)"
+    r"|{item}\s+(?:passed|passes|works|worked)"
+    r"|(?:not|isn'?t|is not)\s+(?:the\s+)?{item}\b")
+
+
+def ruled_out(child_said, chapter):
+    """Which of the chapter's authored set the child has reported as clear.
+
+    Conservative by design: what this returns is served to Milo as fact, so a
+    false positive here becomes Milo telling a child they have finished a test
+    they never ran. It is the exclusion defect R10 scores, one layer earlier and
+    with the service's own authority behind it.
+    """
+    items = corpus.authored_set(chapter)
+    if not items:
+        return ()
+    said = " ".join(child_said).lower()
+    return tuple(i for i in items
+                 if re.search(_RULED.format(item=re.escape(i)), said, re.I))

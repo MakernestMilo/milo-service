@@ -10,6 +10,7 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
+import assembler
 import corpus
 import main
 import runtime
@@ -322,3 +323,62 @@ def test_the_budget_drops_the_oldest_turns_for_both_readers_together():
         "the model and the rules were given different amounts"
     assert kept[-1]["said"].startswith("11 "), "the newest turn was dropped"
     assert not any(t["said"].startswith("0 ") for t in kept), "the oldest survived"
+
+
+def test_the_twelve_minute_rung_narrows_from_what_the_child_said():
+    """U8. The book's twelve-minute rung for chapter 11 is "it isn't the output,
+    so what does that leave" — a sentence needing the child's earlier turns,
+    unbuildable until history shipped, and the first thing history makes
+    possible that nothing else could.
+
+    What is served is what the CHILD said, attributed to them. Three blocks
+    failed to stop Milo guessing which test a child was on at this chapter's
+    other rungs; this does not ask it to guess.
+    """
+    import time
+    client.post("/turn", json={"message": "nothing happens", "session": "u8",
+                               "chapter": "11"})
+    client.post("/turn", json={"message": "power is fine", "session": "u8"})
+    client.post("/turn", json={"message": "the output works", "session": "u8"})
+    s = main.SESSIONS.get("u8")
+    a, b, c = rungs("11")
+    s.failure_seen_at = time.time() - (b + 1)          # the twelve-minute rung
+    s.last_turn_at = time.time() - 30
+    main.SESSIONS.put("u8", s)
+
+    turn = main.advance(main.SESSIONS.get("u8"), "still nothing")
+    assert runtime.level(turn) == "L2"
+    prompt = assembler.assemble(turn, "L2").stage["prompt"]
+    assert "they have ruled out, in their own words: power, output" in prompt
+    assert "that leaves: sensor, rule, sequence" in prompt
+
+
+def test_milos_own_guess_never_becomes_the_childs_finding():
+    """The guard that makes U8 safe. Milo saying "that's the sensor test" is a
+    guess — six of ten times at this chapter's L3 by clock, on nothing — and if
+    its own words fed back in as findings, a fabricated exclusion would harden
+    into served material with the service's authority behind it."""
+    import store
+    s = store.Session(chapter="11")
+    s.turns = [{"who": "milo", "said": "power is fine and the output works"}]
+    turn = main.advance(s, "still nothing")
+    assert turn.child_said == ("still nothing",) or "power" not in " ".join(turn.child_said)
+    assert runtime.ruled_out(turn.child_said, "11") == ()
+
+
+def test_naming_a_test_is_not_ruling_it_out():
+    """A false positive here has Milo tell a child they have finished a test
+    they never ran, so the frame has to report a result and not an attempt."""
+    assert runtime.ruled_out(("I tried the sensor test",), "11") == ()
+    assert runtime.ruled_out(("power, sensor, rule, output, sequence",), "11") == ()
+    assert runtime.ruled_out(("what about the output",), "11") == ()
+    assert runtime.ruled_out(("power is fine",), "11") == ("power",)
+    assert runtime.ruled_out(("I ruled out the sequence",), "11") == ("sequence",)
+
+
+def test_the_rung_is_inert_where_no_set_is_authored():
+    """One chapter of fourteen hands the child a named set. C-17: the gate is a
+    data condition and not a chapter name."""
+    from corpus import authored_set, ORDER
+    assert [k for k in ORDER if authored_set(k)] == ["11"]
+    assert runtime.ruled_out(("power is fine",), "01") == ()

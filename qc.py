@@ -770,17 +770,10 @@ def r10_detail(reply, ctx, utterance):
 # The set is derived from the corpus, not hardcoded: a step that hands the child
 # a named run of tests. One chapter of fourteen has one today, so this is inert
 # elsewhere rather than assuming every chapter should enumerate.
-_SET_ITEM = re.compile(r"\bTest (?:the )?([a-z]+)\b", re.I)
-
-
-@lru_cache(maxsize=None)
-def authored_set(key):
-    """The items of a named set the step hands the child, in the step's order."""
-    for stage in corpus.BY_KEY[key]["stages"]:
-        items = _SET_ITEM.findall(" ".join(stage.get("do") or []))
-        if len(items) >= 3:
-            return tuple(i.lower() for i in items)
-    return ()
+# Moved to corpus.py in M-09 step 06 so the assembler could read it without
+# importing the harness. Re-exported here because eleven rules and a dozen
+# tests name it, and a rename would be churn for no subject change.
+authored_set = corpus.authored_set
 
 
 def _refers_to_the_set(reply, items):
