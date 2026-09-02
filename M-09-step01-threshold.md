@@ -58,3 +58,50 @@ Nothing in this step. Ten minutes is a setting, not a hypothesis, and the thing
 that tests it is real gaps in real transcripts — which do not exist yet. U6's
 fixture proves the rule *works* in both directions; whether ten minutes is the
 right number is M-09's first question for the data history produces.
+
+
+---
+
+# Result
+
+## The prediction holds
+
+```
+7616 checks · 7616 pass · 0 fail
+by level  L0 ×1792  L1 ×1792  L2 ×1792  L3 ×2208  L4 ×32
+```
+
+**Unchanged, exactly as predicted.** The order expected the rung distribution to
+move and it did not, because every harness row is a first turn with an injected
+clock: no previous turn, no gap, nothing to subtract.
+
+**So the harness is blind to this rule**, and that is the finding step 01
+produces. 7,616 checks say nothing about whether a two-hour absence advances a
+rung, and they never could — the sampler reaches rungs by moving one clock, and
+a pause rule needs two turns to have anything to measure.
+
+The rule is proved by fixtures instead, and they are the only instrument in the
+project that can see it:
+
+| fixture | |
+|---|---|
+| a child reports a failure, leaves two hours, returns | stays at **L0**, and the gap is banked as absence |
+| a child stays and says nothing across all three rungs | **L1 → L2 → L3**, unchanged |
+| a nine-minute gap | banked as **nothing** — thinking, not leaving |
+| `/health` | reports `pause_seconds: 600` |
+
+The second is the one that matters. Sheet 4's corollary is not repealed by AT:
+**absence is subtracted, presence never is**, so silence at the table still has
+an end.
+
+## What changed, in full
+
+`Turn` carries `absent_seconds`, defaulting to zero — which is why nothing that
+builds a turn by hand sees any difference. `elapsed()` subtracts it. `advance()`
+banks a gap **before** the level is resolved, because a child who has just
+returned from two hours away must not be answered at the rung their absence
+bought.
+
+`Session` gains `last_turn_at` and `absent_seconds`. **AQ said three fields and
+this makes five**, recorded rather than absorbed. Neither is history: nothing
+here remembers what was said, which is AR's line and M-09's own scope.

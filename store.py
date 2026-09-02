@@ -36,12 +36,35 @@ from dataclasses import asdict, dataclass
 TTL_SECONDS = 6 * 60 * 60
 
 
+# AT. Ten minutes. A gap longer than this means the child left the table rather
+# than went quiet, and does not count toward the rung.
+#
+# The architect's number, with the reasoning recorded in
+# M-09-step01-threshold.md before anything measured it: the corpus's silence
+# windows run 150 to 300 seconds, so the ladder already treats two and a half to
+# five minutes as a child thinking. Ten minutes is twice the longest of those —
+# long enough that reading the book or fetching a screwdriver still escalates,
+# short enough that lunch or bedtime does not.
+#
+# It is a first setting rather than a finding. No session in this project has
+# ever held a real child's gaps, and whether they cluster above or below ten
+# minutes is the first question for the transcripts history will produce.
+PAUSE_SECONDS = 10 * 60
+
+
 @dataclass
 class Session:
-    """Decision Y's contract, unchanged. The store replaces where it lives."""
+    """Decision Y's three fields, plus the two AT needs to tell a pause from a
+    silence. Recorded rather than absorbed: AQ said three, and this makes five.
+
+    last_turn_at and absent_seconds exist only to compute time in the
+    conversation. Neither is history — nothing here remembers what was said,
+    which is decision AR's line and M-09's own scope."""
     chapter: str
     failure_seen_at: float | None = None
     direct_asks: int = 0
+    last_turn_at: float | None = None
+    absent_seconds: float = 0.0
 
 
 class MemoryStore:
