@@ -13,7 +13,7 @@ replies rather than by any check going red.
 | steps closed | **00, 01, 02, 03, 05** — and four pieces the order did not anticipate |
 | harness | **7,616 checks · 7,616 pass · 0 fail** |
 | by level | **L0 1792 · L1 1792 · L2 1792 · L3 2208 · L4 32** — the third rung moved, predicted before the run and matched exactly |
-| tests | **375 passing** |
+| tests | **384 passing** |
 | R10 families | **7**, up from 6 |
 | live calls | **420 in M-08**, on a record of **881** |
 | corpus | 5 asks re-authored, 1 fix re-authored, 1 region **removed**, 1 chapter-scoped block added |
@@ -207,6 +207,67 @@ parts.
 
 ---
 
+## Steps 06 and 07, which this return was written before
+
+### The session store, and the clock it forced to change
+
+Decision AQ and T6. Sessions live in a store with a **six-hour TTL** — three
+fields, no history — behind an interface with two implementations: Render Key
+Value in a deployment, and the dictionary, TTL honoured, for tests and local
+runs. `/health` names which one is live, so a deployment that lost its store
+reports `memory` rather than working until the second worker arrives.
+
+**The clock had to move with it, and that was not obvious from the order.**
+`failure_seen_at` was a `time.monotonic()` reading, which counts from a
+per-process origin and means nothing to the worker that reads it back out of a
+shared store — not stale, **garbage**, possibly negative. It is epoch seconds
+now, everywhere a clock is constructed: the service, the harness, the plan
+runner and the tests.
+
+**One property went inert rather than wrong.** `elapsed()` tests
+`failure_seen_at` for truth, so a clock legitimately reading 0 counted as never
+started — verbatim from the port, and the reason a cold-boot test exists. Epoch
+time is never 0, so that branch is unreachable. It is left standing, and its test
+with it, because the port's behaviour is still the port's and a future clock
+change could make it live again.
+
+**And one test asserted a contract this step replaces.** *"state is in memory and
+lost on restart"* was correct while the dictionary was correct. Rewritten to
+assert both halves of the new one: a restart keeps it, six hours does not.
+
+Six hours because a child who breaks for dinner should come back to the ladder
+they earned, and a child returning next morning should not — they may have fixed
+it or moved on, and handing them L3 on their first message would answer a
+question they are not asking.
+
+### Every rule declares whether its subject survives history
+
+T7, and the point of doing it before history exists: **the widening is designed
+rather than discovered.** The declaration sits on the `@reads` decorator beside
+what each rule reads and what its subject is, because a table kept elsewhere
+drifts from the rules it describes. Two tests: every rule must answer, and none
+may answer without a reason.
+
+| | rules |
+|---|---|
+| **per turn** — history adds text the rule has no business in | R1, R5, R8 |
+| **widens** — same subject, larger text | R6, R7, R9, R10, R10_SET |
+| **restates** — the subject *as written* becomes false | **R2, R3, R4** |
+
+**Three of the eleven cannot widen, and they are the same three.** R2, R3 and R4
+all ask whether something **reached** Milo — and reaching becomes monotonic the
+moment there is a transcript. A fix served legitimately at L3 is visible at every
+turn after it, including turns that resolve lower. Asked of the conversation
+unchanged, all three would **convict the service for remembering something it
+was allowed to say.** Each needs its subject to name the turn rather than the
+text.
+
+That is a rewording of three rules, known now rather than discovered from a
+harness turning red on its own correct behaviour the day history ships. Which is
+what T7 was for.
+
+---
+
 ## Open
 
 **The clock-route material**, now known to be chapter 11's rather than the
@@ -218,5 +279,15 @@ ladder's, and known not to be reachable by prose.
 without their sabotage marking, which affects all fourteen chapters, and the
 cause-word question, now at five words and no closer to an answer.
 
-**Steps 06 and 07** — the session store and the rule declarations for history.
-Neither needs calls or authoring.
+**R2, R3 and R4 restated** to name the turn rather than the text, before history
+ships. Named by T7 and not done in it, because rewording a rule's subject is not
+the same work as declaring that it needs rewording.
+
+**R10_SET across turns** — whether naming three items on one turn and two on the
+next is a set named completely. A question about what completeness means, and
+the architect's.
+
+**The wall clock**, carried as item 7. `elapsed()` measures time on the wall, and
+the store made that live: a child who leaves for two hours returns to L4 having
+asked nothing. The shape of the fix is a clock that pauses on absence, and it is
+a change to the ladder's input.
