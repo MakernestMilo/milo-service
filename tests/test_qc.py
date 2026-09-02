@@ -743,3 +743,30 @@ def test_a_chapter_scoped_block_carries_none_of_its_own_chapters_cause_words():
             assert not bad, (
                 f"the {scope} block for chapter {key} carries its own chapter's "
                 f"cause words {bad} — this one can turn rows red")
+
+
+def test_every_rule_declares_whether_its_subject_survives_history():
+    """T7. Written before history exists, so the widening is designed rather
+    than discovered — and so a rule added later cannot skip the question.
+
+    The declaration is on the decorator, next to what the rule reads and what
+    its subject is, because a table kept somewhere else is a table that drifts
+    from the rules it describes.
+    """
+    for name, reads, subject, history, note in qc.declarations():
+        assert history in (qc.PER_TURN, qc.WIDENS, qc.RESTATES), \
+            f"{name} does not say whether its subject survives history"
+        assert len(note) > 40, f"{name} declares {history!r} without a reason"
+
+
+def test_the_three_rules_that_cannot_widen_are_named():
+    """The finding T7 exists to surface, asserted so it cannot quietly change.
+
+    R2, R3 and R4 all ask whether something REACHED Milo, and reaching becomes
+    monotonic the moment there is a transcript: a fix legitimately served at L3
+    is visible at every turn after it, including turns that resolve lower. Their
+    subjects have to name the turn rather than the text, which is a rewording
+    and not a bigger haystack.
+    """
+    restating = {n for n, _, _, h, _ in qc.declarations() if h == qc.RESTATES}
+    assert restating == {"R2", "R3", "R4"}, restating
