@@ -156,3 +156,38 @@ guard's subject drifting to fit an inconvenience.
 Four runs across four words, each found by a red harness rather than by the rule
 knowing its own subject, is the evidence that the underlying question is
 unanswered.
+
+
+---
+
+## 6. The clock route needs its own material, because the label cannot carry it
+
+**Measured, not assumed.** Chapter 11's L3 is reachable two ways since the third
+rung got its own destination. On the same rung, with the same rung material:
+
+| route | premise rate |
+|---|---|
+| L3 by direct ask | **0 of 10** |
+| L3 by clock | **6 of 10** — every one the same claim, *"that's the sensor test"* |
+
+The hypothesis was that the override line — the only difference in the two
+prompts — was doing the work. **The architect predicted it would reduce the
+guessing. Served where nobody asked, the guessing rose**: 3 of 4 against a
+baseline of 6 of 10, with the ask route unmoved at 0 and the seam verified to
+add exactly one line. At n=4, short of the standard, and the direction is not in
+question.
+
+**So it is not the line. It is having been asked.** No prompt line reaches that,
+because the thing that changes Milo's posture is a property of the turn rather
+than of the text.
+
+**The shape of what is needed**, from the architect: a child who asks gets care
+for free because the asking signals something. A child who waits gets the same
+material and a label. If the label cannot carry it, the material must — which
+points at an instruction the clock route carries and the ask route does not,
+saying in as many words that *nobody asked you for this; they have simply been
+quiet, and quiet is not a question.*
+
+Authoring, and the architect's. It is the third thing chapter 11 has needed in
+one week, and it blocks `twelve`: three hundred calls are worth spending once
+the clock route has stopped producing fabricated wiring procedures, not before.
