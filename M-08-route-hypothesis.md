@@ -47,3 +47,54 @@ here so the observational result is not read as the causal one.
 
 A child who waits twenty-two minutes gets a worse answer than a child who asks.
 That is measured, at one five, and it is the rung sheet 4 wrote the clock for.
+
+
+---
+
+# Result, at n=5
+
+The intervention ran: the override line served at every rung including where
+nobody asked. Five runs, six positions, thirty calls, plus a sixth run of six to
+bring the arm to the standard after a billing failure cut the fifth short.
+
+| position | line **absent** n=10 | line **served** n=5 | move | |
+|---|---|---|---|---|
+| 11/L0-clock | 3/10 = 30% | 1/5 = 20% | −10 | treated |
+| 11/L1-clock | 1/10 = 10% | 1/5 = 20% | +10 | treated |
+| **11/L2-clock** | 3/10 = 30% | **5/5 = 100%** | **+70** | treated |
+| **11/L3-clock** | 6/10 = 60% | **4/5 = 80%** | **+20** | treated |
+| 11/L3-ask | 0/10 = 0% | 0/5 = 0% | 0 | control |
+| 11/L4-ask | 4/10 = 40% | 2/5 = 40% | 0 | control |
+
+**Both controls are unmoved to the point** — 0% stays 0%, 40% stays 40% — which
+is what an arm should look like when the seam touches only what it claims to.
+
+## The hypothesis is refused, and by more than a failure to help
+
+The architect predicted the line would reduce the guessing. **It rose.** Not
+"did not fall": the two rungs where the line was added to a route that already
+had material moved **+20 and +70 points**, and chapter 11's L2 went to five of
+five.
+
+So the override line is not what makes Milo careful. **Having been asked is**,
+and that is a property of the turn rather than of the text — no line reaches it.
+
+## And serving it unasked appears to make things worse
+
+Stated as the stronger claim the numbers support, with its limit attached: n=5
+against n=10, one chapter, and no second five of the arm. The direction is
+consistent across both treated rungs that carry material, and the controls hold
+still. What it is not is established at the standard, and it should not be
+quoted as a rate until a second five agrees.
+
+A reading, offered as one: the line tells Milo *they asked outright to be told,
+do not narrow, answer at the escalation level*. Served to a child who asked, it
+licenses directness against a request. Served to a child who has said nothing,
+it licenses the same directness against nothing at all — an instruction to stop
+narrowing, given at the rung whose whole job is narrowing.
+
+## The seventh family fired again
+
+Run 5's L3-by-clock: *"yellow wire is pushed firmly into A0"*. Third independent
+appearance of an assembled part-to-pin pairing, in a chapter whose prompt pairs
+no wire with any pin.
