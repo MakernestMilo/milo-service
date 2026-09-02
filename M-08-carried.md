@@ -232,3 +232,26 @@ the rung.
 the architect's, and landing it alongside the store would confound two changes
 whose effects on the rungs would then be impossible to separate. T6 ships the
 store and the epoch move; `elapsed()` is untouched and this is ruled on its own.
+
+
+---
+
+## 8. Chapter 03's L2 exclusion is untouched by the block that fixed the others
+
+The L2 block halved the exclusion rate across the twelve chapters, 12/60 to
+6/60, and **chapter 03 did not move: 3/5 before, 3/5 after.** It is the largest
+single contributor to what remains.
+
+Its region is *"It is in what you chose on the output screen"* — a region that
+names **a screen and a choice**, and no part. The chapters the block cleared —
+06, 08, 10, G — have regions that name parts or places. So the working
+hypothesis is that the block helps where the region gives Milo something
+concrete to point at, and does not where the region points at a decision.
+
+That is the same shape as chapter 12's region — *"It is in the sentence, not in
+the machine"* — whose reply reached for **wiring** in a chapter about a sentence
+a child wrote. A region with nothing physical in it appears to leave Milo
+reaching for the machine's vocabulary.
+
+Not a block. Probably a question about what those four regions say, and the
+architect's.
