@@ -191,7 +191,7 @@ comparable one.
 
 ## Open, with an order named
 
-Carried to M-08 in `M-08-carried.md`: the frequency detector's subject stated as
+Carried to M-08 in `M-09-carried.md` (named `M-08-carried.md` when this return was written): the frequency detector's subject stated as
 a shape rather than a vocabulary, with `often` as its fixture and the constraint
 that it must not fire on chapter 07's own instruction; what else decision N made
 public, since completed steps are served in full and only fixes have been
