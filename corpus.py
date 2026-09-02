@@ -1,4 +1,4 @@
-import json, pathlib
+import json, pathlib, re
 from functools import lru_cache
 
 CONTENT = pathlib.Path(__file__).parent / "content"
@@ -206,3 +206,24 @@ def verify():
     # so neither number can drift behind the other.
     assert len(BASE_ALIAS) == 17 and len(TEACH) == 21
     assert len(ALIAS) == 22, f"alias table is {len(ALIAS)}"
+
+
+_SET_ITEM = re.compile(r"\bTest (?:the )?([a-z]+)\b", re.I)
+
+
+@lru_cache(maxsize=None)
+def authored_set(key):
+    """The items of a named set a step hands the child, in the step's order.
+
+    Lived in qc.py until M-09 step 06, when the assembler needed it too. Two
+    implementations of one decision is how they drift apart, so it moved to the
+    corpus, which is where both can read it and neither owns it.
+
+    One chapter of fourteen has one today, so everything reading it is inert
+    elsewhere rather than assuming every chapter enumerates.
+    """
+    for stage in BY_KEY[key]["stages"]:
+        items = _SET_ITEM.findall(" ".join(stage.get("do") or []))
+        if len(items) >= 3:
+            return tuple(i.lower() for i in items)
+    return ()

@@ -143,8 +143,12 @@ def advance(session: Session, text: str) -> runtime.Turn:
         # origin and means nothing to the worker that reads it back out of the
         # store — see store.py.
         session.failure_seen_at = now
+    # U8. What the child has said, oldest first, and never what Milo said —
+    # Milo's guess about which test they are on is not their finding.
     return runtime.Turn(text, session.chapter, session.failure_seen_at,
-                        session.direct_asks, session.absent_seconds)
+                        session.direct_asks, session.absent_seconds,
+                        tuple(t["said"] for t in session.turns
+                              if t["who"] == "child"))
 
 
 class ModelUnavailable(RuntimeError):
