@@ -31,7 +31,7 @@ import json
 import logging
 import os
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 
 TTL_SECONDS = 6 * 60 * 60
 
@@ -51,6 +51,16 @@ TTL_SECONDS = 6 * 60 * 60
 # minutes is the first question for the transcripts history will produce.
 PAUSE_SECONDS = 10 * 60
 
+# AU's engineering guard. Characters rather than tokens, because a character
+# budget needs no tokeniser at the point where a turn is dropped and errs on the
+# side of carrying less; the ratio is roughly four characters to the token.
+#
+# C-30: what the model reads and what the rules read are the same text. If a
+# turn is dropped for budget it is dropped from both, so no guard is ever made
+# to pass by showing it less. Oldest turns go first — the recent conversation is
+# the one a mentor would still have in mind.
+HISTORY_BUDGET_CHARS = 24_000
+
 
 @dataclass
 class Session:
@@ -65,6 +75,11 @@ class Session:
     direct_asks: int = 0
     last_turn_at: float | None = None
     absent_seconds: float = 0.0
+    # AU. The conversation, oldest first: {"who": "child"|"milo", "said": str}.
+    # A human mentor remembers the whole sitting, sessions are one chapter long,
+    # and the prompt is 96% cacheable — so cost is not the constraint and the
+    # cap below is an engineering guard, never a safety mechanism.
+    turns: list = field(default_factory=list)
 
 
 class MemoryStore:

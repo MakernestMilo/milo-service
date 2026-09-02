@@ -176,7 +176,34 @@ def bank(ctx, lvl: str) -> str:
     return "\n\n".join(p for p in parts if p)
 
 
-def call_model(system: str, utterance: str) -> str:
+def history(session: Session):
+    """The conversation the model gets and the rules read, oldest first.
+
+    ONE renderer, two consumers. The messages go to the model and the rendered
+    text goes into the context the rules score, both built here — two
+    representations of one conversation is how they drift apart, which this
+    project has paid for once already.
+
+    Trimmed to a character budget by dropping the OLDEST turns, and trimmed for
+    both consumers together. C-30: never truncate what a guard reads in order to
+    make the guard pass.
+    """
+    kept, total = [], 0
+    for t in reversed(session.turns):
+        cost = len(t["said"]) + 16
+        if total + cost > store.HISTORY_BUDGET_CHARS:
+            break
+        kept.append(t)
+        total += cost
+    kept.reverse()
+    messages = [{"role": "user" if t["who"] == "child" else "assistant",
+                 "content": t["said"]} for t in kept]
+    rendered = "\n".join(
+        ("CHILD: " if t["who"] == "child" else "MILO: ") + t["said"] for t in kept)
+    return kept, messages, rendered
+
+
+def call_model(system: str, utterance: str, prior=()) -> str:
     """The one call. The key comes from the host's secret store and is never
     read from the tree — no committed file, no example, no fixture."""
     import anthropic
@@ -191,7 +218,10 @@ def call_model(system: str, utterance: str) -> str:
         thinking={"type": "adaptive"},
         output_config={"effort": EFFORT},
         system=system,
-        messages=[{"role": "user", "content": utterance}],
+        # AV. Milo's own prior answers are in here as assistant turns: if it
+        # said the fix at L3, the child has it, and a ladder scoring otherwise
+        # is scoring a fiction.
+        messages=[*prior, {"role": "user", "content": utterance}],
     )
     text = "".join(b.text for b in reply.content
                    if getattr(b, "type", None) == "text")
@@ -309,10 +339,15 @@ async def turn(payload: TurnRequest):
     SESSIONS.put(payload.session, session)
     lvl = runtime.level(turn)
     ctx = assembler.assemble(turn, lvl)
+    kept, prior, rendered = history(session)
+    # What the rules read, and it is the same text the model reads. The rules
+    # restated in step 02 ignore it deliberately; a rule that needs it can now
+    # have it.
+    ctx.stage["history"] = rendered
     system = assembler.VOICE + "\n\n=== CONTEXT ===\n" + ctx.stage["prompt"]
 
     try:
-        reply = call_model(system, payload.message)
+        reply = call_model(system, payload.message, prior)
     except Exception:
         # Failed, slow and malformed all land here and all answer from the
         # bank. The child never gets silence, and never learns which it was.
@@ -320,7 +355,19 @@ async def turn(payload: TurnRequest):
                      getattr(request_state(), "request_id", "unknown"), lvl)
         reply = bank(ctx, lvl)
 
-    return {"reply": reply, "level": lvl, "session": payload.session}
+    # Both sides of this turn join the conversation, in order. Milo's answer is
+    # stored whether it came from the model or from the bank: the child heard it
+    # either way, and AV is about what the child has rather than where it came
+    # from.
+    session.turns.append({"who": "child", "said": payload.message})
+    session.turns.append({"who": "milo", "said": reply})
+    SESSIONS.put(payload.session, session)
+
+    # U4. A session silently losing its history says so. This is the count the
+    # model was given on this turn, not the count the session holds — if the
+    # budget dropped the oldest turns, this is the smaller number.
+    return {"reply": reply, "level": lvl, "session": payload.session,
+            "turns": len(kept)}
 
 
 if __name__ == "__main__":
