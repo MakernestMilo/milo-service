@@ -267,3 +267,43 @@ reaching for the machine's vocabulary.
 
 Not a block. Probably a question about what those four regions say, and the
 architect's.
+
+
+---
+
+## 9. A count in prose is stale the moment the work continues
+
+**Register-level, and the architect has asked for it as an entry rather than a
+fifth instance.**
+
+Four times in three orders a document has carried a number that was true when
+written and false when read:
+
+| | the count | what moved under it |
+|---|---|---|
+| M-07 return | test count | tests added after the return |
+| M-08 return | *"six items carried"* | items 7 and 8 arrived after it |
+| M-08 return | *"375 passing"* | steps 06 and 07 added tests |
+| M-09 order | *"420 in M-08, on a record of 881"* | the L2 block ran after the return |
+
+The last is the sharpest: it sits **inside the acceptance item warning that
+figures go stale**, and it is the only claim of seventeen that step 00 could not
+verify.
+
+**The fix is not more care.** Every one of these was written carefully by someone
+who had just checked it. What they have in common is that the number lives in
+prose, and prose is not recomputed when the thing it counts changes.
+
+**Two forms that would hold**, and the choice between them is the architect's:
+
+- **derived at render time** — the document names the query, not the answer, and
+  whatever renders it runs the query
+- **marked as of a commit** — *"420 calls as of `01833c9`"*, so a reader can see
+  the claim is a snapshot and check it against the tree themselves
+
+The second is cheaper and works in a plain markdown file that nothing renders.
+The first is the only one that cannot go stale.
+
+`tools/r10_score.py` already does the equivalent for a tool's expectations: it
+declares them as data and a test asserts them, after that file spent months
+printing a claim the commits had changed. Nothing does it for a return's counts.
