@@ -1,7 +1,12 @@
-# Carried to M-08
+# Carried to M-09
 
 Named pieces of work, recorded when they were found rather than when they are
-started. Each carries the reason it was not done in M-07.
+started. Each carries the reason it was not done in the order that found it.
+
+Opened at the end of M-07 with three items and titled *Carried to M-08*; M-08
+added five more and closed without emptying it, so the title now names where the
+work goes rather than where it came from. Items 1 to 3 were found in M-07 and
+4 to 8 in M-08.
 
 ---
 
@@ -54,6 +59,46 @@ completed-step text.
 instrument built for a different question. Answering it means pointing the same
 two measures at `region` and `ask` across all fourteen, which is a measurement
 rather than a fix, and the order had already spent its authoring.
+
+---
+
+## 3. The cause-word set deserves a better answer than the lint
+
+**The ruling that stands.** The exclusion list was refused, on the grounds that
+"function words guard nothing" selects five of the thirty-three — `anything`,
+`enough`, `instead`, `could`, `several` — and does not select `happens`, one of
+the two words that actually turned the harness red. A principle that misses half
+the case that motivated it is a patch wearing a policy's clothes.
+
+**A fifth word, and a new kind of cost.** `anything` blocked an authored
+sentence rather than a run: chapter 11's clock-route block opens *NOBODY HAS
+ASKED YOU FOR ANYTHING*, and `anything` is a cause word of chapters 03 and 12,
+where that block never appears. Nothing could have turned red. What failed was a
+lint rule checking chapter-scoped blocks against all thirty-two words, which was
+a proxy for a scope test that now exists — so the rule changed rather than the
+prose. Five words now, and the question gets stronger each time without getting
+closer to an answer.
+
+**Why it is still carried.** The disputed set has cost **five** words —
+`instead`, `happens`, `several`, `could` and `anything` — of which four cost a
+run and the fifth cost an authored sentence. The last three collided through
+mechanisms the exclusion list does not address at all.
+`several` was published by the chapter's own authored fix, which
+`cause_words()` did not read. `could` arrived in an authored **ask** for chapter
+12, turning 416 rows red at every rung above L0.
+
+`could` is the sharper of the two, because it is the word both of the scoring
+tests agreed was doing no work: a modal in *"which part could they both point
+at"*, carrying none of the cause's mechanism. It was resolved by changing the
+word to `can`, on a ruling that refused both alternatives — the fix's precedent
+does not extend to the ask, because R3 confines a fix to L3 and L4 where the
+rung is licensed to give the fault, while an ask is served from L1 where
+withholding the cause is the whole point. Widening the guard there would be the
+guard's subject drifting to fit an inconvenience.
+
+Five words, four of them found by a red harness and the fifth by a lint rule
+blocking prose, none of them found by the rule knowing its own subject. That is
+the evidence that the underlying question is unanswered.
 
 ---
 
@@ -129,46 +174,6 @@ that exists and has no mechanism reading it.
 
 ---
 
-## 3. The cause-word set deserves a better answer than the lint
-
-**The ruling that stands.** The exclusion list was refused, on the grounds that
-"function words guard nothing" selects five of the thirty-three — `anything`,
-`enough`, `instead`, `could`, `several` — and does not select `happens`, one of
-the two words that actually turned the harness red. A principle that misses half
-the case that motivated it is a patch wearing a policy's clothes.
-
-**A fifth word, and a new kind of cost.** `anything` blocked an authored
-sentence rather than a run: chapter 11's clock-route block opens *NOBODY HAS
-ASKED YOU FOR ANYTHING*, and `anything` is a cause word of chapters 03 and 12,
-where that block never appears. Nothing could have turned red. What failed was a
-lint rule checking chapter-scoped blocks against all thirty-two words, which was
-a proxy for a scope test that now exists — so the rule changed rather than the
-prose. Five words now, and the question gets stronger each time without getting
-closer to an answer.
-
-**Why it is still carried.** The disputed set has cost **four** runs across
-**four** words — `instead`, `happens`, `several`, and `could` — and the last two
-collided through mechanisms the exclusion list does not address at all.
-`several` was published by the chapter's own authored fix, which
-`cause_words()` did not read. `could` arrived in an authored **ask** for chapter
-12, turning 416 rows red at every rung above L0.
-
-`could` is the sharper of the two, because it is the word both of the scoring
-tests agreed was doing no work: a modal in *"which part could they both point
-at"*, carrying none of the cause's mechanism. It was resolved by changing the
-word to `can`, on a ruling that refused both alternatives — the fix's precedent
-does not extend to the ask, because R3 confines a fix to L3 and L4 where the
-rung is licensed to give the fault, while an ask is served from L1 where
-withholding the cause is the whole point. Widening the guard there would be the
-guard's subject drifting to fit an inconvenience.
-
-Four runs across four words, each found by a red harness rather than by the rule
-knowing its own subject, is the evidence that the underlying question is
-unanswered.
-
-
----
-
 ## 6. The clock route needs its own material, because the label cannot carry it
 
 **Measured, not assumed.** Chapter 11's L3 is reachable two ways since the third
@@ -198,9 +203,17 @@ saying in as many words that *nobody asked you for this; they have simply been
 quiet, and quiet is not a question.*
 
 Authoring, and the architect's. It is the third thing chapter 11 has needed in
-one week, and it blocks `twelve`: three hundred calls are worth spending once
-the clock route has stopped producing fabricated wiring procedures, not before.
+one week.
 
+**The gate this item originally set was overtaken rather than met.** It said
+`twelve` should not run until the clock route had stopped producing fabricated
+wiring procedures. `twelve` ran twice and the clock route was never fixed —
+because the first run showed the asymmetry is **chapter 11's and not the
+ladder's**: across twelve chapters L3-by-clock reads 4/60 against L3-by-ask's
+2/60, a gap of two draws in sixty, where chapter 11 reads 6/10 against 0/10. The
+gate was written when the defect looked general. It was specific, so the
+condition stopped being the right one to wait on, and this line records that
+rather than leaving a condition standing that nobody met.
 
 ---
 
@@ -232,7 +245,6 @@ the rung.
 the architect's, and landing it alongside the store would confound two changes
 whose effects on the rungs would then be impossible to separate. T6 ships the
 store and the epoch move; `elapsed()` is untouched and this is ruled on its own.
-
 
 ---
 

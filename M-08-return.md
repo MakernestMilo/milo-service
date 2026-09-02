@@ -214,7 +214,7 @@ ladder's, and known not to be reachable by prose.
 
 **L2's exclusion rate across the twelve**, which is new and unexplained.
 
-**Six items carried**, in `M-08-carried.md` — including completed steps served
+**Six items carried**, in `M-09-carried.md` — including completed steps served
 without their sabotage marking, which affects all fourteen chapters, and the
 cause-word question, now at five words and no closer to an answer.
 
