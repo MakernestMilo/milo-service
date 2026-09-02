@@ -252,6 +252,10 @@ def health():
         # Named rather than assumed: a deployment that lost its store reports
         # "memory" here, instead of working until the second worker arrives.
         "session_store": SESSIONS.name,
+        # Present only when memory is standing in for a store that failed. A
+        # deployment reading "memory" with no reason was never configured; one
+        # with a reason is degraded and says so.
+        "session_store_degraded_from": getattr(SESSIONS, "degraded_from", None),
     }
 
 

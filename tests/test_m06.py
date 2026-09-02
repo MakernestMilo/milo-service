@@ -174,3 +174,31 @@ def test_the_clock_is_epoch_not_monotonic():
     seen = main.SESSIONS.get("s").failure_seen_at
     assert abs(seen - time.time()) < 5, seen
     assert seen > 1_600_000_000, "the clock is not epoch seconds"
+
+
+def test_a_broken_store_url_degrades_instead_of_killing_the_service():
+    """The finding that cost two deploys and an hour.
+
+    from_env() branched on whether the variable was SET, never on whether the
+    store worked, so a malformed URL raised at import and took the service down
+    at boot — while MemoryStore, which exists precisely as the fallback, sat
+    unreachable in the same file. A selector that cannot reach its own fallback
+    is not a selector.
+    """
+    import store
+    s = store.from_env({"SESSION_STORE_URL": "not-a-url"})
+    assert s.name == "memory", "a bad URL must not take the service down"
+    assert s.degraded_from, "it degraded without saying why"
+
+
+def test_no_store_configured_and_a_broken_store_are_told_apart():
+    """Still not a silent fallback, which is the whole design. Memory in a
+    deployment running more than one worker is the defect T6 removes, so the
+    difference between "never configured" and "configured and broken" has to
+    survive to /health."""
+    import store
+    assert store.from_env({}).degraded_from is None
+    assert store.from_env({"REDIS_URL": "nonsense://x"}).degraded_from is not None
+
+    body = client.get("/health").json()
+    assert "session_store" in body and "session_store_degraded_from" in body

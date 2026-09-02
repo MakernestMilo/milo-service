@@ -28,6 +28,7 @@ future clock change could make it live again.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import time
 from dataclasses import asdict, dataclass
@@ -51,6 +52,9 @@ class MemoryStore:
     lost its store says so rather than working until the second worker.
     """
     name = "memory"
+    # Set when memory is standing in for a store that failed, so /health can say
+    # the difference between "no store configured" and "the store broke".
+    degraded_from = None
 
     def __init__(self, ttl=TTL_SECONDS, clock=time.time):
         self._d: dict[str, tuple[float, Session]] = {}
@@ -78,13 +82,29 @@ class RedisStore:
 
     Expiry is the store's, not ours: SET with EX means a session that is never
     touched again disappears without any cleanup code to forget to run.
+
+    Connect and read timeouts are short and explicit. A store that is merely
+    slow must not become a service that never answers — the failure this class
+    can cause has to be a fast error rather than a hang, because a hang at boot
+    reads as "Timed Out" and says nothing about which of a dozen things timed
+    out.
     """
     name = "redis"
 
-    def __init__(self, url, ttl=TTL_SECONDS):
+    def __init__(self, url, ttl=TTL_SECONDS, timeout=2.0):
         import redis
-        self._r = redis.Redis.from_url(url, decode_responses=True)
+        self._r = redis.Redis.from_url(
+            url, decode_responses=True,
+            socket_connect_timeout=timeout, socket_timeout=timeout)
         self._ttl = ttl
+
+    def check(self):
+        """Prove the store answers, once, at startup.
+
+        from_url() parses and does not connect, so without this the first proof
+        that the configuration works is a child's turn failing."""
+        self._r.ping()
+        return self
 
     def get(self, key):
         raw = self._r.get("session:" + key)
@@ -95,12 +115,34 @@ class RedisStore:
 
 
 def from_env(env=None):
-    """Redis when a URL is configured, memory when not — and /health says which.
+    """Redis when a URL is configured AND WORKS, memory when not — and /health
+    says which, and why.
 
-    Deliberately not a silent fallback: the store being memory in a deployment
-    that runs more than one worker is the defect this whole step removes, so the
-    running configuration is reported rather than assumed.
+    The first version branched on whether the variable was SET, never on
+    whether the store worked. So a malformed URL raised at import and took the
+    service down at boot, and MemoryStore — which exists precisely as the
+    fallback — was unreachable. Two failed deploys and an hour, with the
+    fallback sitting in the same file the whole time.
+
+    A selector that cannot reach its own fallback is not a selector.
+
+    It is still not a SILENT fallback, and that distinction is the whole design.
+    Memory in a deployment running more than one worker is the defect this step
+    removes, so the degradation is loud in three places at once: an ERROR in the
+    log, the store's name in /health, and the reason beside it. What must never
+    happen is the service dying rather than degrading, or degrading without
+    saying so.
     """
     env = os.environ if env is None else env
     url = env.get("SESSION_STORE_URL") or env.get("REDIS_URL")
-    return RedisStore(url) if url else MemoryStore()
+    if not url:
+        return MemoryStore()
+    try:
+        return RedisStore(url).check()
+    except Exception as e:                      # noqa: BLE001 — any failure degrades
+        fallback = MemoryStore()
+        fallback.degraded_from = f"{type(e).__name__}: {e}"
+        logging.getLogger("milo").error(
+            "session store unavailable, serving from memory: %s",
+            fallback.degraded_from)
+        return fallback
