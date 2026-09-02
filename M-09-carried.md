@@ -311,7 +311,33 @@ printing a claim the commits had changed. Nothing does it for a return's counts.
 
 ---
 
-## 10. OVERRIDE is a phrase list, and a phrase list goes green when the claim changes form
+## 10. What Milo carries forward from its own last answer — an order, not three carries
+
+**Three findings with one subject, named as an order rather than carried
+separately** — because they share a subject nothing in the project has: **what
+Milo carries forward from its own last answer.** Repetition, a rung's answer
+surviving into a lower rung, and a phrase list not hearing a child are all
+properties of the conversation rather than of a turn. Three items nobody
+connects later would be less honest than one order.
+
+Every rule scores what the prompt SERVES at a level. Nothing scores what Milo
+CARRIES. That was theoretical until the first conversation ran.
+
+---
+
+### The one to lead with: a child pleading is treated as silence
+
+`11-asks-early`, three turns running:
+
+| the child types | the ladder resolves | what `OVERRIDE` matches |
+|---|---|---|
+| just tell me what they broke | **L4** | yes |
+| please | **L0** | no |
+| i dont want to do all five | **L0** | no |
+| ok fine which one should i do first | **L0** | no |
+
+A child who has already asked outright, and who then says **please**, is heard as
+a child who said nothing.
 
 **Found in a session written for something else**, which is how the port audit
 and the seventh R10 family were found too.
@@ -347,7 +373,38 @@ unexamined is narrower than it looked.
 Milo at a low rung answers *please* warmly and the child is fine, the gap is
 theoretical. If a visibly pleading child gets a narrowing question, it is not.
 
+---
+
+### The rung became advisory, and the transcript decided
+
+The same session, turn 2, resolves **L0** — and Milo's answer ends:
+
+> *"Ask a grown-up to look at it with you, or use restore and build it again from
+> scratch."*
+
+That is the **L4 escalation route, served at L0**, near-verbatim from turn 1. The
+ladder said beginning; Milo answered rescue, because its own prior answer was in
+the conversation and set the register.
+
+Whether that is wrong is genuinely open — a child still pleading arguably should
+keep the way out. **What is not open is that the ladder did not decide it.**
+
+---
+
+### And it repeats itself, verbatim
+
+The escalation sentence appears identically on turns 1 and 2 of
+`11-asks-early`; `06-quiet` gives the same fix twice in different words on turns
+3 and 4. Nothing scores it, and a child reading the same sentence twice learns
+that nobody is listening.
+
+---
+
 **Not fixed here, and deliberately.** Widening a phrase list is the move this
-project has watched fail four times in the frequency family. Whatever replaces it
-has to score the claim — a child asking to be told — rather than the words, and
-that is an order's work rather than a step's.
+project has watched fail four times in the frequency family. Whatever replaces
+`OVERRIDE` has to score the claim — a child asking to be told — rather than the
+words. And the other two need a rule class that reads the conversation rather
+than the turn, which no rule has.
+
+That is an order's work, and its subject is one sentence: **what Milo carries
+forward from its own last answer.**

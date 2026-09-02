@@ -316,24 +316,6 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
         e += "\n  narrow: " + f["ask"]
     if n >= 2 and f.get("region"):
         e += "\n  region: " + f["region"]
-    # U8. The book's twelve-minute rung for chapter 11 is "it isn't the output,
-    # so what does that leave" — a sentence that needs the child's earlier turns
-    # and has been unbuildable until history shipped.
-    #
-    # Served from L2, and only where the chapter hands the child a named set:
-    # a data condition, not a chapter name, so C-17 holds and it is inert in the
-    # thirteen chapters that have no set. What is served is what the CHILD said,
-    # attributed to them, so Milo narrows by elimination from their own words
-    # rather than by guessing — which is the defect three blocks failed to fix
-    # at this chapter's other rungs.
-    items = corpus.authored_set(turn.chapter)
-    if n >= 2 and items:
-        done = runtime.ruled_out(turn.child_said, turn.chapter)
-        left = [i for i in items if i not in done]
-        if done:
-            e += ("\n  they have ruled out, in their own words: "
-                  + ", ".join(done)
-                  + "\n  that leaves: " + ", ".join(left))
     if n >= 3 and f.get("fix"):
         e += "\n  fix: " + f["fix"]
     L.append(e)

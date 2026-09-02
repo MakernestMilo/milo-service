@@ -78,8 +78,6 @@ def run_one(client, spec, out):
             "elapsed_seconds": runtime.elapsed(turn),
             "absent_seconds": round(s.absent_seconds),
             "direct_asks": s.direct_asks,
-            # the guard U8 rests on: what the child was credited with
-            "ruled_out": list(runtime.ruled_out(child, key)),
             "assembled_context": ctx.stage["prompt"],
             "history_as_the_model_saw_it": rendered,
             "latency_seconds": round(latency, 3),
