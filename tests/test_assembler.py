@@ -191,3 +191,20 @@ def test_the_premise_stands_before_the_absence_guard():
     p = assembler.assemble(runtime.Turn("nothing happens", "11", None, 0),
                            "L2").stage["prompt"]
     assert p.index("WHAT HAPPENED IN THIS CHAPTER") < p.index("WHEN A RUNG HAS NO MATERIAL")
+
+
+def test_no_block_is_defined_that_nothing_serves():
+    """The clock-route block was landed, measured, and removed on its result —
+    three attempts at that rung, and two of the three made the guessing worse.
+
+    Its text lives in M-08-clock-route-prediction.md with the numbers beside it.
+    It does not live in the assembler, because material in the tree that no
+    mechanism serves is the defect this project has found five times, and
+    keeping a failed block around "for reference" is how the sixth one starts.
+    """
+    assert not hasattr(assembler, "CLOCK_ROUTE")
+    for key in [c["key"] for c in corpus.CHAPTERS]:
+        turn = runtime.Turn("the number isn't changing", key, None, 0)
+        for lvl in LEVELS:
+            assert "NOBODY HAS ASKED YOU FOR ANYTHING" not in \
+                assembler.assemble(turn, lvl).stage["prompt"]

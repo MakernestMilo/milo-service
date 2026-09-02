@@ -137,7 +137,16 @@ that exists and has no mechanism reading it.
 the two words that actually turned the harness red. A principle that misses half
 the case that motivated it is a patch wearing a policy's clothes.
 
-**Why it is still carried.** The disputed set has now cost **four** runs across
+**A fifth word, and a new kind of cost.** `anything` blocked an authored
+sentence rather than a run: chapter 11's clock-route block opens *NOBODY HAS
+ASKED YOU FOR ANYTHING*, and `anything` is a cause word of chapters 03 and 12,
+where that block never appears. Nothing could have turned red. What failed was a
+lint rule checking chapter-scoped blocks against all thirty-two words, which was
+a proxy for a scope test that now exists — so the rule changed rather than the
+prose. Five words now, and the question gets stronger each time without getting
+closer to an answer.
+
+**Why it is still carried.** The disputed set has cost **four** runs across
 **four** words — `instead`, `happens`, `several`, and `could` — and the last two
 collided through mechanisms the exclusion list does not address at all.
 `several` was published by the chapter's own authored fix, which

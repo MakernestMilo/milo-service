@@ -107,6 +107,21 @@ CHAPTER_PREMISE = {
         "cheating."),
 }
 
+
+# C-13, sixth authored block. Chapter-scoped like the premise, and narrower:
+# served on the CLOCK ROUTE only, never where the child asked.
+#
+# The third attempt at this rung. The first was the rung label, which changed
+# nothing but a line reading "ESCALATION: L2". The second was the override line,
+# served where nobody asked — it made the guessing WORSE, +20 points at L3 and
+# +70 at L2, because it tells Milo not to narrow at the rung whose whole job is
+# narrowing. This is prose, and if it fails too the finding is that prose does
+# not reach this route.
+#
+# Served when a clock is actually running, not at a cold L0: the block opens
+# "You are here because time passed", which is false where no failure has been
+# seen. That is an engineering call, recorded in the prediction file.
+
 SERVED_BLOCKS = ("absence",)
 FORCE_OVERRIDE_LINE = False
 

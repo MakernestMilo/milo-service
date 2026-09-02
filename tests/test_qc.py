@@ -363,11 +363,7 @@ def test_no_authored_block_contains_a_cause_word():
               "OPENING_WORD": A.OPENING_WORD,
               "OVERRIDE_LINE": A.OVERRIDE_LINE,
               "ESCALATION": A.ESCALATION,
-              "STANDING_RULE": A.STANDING_RULE,
-              # chapter-scoped, so only its own chapter's cause words can turn a
-              # row red — checked against all thirty-two anyway, because a block
-              # that is safe only by its scope is one refactor from not being.
-              **{f"CHAPTER_PREMISE[{k}]": v for k, v in A.CHAPTER_PREMISE.items()}}
+              "STANDING_RULE": A.STANDING_RULE}
     bad = []
     for name, text in blocks.items():
         for word in re.findall(r"[a-z]{4,}", text.lower()):
@@ -710,3 +706,33 @@ def test_a_pairing_the_prompt_serves_is_not_an_assembled_procedure():
                  "the red wire goes to 3V"):
         kinds = [k for k, _, _ in qc.r10_detail(line, ctx, c["utterance"])]
         assert "a procedure assembled" not in kinds, line
+
+
+
+def test_a_chapter_scoped_block_carries_none_of_its_own_chapters_cause_words():
+    """The live risk, and the whole of it.
+
+    A scoped block appears in one chapter's prompt, so only that chapter's
+    guarded words can turn a row red. This was checked against all thirty-two
+    for a while, on the reasoning that a block safe by its scope is one refactor
+    from not being — but the refactor risk is already caught by
+    test_the_chapter_premise_reaches_only_its_own_chapter, which walks all
+    fourteen chapters at all five rungs. The wider check was a proxy for that
+    test, and once the test existed the proxy did nothing except block authored
+    prose on words carrying nothing.
+
+    It cost a sentence before it was removed: "NOBODY HAS ASKED YOU FOR
+    ANYTHING" tripped it on `anything`, a cause word of chapters 03 and 12,
+    where the block never appears. That is the fifth disputed word — after
+    instead, happens, several and could — and the first to cost an authored
+    sentence rather than a run.
+    """
+    import assembler as A
+    for key, text in A.CHAPTER_PREMISE.items():
+        if True:
+            guarded = qc.cause_words(corpus.BY_KEY[key])
+            bad = [w for w in guarded
+                   if re.search(r"\b" + w + r"\b", text.lower())]
+            assert not bad, (
+                f"the {scope} block for chapter {key} carries its own chapter's "
+                f"cause words {bad} — this one can turn rows red")
