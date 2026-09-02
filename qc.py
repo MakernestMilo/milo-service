@@ -823,6 +823,27 @@ def r10_set(reply, key, ctx):
     named, refers = _refers_to_the_set(reply, items)
     if not refers:
         return None
+    # U7, ruled in M-09 step 05. A set is named completely if every item appears
+    # somewhere in the conversation — the same reasoning as AV. If Milo gave
+    # power, sensor and rule on one turn and output and sequence on the next,
+    # the child has the five, and a check scoring otherwise is scoring Milo's
+    # typing rather than the child's knowledge. It would also push toward the
+    # recitation the list block produced in M-07.
+    #
+    # ONE BOUND, and it is the whole of the ruling. Completeness is per
+    # set-invocation, not per session. A reply that GESTURES at the set — "the
+    # five", "the list" — and names fewer than all of them is incomplete
+    # whatever came before, because a child reading "which of the five have you
+    # ruled out — power and the rule" is told there are five and shown two, in
+    # that moment. What an earlier turn establishes is that the items are known,
+    # not that this sentence is whole.
+    #
+    # So history clears an ITEM named earlier. It never clears a GESTURE
+    # standing in for the rest.
+    gestured = len(named) < len(items) and _refers_to_the_set(reply, ())[1]
+    if not gestured:
+        earlier, _ = _refers_to_the_set(_carried(ctx), items)
+        named = sorted(set(named) | set(earlier), key=items.index)
     # The exception ruled in step 00: when the step's own question refers to the
     # set, delivering that question as the step words it is complete in itself.
     # Milo is not naming the set — the step is.

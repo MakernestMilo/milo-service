@@ -842,3 +842,48 @@ def test_r4_clears_a_fix_the_child_carried_in_from_another_chapter():
                         "MILO (turn 3, chapter 07, L3): "
                         + corpus.BY_KEY["07"]["failure"]["fix"])
     assert qc.r4(ctx, "11") is None, "R4 convicted a fix from another chapter"
+
+
+# U7, ruled in M-09 step 05. A set is named completely if every item appears
+# somewhere in the conversation — the AV reasoning, one field over. The bound:
+# completeness is per set-invocation, so a reply that GESTURES at the set and
+# names fewer than all of them is incomplete whatever came before.
+
+def _set_ctx(history=""):
+    return runtime.Context(stage={"prompt": "", "instructions": [],
+                                  "history": history},
+                           parts_allowed=[], aliases={},
+                           escalation=assembler.ESCALATION, rule="")
+
+
+def test_a_set_named_across_two_turns_is_named_completely():
+    """A child given power, sensor and rule on one turn and output and sequence
+    on the next has been given the five. Demanding all five in one sentence
+    scores Milo's typing rather than the child's knowledge, and pushes toward
+    the recitation the list block produced in M-07."""
+    assert qc.r10_set("Try output and sequence next.", "11",
+                      _set_ctx("MILO: work power, sensor and rule in order")) is None
+
+
+def test_the_same_reply_is_incomplete_with_nothing_behind_it():
+    """The half that proves the first test is about history and not about the
+    rule going soft."""
+    assert qc.r10_set("Try output and sequence next.", "11", _set_ctx())
+
+
+def test_a_gesture_at_the_set_is_not_cleared_by_an_earlier_turn():
+    """The bound, and the whole of the ruling.
+
+    A child reading "which of the five have you ruled out — power and the rule"
+    is told there are five and shown two, in that moment. What the earlier turn
+    established is that the items are known, not that this sentence is whole. So
+    history clears an ITEM named earlier; it never clears a GESTURE standing in
+    for the rest.
+    """
+    assert qc.r10_set("Which of the five have you ruled out — power and the rule?",
+                      "11", _set_ctx("MILO: power, sensor, rule, output, sequence"))
+
+
+def test_a_gesture_that_names_all_five_is_complete():
+    assert qc.r10_set("The five: power, sensor, rule, output, sequence.",
+                      "11", _set_ctx()) is None
