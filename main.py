@@ -99,7 +99,29 @@ EFFORT = "medium"
 # Note also that the slowest rung is 11/L1 — a clock rung, 2.30s to 28.68s on
 # identical input, a 12.5x spread. The earlier reading that the direct-ask rungs
 # are the slow ones does not survive n=5: a child who waits can wait longest.
-TIMEOUT_SECONDS = 120.0
+TIMEOUT_SECONDS = 30.0
+
+# M-10 step 05. The failure drill measured the ceiling rather than the timeout,
+# and the ceiling was not 120 seconds. The SDK retries twice by default, so a
+# hung model cost 3 x 120 = **360 seconds of "Milo is looking…"** before the
+# bank spoke — six minutes at a table with a nine-year-old at it.
+#
+# The reasoning above is still right and it is why the ceiling errs long. What
+# it did not account for is that the ceiling is multiplied.
+#
+# The numbers this is set from, over the 1,106 recorded model calls in this
+# repository: median 2.87s, p95 7.16s, p99 13.95s. Five calls exceeded 20s —
+# 20.7, 28.7, 30.6, 68.8 and 603.2. (The 603.2 is the tooling's client hitting
+# the SDK's own 600s default, which is what a ceiling nobody set looks like.)
+#
+# At 30 seconds and no retry, 1,103 of those 1,106 calls complete unchanged.
+# The three that would not were already past anything a child sits through.
+#
+# **The bank is the retry.** It is instant, it always answers, and it says the
+# corpus's own words. Retrying at the SDK level buys a better answer with the
+# child's time, and this project's position is that the bank is the floor
+# rather than the last resort.
+MODEL_RETRIES = 0
 
 
 class TurnRequest(BaseModel):
@@ -228,7 +250,8 @@ def call_model(system: str, utterance: str, prior=()) -> str:
     key = os.getenv("MODEL_API_KEY")
     if not key:
         raise RuntimeError("MODEL_API_KEY is not set")
-    client = anthropic.Anthropic(api_key=key, timeout=TIMEOUT_SECONDS)
+    client = anthropic.Anthropic(api_key=key, timeout=TIMEOUT_SECONDS,
+                                 max_retries=MODEL_RETRIES)
     reply = client.messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,

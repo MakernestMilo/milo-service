@@ -113,6 +113,28 @@ def test_the_harness_stays_off_the_model_path():
     assert elapsed < HARNESS_SECONDS, f"harness took {elapsed:.2f}s"
 
 
+def test_the_harness_makes_no_model_call(monkeypatch):
+    """The claim this file's timing test is named for, asserted directly.
+
+    Elapsed time is a proxy for *no network call*, and the two are not the
+    same claim: a harness that made one fast call would pass the timing bound,
+    and a harness on a loaded machine fails it while making none. C-27 — a
+    detector matching a form goes green when the claim changes form.
+
+    So this one blocks the path instead of timing it. The timing bound is left
+    exactly where it was; it is a runaway guard and this is the claim.
+    """
+    import anthropic
+    import main
+
+    def must_not(*a, **k):
+        raise AssertionError("the harness reached the model path")
+
+    monkeypatch.setattr(anthropic, "Anthropic", must_not)
+    monkeypatch.setattr(main, "call_model", must_not)
+    assert len(qc.run(runtime.level, assembler.assemble)) == 7616
+
+
 # ---------------------------------------------------------------- AB and AC
 
 LEVELS = ("L0", "L1", "L2", "L3", "L4")
