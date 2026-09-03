@@ -47,11 +47,45 @@ to read after seeing the result.
 
 ---
 
-## P1 and P3 · waiting on the tier
+## P1 · the wake — **passes on both clauses**
 
-Both are the architect's ruling landing on Render — Starter, no sleep — and
-neither can be measured until it does. They are stated, committed and
-untouched.
+Starter went live and the service redeployed at `25b42e6`. Sixteen minutes of
+no traffic from us, then one request.
+
+| | |
+|---|---|
+| `GET /c/01`, first after idle | **0.235 s** |
+| immediately after | 0.254 s |
+| free-tier baseline, same route class | 22.37 s |
+
+Predicted under 1.5 s, and at least 20 seconds off. Measured **0.235 s** and
+**22.14 s off**. The second request being marginally slower than the first is
+the useful part: there is no warm-up left to observe, which is what no-sleep
+was bought for.
+
+## P3 · the first turn on production — **passes**, and n=1 was too few
+
+One live call, the first `/turn` anyone in this project has timed against
+production. **6.025 s**, predicted under 8 s. The reply came from the model and
+not the bank, which also settles that the deployed key is live.
+
+Because this is now the whole of what a child waits through, four more first
+turns were taken at L0 with fresh sessions and the same message — after the
+prediction, not against it, and characterising rather than deciding.
+
+| | |
+|---|---|
+| n | 5 |
+| median | **4.83 s** |
+| mean | 4.82 s |
+| range | 3.33 – 6.02 s |
+
+**This is V2's real answer.** The cold start was 22 seconds and is now a
+quarter of one. What remains is the model, at roughly five seconds a message —
+not once at the start, but every time the child presses send. No hosting
+decision touches it, and the architect's ruling bought exactly the thing it was
+supposed to buy: the wait a child sits through is no longer an artefact of
+where the service is hosted.
 
 ---
 
@@ -70,3 +104,59 @@ Local, no model calls.
 The endpoint's exposure, written down rather than assumed: anyone holding the
 id can read that conversation. The id is a v4 UUID that exists in one browser's
 local storage and is never printed on the card.
+
+---
+
+## Found while measuring, and not part of any prediction
+
+Six production replies were read — P3's two and the four latency turns. They
+are the first replies from the deployed service anyone has read in this order,
+and two things in them are worth recording before step 08 rather than after.
+
+**Every one of the six tells the child they have already pulled the yellow
+wire. 6 of 6.** The child's message was *the number isn't changing* and said
+nothing about pulling anything. Chapter 01's current step is the pull-the-wire
+test, and the step's instruction is in the assembled prompt because VOICE says
+Milo is given it *so that you know where they are*. What comes back is not
+Milo knowing where they are — it is Milo narrating the instruction as an event
+that has happened:
+
+> *you just pulled the yellow wire, right?*
+> *you pulled the yellow wire, and now the number's frozen*
+> *you're at the pull-the-yellow-wire part, so that's actually what should
+> happen*
+
+Whether that is a defect is genuinely open, and it is **step 08's reader to
+rule, not mine**: a mentor who knows which step a child is on and says so is
+doing what VOICE asks. A mentor who tells a child what they have just done,
+when they have not said it and may not have done it, is inventing the child's
+state — and at L0, whose whole job is *establish what is actually happening*,
+that is establishing it by assertion.
+
+**Two of the six ask two questions where VOICE allows one.** *One question per
+message, never two* is a line in the prompt; 2 of 6 carry two question marks.
+
+**Neither has an instrument.** Eleven rules: nine score the assembled prompt,
+one scores the ladder's inputs, and R10 and R10_SET score the reply for the
+seven disclosure families — which test, how often, what the fault is, a part's
+state, a place ruled out, a cause proposed, a procedure assembled. *How many
+questions the reply asks* is none of those, and *whether the reply attributes
+an action to the child* is none of those either. Both would go green forever.
+
+Recorded as found, at n=6, single-armed, on one chapter at one rung. That is
+not a rate and decides nothing.
+
+---
+
+## Step 03, closed
+
+| | predicted | measured | |
+|---|---|---|---|
+| P1 · the wake | under 1.5 s, ≥20 s off | 0.235 s, 22.14 s off | **passes** |
+| P2 · the import | under 0.15 s, ≥0.9 s off | 0.002 s, 0.80 s off | **endpoint passes, movement fails** |
+| P3 · the first turn | under 8 s | 6.025 s | **passes** |
+| V3 · resumption | not predicted | replays, forgets only on 404 | proved |
+
+Two of three predictions hold. The one that does not, does not because its
+baseline was measured in a bare interpreter rather than in the process that
+pays the cost — which is C-34, proposed above and the architect's to number.
