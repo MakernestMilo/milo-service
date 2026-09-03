@@ -101,15 +101,16 @@ var log = document.getElementById("log"),
 // throws (private mode, blocked site data) must not cost the child the page,
 // so every read and write of it is guarded and the fallback is a session that
 // simply does not survive the tab.
-var sid = null;
+var sid = null, KEY = "milo:session:" + CHAPTER;
+function stored(){ try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+function forget(){ sid = null; try { localStorage.removeItem(KEY); } catch (e) {} }
 function sessionId(){
   if (sid) return sid;
-  var k = "milo:session:" + CHAPTER;
-  try { sid = localStorage.getItem(k); } catch (e) {}
+  sid = stored();
   if (!sid) {
     sid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
         : String(Date.now()) + "-" + Math.random().toString(36).slice(2);
-    try { localStorage.setItem(k, sid); } catch (e) {}
+    try { localStorage.setItem(KEY, sid); } catch (e) {}
   }
   return sid;
 }
@@ -155,6 +156,34 @@ async function ask(text){
   setBusy(false);
   input.focus();
 }
+
+// V3. The session surviving the tab is not the same as the child seeing it:
+// the store kept every turn while the page opened empty, so Milo answered as
+// though it remembered and nothing on screen said why. This replays what was
+// already said, and nothing else — no level, no marker, no line announcing
+// that the conversation is old. A conversation that is still there is what a
+// child expects; being told it is still there is not.
+(async function resume(){
+  var existing = stored();
+  if (!existing) return;
+  sid = existing;
+  var r;
+  try {
+    r = await fetch("/session/" + encodeURIComponent(existing));
+  } catch (e) {
+    // Offline. The id is still good and the session may still be there, so
+    // it is kept: forgetting on a network wobble would throw away a live
+    // conversation to fix a display problem.
+    return;
+  }
+  if (r.status === 404) { forget(); return; }   // expired — BA, six hours
+  if (!r.ok) return;
+  var s = await r.json();
+  if (s.chapter !== CHAPTER) { forget(); return; }
+  s.turns.forEach(function(turn){
+    addMsg(turn.who === "child" ? "me" : "milo", turn.said);
+  });
+})();
 
 form.addEventListener("submit", function(e){
   e.preventDefault();
