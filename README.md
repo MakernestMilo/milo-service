@@ -59,9 +59,17 @@ It listens on port 8000 unless `PORT` is set. Confirm it is up:
 curl http://127.0.0.1:8000/health
 ```
 
-Returns `status`, the build id, uptime, and the chapter count, which is 14.
+Returns `status`, the build id, uptime, the chapter count (14), the session
+store and whether it degraded, and the pause threshold in seconds.
 
 ## Deployment
 
-Not deployed yet.
+`https://milo-service.onrender.com` — Render, free tier, deployed from `main`.
+
+The build id in `/health` is the commit it is serving; check it against `main`
+before reading anything into a run. The service sleeps when idle: a first
+request after sleep took 22.4s on 2026-09-03, and the next took 0.18s.
+
+`MODEL_API_KEY` and `SESSION_STORE_URL` are set in the Render environment and
+exist nowhere in this repository — no file, no example, no fixture.
 
