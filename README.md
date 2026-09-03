@@ -66,6 +66,11 @@ store and whether it degraded, and the pause threshold in seconds.
 
 `https://milo-service.onrender.com` — Render, free tier, deployed from `main`.
 
+The child's page is `GET /c/{chapter}` — `…/c/01` is what the QR code on
+chapter 01's card opens. It is served by the same service it talks to, so
+`/turn` is same-origin, and it is the only route a child sees. It shows the
+chapter and never the rung: AZ and C-33.
+
 The build id in `/health` is the commit it is serving; check it against `main`
 before reading anything into a run. The service sleeps when idle: a first
 request after sleep took 22.4s on 2026-09-03, and the next took 0.18s.

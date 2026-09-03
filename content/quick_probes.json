@@ -1,0 +1,13 @@
+{
+  "_note": "The dock's quick-tap probes, for a child who cannot phrase it. Label and question are both the architect's, transcribed verbatim from Milo Beta (standalone).html — the dock's .quick buttons, in the order the beta has them. Nothing here is composed by the engineer.",
+  "probes": [
+    {"label": "Next task",                  "says": "What do I do now?"},
+    {"label": "How many left",              "says": "How many tasks are left?"},
+    {"label": "I'm lost",                   "says": "I don't understand what to do."},
+    {"label": "What is the board",          "says": "What is the board? Why do we even need a microcontroller?"},
+    {"label": "Why three wires",            "says": "Why are there three wires, and why does the black one matter?"},
+    {"label": "What is an ohm",             "says": "What is an ohm, and why would I need a resistor?"},
+    {"label": "Is the MCU the green one",   "says": "Is the MCU the green rectangle thing?"},
+    {"label": "Something you won't know",   "says": "How many amps does the board draw when the buzzer is on?"}
+  ]
+}

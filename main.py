@@ -1,13 +1,16 @@
 import os
+import html
+import json
 import time
 import uuid
 import logging
+import pathlib
 from dataclasses import dataclass
 
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict
 
 import corpus  # import is the load. No lazy loading.
@@ -297,6 +300,59 @@ async def unexpected_exception_handler(
             "detail": "Internal server error.",
             "request_id": request_id,
         },
+    )
+
+
+# --- the child's page -------------------------------------------------------
+#
+# Read once at import, like the corpus. A page that re-reads the file per
+# request would let a deploy serve two different pages to one child.
+_PAGE = (pathlib.Path(__file__).parent / "child" / "page.html").read_text()
+_QUICK = json.loads(
+    (pathlib.Path(__file__).parent / "content" / "quick_probes.json").read_text()
+)["probes"]
+
+
+def render_page(key: str) -> str:
+    """The child's view of one chapter.
+
+    Every value substituted here is authored corpus text, escaped anyway: the
+    escaping is not about trusting the corpus, it is about the page staying
+    correct the day someone authors an ampersand.
+    """
+    ch = corpus.BY_KEY[key]
+    out = _PAGE
+    for token, value in (
+        ("__KEY__", ch["key"]),
+        ("__RUNG__", ch["rung"]),
+        ("__NAME__", ch["name"]),
+        ("__SUB__", ch["sub"]),
+        ("__TIME__", ch["time"]),
+        ("__OPEN__", ch["open"]),
+    ):
+        out = out.replace(token, html.escape(str(value)))
+    # The probes go in as JSON rather than as markup: the page builds the
+    # buttons with textContent, so a label is never parsed as HTML.
+    return out.replace("__QUICK__", json.dumps(_QUICK))
+
+
+@app.get("/c/{chapter}", response_class=HTMLResponse)
+def child_page(chapter: str):
+    """What the QR code on the card opens.
+
+    AY: the chapter is carried by the artefact in the child's hand. It arrives
+    in the path, and a path naming no chapter we have is a 404 rather than a
+    page apologising — a mis-printed card should fail where an adult can see
+    it, not where a child can.
+    """
+    if chapter not in corpus.BY_KEY:
+        return JSONResponse(status_code=404, content={"detail": "Unknown chapter."})
+    return HTMLResponse(
+        render_page(chapter),
+        # The page is one deploy old at most and the service restarts on
+        # deploy. No caching, so a child who reloads gets the page that matches
+        # the service answering them.
+        headers={"Cache-Control": "no-store"},
     )
 
 
