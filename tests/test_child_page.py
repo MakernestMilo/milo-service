@@ -113,19 +113,70 @@ def test_the_dock_header_has_no_second_slot():
 
 def test_the_probes_are_data_and_are_carried_through_unedited():
     probes = json.loads((ROOT / "content" / "quick_probes.json").read_text())["probes"]
-    assert len(probes) == 8
+    assert len(probes) == 7
     html = main.render_page("01")
     for p in probes:
         assert json.dumps(p["says"])[1:-1] in html
         assert json.dumps(p["label"])[1:-1] in html
-    # V8's three, by name, so a probe cannot quietly leave the dock.
     says = " ".join(p["says"] for p in probes)
     assert "why are there three wires" in says.lower()
     assert "what is an ohm" in says.lower()
-    assert "Something you won't know" in [p["label"] for p in probes]
+
+
+def test_the_red_team_probe_is_withheld_from_the_dock_and_not_deleted():
+    """The architect's ruling, M-10 step 03. A child who taps *something you
+    won't know* is being invited to find the edge rather than build the
+    machine. V8 still runs it against production and step 04 puts it in the
+    panel, so the test is that it left the dock *and survived* — a deletion
+    would pass a test that only checked the dock."""
+    data = json.loads((ROOT / "content" / "quick_probes.json").read_text())
+    held = data["_withheld_from_the_dock"]["probes"]
+    assert [p["label"] for p in held] == ["Something you won't know"]
+    assert "how many amps" in held[0]["says"].lower()
+    assert held[0]["label"] not in main.render_page("01")
+    assert held[0]["says"] not in main.render_page("01")
 
 
 def test_the_probes_go_in_as_json_not_as_markup():
     """A label containing a bracket must not become an element."""
     assert "__QUICK__" in PAGE
     assert 'textContent = q.label' in PAGE
+
+
+# --- resumption, V3 --------------------------------------------------------
+
+def test_a_session_hands_back_what_was_said_and_nothing_else():
+    sid = "test-resume-" + str(id(object()))
+    for message in ("the number isnt changing", "still nothing"):
+        r = client.post("/turn", json={"session": sid, "chapter": "01",
+                                       "message": message})
+        assert r.status_code == 200
+
+    got = client.get(f"/session/{sid}")
+    assert got.status_code == 200
+    body = got.json()
+    assert body["chapter"] == "01"
+    assert [t["who"] for t in body["turns"]] == ["child", "milo", "child", "milo"]
+    assert body["turns"][0]["said"] == "the number isnt changing"
+    # The ladder's state is not a thing a child may see, and an endpoint is a
+    # way of seeing it.
+    assert "level" not in body
+    assert "prompt" not in json.dumps(body)
+
+
+def test_a_session_that_is_not_there_is_a_404_and_not_an_empty_one():
+    """The page mints a fresh id on 404 and keeps the old one on anything
+    else, so this status carries a decision."""
+    assert client.get("/session/nothing-was-ever-stored-here").status_code == 404
+
+
+def test_the_page_replays_on_load_and_forgets_only_on_404():
+    """Read against the mechanism. A page that forgot the id whenever the
+    fetch failed would throw away a live conversation to fix a display
+    problem, and the failure would only show on a bad connection."""
+    body = strip_comments(PAGE)
+    assert "/session/" in body
+    assert "r.status === 404" in body and "forget()" in body
+    # the offline path returns without forgetting
+    catch = body[body.index("} catch (e) {", body.index("/session/")):]
+    assert "forget" not in catch[:catch.index("}")]

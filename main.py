@@ -13,6 +13,13 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict
 
+# The SDK is imported here rather than inside call_model. It was lazy, and the
+# cost was real and in the wrong place: 3.58s cold and 1.07s warm, measured in
+# M-10 step 01, paid by the child's first message rather than by the boot that
+# nobody is waiting through. A cost at import is a cost the platform's health
+# check absorbs.
+import anthropic
+
 import corpus  # import is the load. No lazy loading.
 corpus.verify()
 
@@ -216,8 +223,6 @@ def history(session: Session):
 def call_model(system: str, utterance: str, prior=()) -> str:
     """The one call. The key comes from the host's secret store and is never
     read from the tree — no committed file, no example, no fixture."""
-    import anthropic
-
     key = os.getenv("MODEL_API_KEY")
     if not key:
         raise RuntimeError("MODEL_API_KEY is not set")
@@ -384,6 +389,32 @@ class _NoState:
 
 
 _NO_STATE = _NoState()
+
+
+@app.get("/session/{session_id}")
+def session_turns(session_id: str):
+    """What the page needs to show a child the conversation they already had.
+
+    V3 was satisfied by the store and not by the child: the session survived,
+    the page opened empty, and Milo answered as though it remembered because
+    it did. The record and the screen disagreed, and the record is this
+    order's only deliverable.
+
+    It returns what was already said to this child and nothing else. No level,
+    no assembled prompt, no chapter material — the ladder's state is not a
+    thing a child may see, and an endpoint is a way of seeing it.
+
+    Anyone holding the id can read the conversation. The id is a v4 UUID that
+    exists in one browser's local storage and is never printed on the card, so
+    the exposure is the child's own device. It is written down here rather
+    than left as an assumption.
+    """
+    session = SESSIONS.get(session_id)
+    if session is None:
+        # Expired, or never existed. BA: a scan the next day is a new session,
+        # and the page mints a fresh id rather than posting a dead one.
+        return JSONResponse(status_code=404, content={"detail": "No such session."})
+    return {"chapter": session.chapter, "turns": list(session.turns)}
 
 
 @app.post("/turn")
