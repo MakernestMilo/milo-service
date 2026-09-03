@@ -35,6 +35,15 @@ from dataclasses import asdict, dataclass, field
 
 TTL_SECONDS = 6 * 60 * 60
 
+# V4. The record outlives the session it describes, and by a long way.
+#
+# A session expires at six hours because BA says a scan the next day is a new
+# session. The record must not: "the transcript is the deliverable, and a run
+# that produces a good session and no record has produced nothing." A record
+# that vanished with the session would vanish the same evening — before anyone
+# sat down to read it.
+RECORD_TTL_SECONDS = 30 * 24 * 60 * 60
+
 
 # AT. Ten minutes. A gap longer than this means the child left the table rather
 # than went quiet, and does not count toward the rung.
@@ -96,6 +105,7 @@ class MemoryStore:
 
     def __init__(self, ttl=TTL_SECONDS, clock=time.time):
         self._d: dict[str, tuple[float, Session]] = {}
+        self._rec: dict[str, list] = {}
         self._ttl, self._clock = ttl, clock
 
     def get(self, key):
@@ -113,6 +123,19 @@ class MemoryStore:
 
     def clear(self):
         self._d.clear()
+        self._rec.clear()
+
+    # --- the record, V4 ---
+
+    def append_record(self, key, entry):
+        self._rec.setdefault(key, []).append(entry)
+
+    def record(self, key):
+        return list(self._rec.get(key, []))
+
+    def recorded(self):
+        """Newest first, so a panel opens on the run that just happened."""
+        return list(reversed(list(self._rec)))
 
 
 class RedisStore:
@@ -150,6 +173,27 @@ class RedisStore:
 
     def put(self, key, session):
         self._r.set("session:" + key, json.dumps(asdict(session)), ex=self._ttl)
+
+    # --- the record, V4 ---
+    #
+    # A list per session and a sorted set as the index. The index is scored by
+    # write time so a panel opens on the run that just happened, and pruned on
+    # read rather than by a job: a cleanup that has to be remembered is a
+    # cleanup that stops running.
+
+    def append_record(self, key, entry):
+        k = "record:" + key
+        self._r.rpush(k, json.dumps(entry))
+        self._r.expire(k, RECORD_TTL_SECONDS)
+        self._r.zadd("records", {key: time.time()})
+
+    def record(self, key):
+        return [json.loads(x) for x in self._r.lrange("record:" + key, 0, -1)]
+
+    def recorded(self):
+        cutoff = time.time() - RECORD_TTL_SECONDS
+        self._r.zremrangebyscore("records", "-inf", cutoff)
+        return list(reversed(self._r.zrange("records", 0, -1)))
 
 
 def from_env(env=None):

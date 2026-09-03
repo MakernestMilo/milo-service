@@ -75,6 +75,12 @@ The build id in `/health` is the commit it is serving; check it against `main`
 before reading anything into a run. The service sleeps when idle: a first
 request after sleep took 22.4s on 2026-09-03, and the next took 0.18s.
 
-`MODEL_API_KEY` and `SESSION_STORE_URL` are set in the Render environment and
-exist nowhere in this repository — no file, no example, no fixture.
+The runtime panel is `GET /panel/{token}` and `/panel/{token}/{session}` —
+BB. It is not linked from the child's page and not a query parameter on it. An
+unset `PANEL_TOKEN` makes the route 404 rather than 403, because a 403 tells
+whoever found it that there is something there.
+
+`MODEL_API_KEY`, `SESSION_STORE_URL` and `PANEL_TOKEN` are set in the Render
+environment and exist nowhere in this repository — no file, no example, no
+fixture.
 

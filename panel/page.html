@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Milo · the runtime, visible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&family=Newsreader:ital,wght@0,400;1,400&family=Space+Mono:wght@400;700&display=swap">
+<style>
+:root{--ink:#191713;--ac:#BF532D;--sd:#E3CFA6;--mu:#a89e8a;--ln:#3a352d}
+*{box-sizing:border-box}
+body{margin:0;background:#25211c;color:#EDE5D6;padding:22px;
+  font-family:'Newsreader',Georgia,serif;line-height:1.5}
+.wrap{max-width:900px;margin:0 auto}
+h1{font:600 21px/1.2 'Hanken Grotesk',system-ui,sans-serif;margin:0 0 4px;color:#fff}
+.lead{font:400 13.5px/1.5 'Newsreader',Georgia,serif;color:var(--mu);margin:0 0 18px}
+.card{background:var(--ink);border:1px solid var(--ln);border-radius:12px;
+  padding:13px 15px;margin-bottom:12px}
+.card b.t{display:block;font:700 8px/1 'Space Mono',monospace;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--sd);margin-bottom:8px}
+.kv{font:400 11.5px/1.7 'Space Mono',monospace;color:var(--mu);
+  white-space:pre-wrap;word-break:break-word}
+.kv b{color:#e8a37d;font-weight:400}
+.pill{display:inline-block;font:700 8px/1 'Space Mono',monospace;letter-spacing:.1em;
+  text-transform:uppercase;padding:4px 7px;border-radius:5px;background:#2b2823;
+  color:var(--sd);margin:0 5px 5px 0}
+.pill.no{background:#3a1c14;color:#f0a68c}
+.pill.yes{background:#1e3320;color:#a8dbab}
+.said{font:400 14px/1.5 'Newsreader',Georgia,serif;margin:0 0 8px}
+.said i{display:block;font:700 8px/1.6 'Space Mono',monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:#7d7466;font-style:normal}
+.said.milo{color:var(--sd)}
+details{margin-top:8px;border-top:1px solid var(--ln);padding-top:8px}
+summary{font:700 8px/1 'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mu);cursor:pointer}
+summary:hover{color:var(--sd)}
+details pre{font:400 11px/1.55 'Space Mono',monospace;color:#cdc4b4;white-space:pre-wrap;
+  word-break:break-word;background:#141210;border-radius:8px;padding:10px 12px;
+  max-height:340px;overflow:auto;margin:8px 0 0}
+a{color:#e8a37d}
+table{width:100%;border-collapse:collapse;font:400 12px/1.6 'Space Mono',monospace}
+td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--ln);color:var(--mu)}
+th{font:700 8px/1 'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--sd)}
+.probe{display:block;width:100%;text-align:left;background:#2b2823;border:1px solid #4a453c;
+  color:#EDE5D6;border-radius:8px;padding:7px 10px;font:400 13px/1.35 'Newsreader',Georgia,serif;
+  margin-bottom:6px;cursor:pointer}
+.probe:hover{border-color:var(--ac)}
+.probe[disabled]{opacity:.45}
+.held{border-color:#6b3a24}
+.warn{font:400 12px/1.5 'Newsreader',Georgia,serif;color:#f0a68c;margin:0 0 8px}
+</style>
+</head><body><div class="wrap">
+<h1>The runtime, visible</h1>
+<p class="lead">Everything here is what the server decided and what it sent. None of it is
+in the child's view, and this page is not reachable from it.</p>
+<div id="out"></div>
+</div>
+<script>
+"use strict";
+var DATA = __DATA__;
+var out = document.getElementById("out");
+
+function el(tag, cls, text){
+  var d = document.createElement(tag);
+  if (cls) d.className = cls;
+  if (text !== undefined) d.textContent = text;
+  return d;
+}
+function card(title){
+  var c = el("div", "card");
+  c.appendChild(el("b", "t", title));
+  return c;
+}
+function fold(label, body){
+  var d = document.createElement("details");
+  d.appendChild(el("summary", null, label));
+  d.appendChild(el("pre", null, body));
+  return d;
+}
+function secs(n){
+  if (n === null || n === undefined) return "—";
+  return n < 60 ? n + "s" : Math.floor(n / 60) + "m " + (n % 60) + "s";
+}
+
+if (DATA.mode === "list") {
+  var c = card("Recorded sessions · newest first");
+  if (!DATA.sessions.length) {
+    c.appendChild(el("p", "kv", "Nothing recorded yet."));
+  } else {
+    var t = document.createElement("table");
+    t.innerHTML = "<tr><th>session</th><th>chapter</th><th>turns</th><th>last</th></tr>";
+    DATA.sessions.forEach(function(s){
+      var tr = document.createElement("tr");
+      var a = document.createElement("a");
+      a.href = DATA.base + "/" + encodeURIComponent(s.session);
+      a.textContent = s.session;
+      var td = document.createElement("td"); td.appendChild(a);
+      tr.appendChild(td);
+      [s.chapter, String(s.turns), s.last].forEach(function(v){
+        tr.appendChild(el("td", null, v));
+      });
+      t.appendChild(tr);
+    });
+    c.appendChild(t);
+  }
+  out.appendChild(c);
+} else {
+  var head = card("Session");
+  head.appendChild(el("p", "kv", DATA.session));
+  head.appendChild(el("p", "kv", DATA.turns.length + " turns recorded"));
+  out.appendChild(head);
+
+  DATA.turns.forEach(function(t, i){
+    var c = card("Turn " + (i + 1) + " · " + t.at);
+    var pills = el("div");
+    [["level " + t.level, ""],
+     ["clock " + secs(t.clock.elapsed), ""],
+     ["asks " + t.clock.direct_asks, ""],
+     ["absent " + secs(Math.round(t.clock.absent_seconds || 0)), ""],
+     ["history " + t.history_turns + " turns", ""],
+     [t.from_bank ? "the bank answered" : "the model answered",
+      t.from_bank ? "no" : "yes"]].forEach(function(p){
+       pills.appendChild(el("span", "pill " + p[1], p[0]));
+     });
+    if (t.usage) {
+      pills.appendChild(el("span", "pill",
+        "in " + t.usage.input_tokens + " · out " + t.usage.output_tokens));
+    }
+    c.appendChild(pills);
+
+    var said = el("div", "said");
+    said.appendChild(el("i", null, "the child"));
+    said.appendChild(document.createTextNode(t.said));
+    c.appendChild(said);
+    var milo = el("div", "said milo");
+    milo.appendChild(el("i", null, "milo"));
+    milo.appendChild(document.createTextNode(t.reply));
+    c.appendChild(milo);
+
+    c.appendChild(fold("The assembled prompt, this turn", t.prompt));
+    c.appendChild(fold("The transcript, as the model received it",
+      t.history.length
+        ? t.history.map(function(m){ return m.role.toUpperCase() + ": " + m.content; }).join("\n\n")
+        : "(nothing — this was the first turn)"));
+    out.appendChild(c);
+  });
+}
+
+// The probes. They fire into a session of the panel's own, never the child's:
+// a probe injected into a live session would put words in the transcript that
+// the child never said, and the transcript is the deliverable.
+var pc = card("Probes · fire against production");
+pc.appendChild(el("p", "warn",
+  "These run in a panel session of their own. They never touch a child's session."));
+DATA.probes.forEach(function(p){
+  var b = el("button", "probe" + (p.held ? " held" : ""), p.says);
+  b.type = "button";
+  b.addEventListener("click", function(){
+    b.disabled = true;
+    var was = b.textContent;
+    b.textContent = "…";
+    fetch("/turn", {method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({session: DATA.probe_session, chapter: DATA.chapter,
+                            message: p.says})})
+      .then(function(r){ return r.json(); })
+      .then(function(o){
+        b.textContent = was;
+        var r = card("Probe · " + p.label);
+        r.appendChild(el("span", "pill", "level " + o.level));
+        r.appendChild(el("span", "pill", "history " + o.turns));
+        var m = el("div", "said milo");
+        m.appendChild(el("i", null, "milo"));
+        m.appendChild(document.createTextNode(o.reply));
+        r.appendChild(m);
+        out.appendChild(r);
+        b.disabled = false;
+      })
+      .catch(function(e){ b.textContent = was; b.disabled = false;
+        out.appendChild(card("Probe failed · " + e.message)); });
+  });
+  pc.appendChild(b);
+});
+out.appendChild(pc);
+</script>
+</body></html>
