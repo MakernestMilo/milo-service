@@ -1,6 +1,8 @@
 import os
+import hmac
 import html
 import json
+import datetime
 import time
 import uuid
 import logging
@@ -8,7 +10,7 @@ import pathlib
 from dataclasses import dataclass
 
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict
@@ -313,9 +315,14 @@ async def unexpected_exception_handler(
 # Read once at import, like the corpus. A page that re-reads the file per
 # request would let a deploy serve two different pages to one child.
 _PAGE = (pathlib.Path(__file__).parent / "child" / "page.html").read_text()
-_QUICK = json.loads(
+_PROBE_FILE = json.loads(
     (pathlib.Path(__file__).parent / "content" / "quick_probes.json").read_text()
-)["probes"]
+)
+_QUICK = _PROBE_FILE["probes"]
+# The architect's ruling, M-10 step 03: withheld from the child's dock and kept
+# for the panel. A child who taps "something you won't know" is being invited
+# to find the edge rather than build the machine.
+_HELD_PROBES = _PROBE_FILE["_withheld_from_the_dock"]["probes"]
 
 
 def render_page(key: str) -> str:
@@ -339,6 +346,76 @@ def render_page(key: str) -> str:
     # The probes go in as JSON rather than as markup: the page builds the
     # buttons with textContent, so a label is never parsed as HTML.
     return out.replace("__QUICK__", json.dumps(_QUICK))
+
+
+# --- the panel ---------------------------------------------------------------
+#
+# BB. It ships, and it is not reachable from the child's page: not a link, not
+# a query parameter on /c/, and not a path a child could arrive at by typing.
+# The token is the whole of the gate and it is not in the tree — an unset
+# PANEL_TOKEN makes the route 404 rather than 403, because a 403 tells whoever
+# found it that there is something there.
+_PANEL = (pathlib.Path(__file__).parent / "panel" / "page.html").read_text()
+PANEL_TOKEN = os.getenv("PANEL_TOKEN")
+
+
+def _panel_open(token: str) -> bool:
+    """Constant time, and closed when no token is configured.
+
+    `hmac.compare_digest` rather than `==` so the comparison does not leak the
+    prefix a guess got right.
+    """
+    return bool(PANEL_TOKEN) and hmac.compare_digest(token, PANEL_TOKEN)
+
+
+def _panel(data: dict) -> HTMLResponse:
+    data.setdefault("probes", [
+        *({"label": q["label"], "says": q["says"], "held": False} for q in _QUICK),
+        *({"label": q["label"], "says": q["says"], "held": True}
+          for q in _HELD_PROBES),
+    ])
+    return HTMLResponse(
+        _PANEL.replace("__DATA__", json.dumps(data)),
+        headers={"Cache-Control": "no-store", "X-Robots-Tag": "noindex"},
+    )
+
+
+@app.get("/panel/{token}", response_class=HTMLResponse)
+def panel_index(token: str):
+    if not _panel_open(token):
+        raise HTTPException(status_code=404)
+    sessions = []
+    for key in SESSIONS.recorded()[:50]:
+        rec = SESSIONS.record(key)
+        if not rec:
+            continue
+        sessions.append({
+            "session": key,
+            "chapter": rec[-1].get("chapter", "—"),
+            "turns": len(rec),
+            "last": datetime.datetime.fromtimestamp(
+                rec[-1]["at"], datetime.timezone.utc).strftime("%Y-%m-%d %H:%M"),
+        })
+    return _panel({"mode": "list", "sessions": sessions,
+                   "base": f"/panel/{token}", "chapter": "01",
+                   "probe_session": f"panel-{uuid.uuid4()}"})
+
+
+@app.get("/panel/{token}/{session_id}", response_class=HTMLResponse)
+def panel_session(token: str, session_id: str):
+    """V4. Every turn, with the five things: the assembled prompt, the
+    transcript as the model received it, the resolved rung, the reply and the
+    derived clock."""
+    if not _panel_open(token):
+        raise HTTPException(status_code=404)
+    rec = SESSIONS.record(session_id)
+    if not rec:
+        raise HTTPException(status_code=404)
+    turns = [dict(r, at=datetime.datetime.fromtimestamp(
+        r["at"], datetime.timezone.utc).strftime("%H:%M:%S")) for r in rec]
+    return _panel({"mode": "record", "session": session_id, "turns": turns,
+                   "chapter": rec[-1].get("chapter", "01"),
+                   "probe_session": f"panel-{uuid.uuid4()}"})
 
 
 @app.get("/c/{chapter}", response_class=HTMLResponse)
@@ -449,9 +526,11 @@ async def turn(payload: TurnRequest):
     ctx.stage["history"] = rendered
     system = assembler.VOICE + "\n\n=== CONTEXT ===\n" + ctx.stage["prompt"]
 
+    from_bank = False
     try:
         reply = call_model(system, payload.message, prior)
     except Exception:
+        from_bank = True
         # Failed, slow and malformed all land here and all answer from the
         # bank. The child never gets silence, and never learns which it was.
         logger.error("model call failed request_id=%s level=%s — serving the bank",
@@ -465,6 +544,40 @@ async def turn(payload: TurnRequest):
     session.turns.append({"who": "child", "said": payload.message})
     session.turns.append({"who": "milo", "said": reply})
     SESSIONS.put(payload.session, session)
+
+    # V4. Written after the reply and never before: a record of a turn that
+    # then failed would be a record of something that did not happen.
+    #
+    # It goes to the store and not to the log. The M-05 rule stands — no
+    # request body and no response body in a log line, not behind a flag and
+    # not in development — and a record is exactly the material that rule
+    # exists to keep out of one.
+    try:
+        SESSIONS.append_record(payload.session, {
+            "at": time.time(),
+            "chapter": session.chapter,
+            "said": payload.message,
+            "reply": reply,
+            "level": lvl,                       # the rung, resolved server-side
+            "prompt": ctx.stage["prompt"],      # what was assembled this turn
+            "history": [dict(m) for m in prior],  # as the model received it
+            "history_turns": len(kept),
+            "clock": {
+                "elapsed": runtime.elapsed(turn),
+                "failure_seen_at": session.failure_seen_at,
+                "direct_asks": session.direct_asks,
+                "absent_seconds": session.absent_seconds,
+            },
+            "from_bank": from_bank,
+            "usage": dict(LAST_CALL) if not from_bank else None,
+        })
+    except Exception:
+        # A store that will not take the record must not cost the child their
+        # turn. The reply has already been produced and the session already
+        # written; this is the last thing that happens and the least important
+        # thing in the function.
+        logger.error("could not write the turn record request_id=%s",
+                     getattr(request_state(), "request_id", "unknown"))
 
     # U4. A session silently losing its history says so. This is the count the
     # model was given on this turn, not the count the session holds — if the
