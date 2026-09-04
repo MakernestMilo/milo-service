@@ -253,10 +253,25 @@ def stages_in_scope(ch, idx, procedural, done):
     return [s for i, s in enumerate(ch["stages"]) if i == idx or i in done]
 
 
+def stage_index(turn: Turn, ch) -> int:
+    """BD. Where the child is, from the session — not where the failure is.
+
+    `failure["stage"]` says where this chapter's failure occurs. It was standing
+    in for the child's position until M-11, which meant every session opened
+    with three to six steps marked finished for a child who had just opened a
+    box. It keeps its own job: the failure's material is still gated by the
+    ladder and is not selected by this.
+
+    Clamped rather than trusted. A position past the last stage is a bug
+    somewhere else and must not become an IndexError in front of a child.
+    """
+    return max(0, min(turn.position - 1, len(ch["stages"]) - 1))
+
+
 def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str:
     ch = corpus.BY_KEY[turn.chapter]
     f = ch["failure"]
-    idx = min(f.get("stage", 1) - 1, len(ch["stages"]) - 1)
+    idx = stage_index(turn, ch)
     s = ch["stages"][idx]
     n = _LVL[lvl]
     L = ["CHILD: " + (name or "name unknown — do not ask for it")]
@@ -360,7 +375,7 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
 def assemble(turn: Turn, lvl: str) -> Context:
     ch = corpus.BY_KEY[turn.chapter]
     f = ch["failure"]
-    idx = min(f.get("stage", 1) - 1, len(ch["stages"]) - 1)
+    idx = stage_index(turn, ch)
     s = ch["stages"][idx]
     n = _LVL[lvl]
 

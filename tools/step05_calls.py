@@ -222,7 +222,16 @@ def _run(cases, client, out):
     import time
     for key, target, text, ago, asks in cases:
         seen_at = None if ago is None else time.time() - ago
-        turn = Turn(text, key, seen_at, asks)
+        # BD, M-11. The position is the child's now, and it defaults to step one —
+        # which is right for a child and wrong for this. This asks what the ladder
+        # withholds AT THE FAILURE, so it stands the child where the failure is.
+        #
+        # Left implicit, the default would have made this quieter rather than
+        # redder: at step one the prompt carries 15% less material across the
+        # fourteen chapters, so the rules would have had less to convict and the
+        # harness would have reported the same 0 fail for a worse reason.
+        turn = Turn(text, key, seen_at, asks,
+                    position=corpus.BY_KEY[key]["failure"].get("stage", 1))
 
         lvl = runtime.level(turn)                    # the real ladder decides
         assert lvl == target, (

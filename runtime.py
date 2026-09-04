@@ -21,6 +21,19 @@ class Turn:
     # U8. The child's own utterances so far, oldest first — never Milo's. Empty
     # for a turn with no history, which is every row the harness builds.
     child_said: tuple = ()
+    # BD. Which step the child is on, 1-based. It comes from the card — scanning
+    # the QR is a child deciding to begin that chapter — and advances on what
+    # they say. It is NOT failure["stage"], which is where the chapter's failure
+    # lives and was standing in for this until M-11.
+    #
+    # The default is 1 rather than None, and deliberately: a turn built without
+    # a session is a child at the beginning, which is the honest assumption and
+    # the one the harness should be testing.
+    position: int = 1
+    # BI. True when this session id has been used before and its session has
+    # expired — a returning scan. The prompt does not act on it yet; the
+    # question Milo asks is the architect's to write.
+    returning: bool = False
 
 
 @dataclass
@@ -57,6 +70,29 @@ NEG = re.compile(
     r"|blank|dead|broken|stuck|frozen|weird|wrong|nothing (happens|is happening)"
     r"|no number|no noise|where do i start|keeps? (going|clicking|beeping)"
     r"|now it doesn'?t|used to work", re.I)
+
+
+# BD. The child's position advances on what the child says, and this is the
+# only thing that advances it.
+#
+# **Deliberately strict, and the asymmetry is the reason.** Under-advancing
+# leaves a child on a step they have finished, which Milo can be told about and
+# corrected on in one turn. Over-advancing is the defect M-11 exists to remove:
+# a child told they are past something they have not done. So the predicate
+# requires an explicit statement of completion and nothing weaker — "what's
+# next" is not in it, because a child at the very beginning says that too.
+#
+# It will miss. Step 04 measures how often, and a miss is a child repeating
+# themselves rather than a child being overruled.
+DONE = re.compile(
+    r"\b(?:i(?:'ve|ve| have)? ?done (?:it|that|this)|done it|done that"
+    r"|that(?:'s|s| is) done|finished|all done|got (?:it|that) done"
+    r"|that(?:'s|s| is) (?:working|sorted))\b", re.I)
+
+
+def advanced(text: str) -> bool:
+    """Did the child just say they finished the step they are on?"""
+    return bool(DONE.search(text))
 
 
 def matched(text: str, chapter: str) -> bool:

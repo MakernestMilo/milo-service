@@ -903,7 +903,17 @@ def run(level_fn, assemble_fn):
         words = cause_words(ch)
         for text, tag in BANK:
             for cname, seen in clocks:
-                turn = Turn(text, ch["key"], seen, 1 if tag == "override" else 0)
+                # BD, M-11. The position is the child's now, and it defaults to step one —
+                # which is right for a child and wrong for this. This asks what the ladder
+                # withholds AT THE FAILURE, so it stands the child where the failure is.
+                #
+                # Left implicit, the default would have made this quieter rather than
+                # redder: at step one the prompt carries 15% less material across the
+                # fourteen chapters, so the rules would have had less to convict and the
+                # harness would have reported the same 0 fail for a worse reason.
+                turn = Turn(text, ch["key"], seen,
+                            1 if tag == "override" else 0,
+                            position=ch["failure"].get("stage", 1))
                 lvl = level_fn(turn)
                 ctx = assemble_fn(turn, lvl)
                 fails = [r for r in (r1(ctx), r2(ctx, words),

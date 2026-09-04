@@ -89,6 +89,16 @@ class Session:
     # and the prompt is 96% cacheable — so cost is not the constraint and the
     # cap below is an engineering guard, never a safety mechanism.
     turns: list = field(default_factory=list)
+    # BD. The child's position in the chapter, 1-based, starting at one because
+    # scanning the card is a child deciding to begin. Until M-11 the assembler
+    # substituted failure["stage"] for this, so every session in the project's
+    # history was served as though six steps were behind it.
+    position: int = 1
+    # BI. Set once, on the first turn of a session that is a returning scan —
+    # a session id whose record survives but whose session has expired. Nothing
+    # is served from it yet: the question Milo asks is the architect's to write.
+    returning: bool = False
+    asked_position: bool = False
 
 
 class MemoryStore:

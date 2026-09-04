@@ -181,6 +181,13 @@ def advance(session: Session, text: str) -> runtime.Turn:
             session.absent_seconds += gap
     session.last_turn_at = now
 
+    # BD. The position advances only on what the child says, one step at a
+    # time, and never past the last. Nothing else moves it — not the clock, not
+    # the rung, not a guess from the reply.
+    stages = len(corpus.BY_KEY[session.chapter]["stages"])
+    if runtime.advanced(text) and session.position < stages:
+        session.position += 1
+
     if runtime.OVERRIDE.search(text):
         session.direct_asks += 1
     if session.failure_seen_at is None and runtime.matched(text, session.chapter):
@@ -193,7 +200,9 @@ def advance(session: Session, text: str) -> runtime.Turn:
     return runtime.Turn(text, session.chapter, session.failure_seen_at,
                         session.direct_asks, session.absent_seconds,
                         tuple(t["said"] for t in session.turns
-                              if t["who"] == "child"))
+                              if t["who"] == "child"),
+                        position=session.position,
+                        returning=session.returning)
 
 
 class ModelUnavailable(RuntimeError):
@@ -537,7 +546,16 @@ async def turn(payload: TurnRequest):
                 status_code=400,
                 content={"detail": "A new session must name its chapter."},
             )
-        session = Session(chapter=payload.chapter)
+        # BI. A session id whose record survives but whose session has expired
+        # is a returning scan, not a first one. The store already carried this
+        # fact and nobody had asked it: the record outlives the session by
+        # thirty days precisely so a transcript can be read afterwards, and
+        # that makes it the evidence that this id has been here before.
+        #
+        # Its limit, stated: beyond thirty days a return reads as a first scan.
+        # No new key is added to learn something the store already knows.
+        session = Session(chapter=payload.chapter,
+                          returning=bool(SESSIONS.record(payload.session)))
     elif payload.chapter and payload.chapter != session.chapter:
         # The child moved on. The clock belongs to the failure they were
         # looking at, so it does not follow them into the next chapter.
@@ -596,6 +614,8 @@ async def turn(payload: TurnRequest):
             "prompt": ctx.stage["prompt"],      # what was assembled this turn
             "history": [dict(m) for m in prior],  # as the model received it
             "history_turns": len(kept),
+            "position": session.position,
+            "returning": session.returning,
             "clock": {
                 "elapsed": runtime.elapsed(turn),
                 "failure_seen_at": session.failure_seen_at,

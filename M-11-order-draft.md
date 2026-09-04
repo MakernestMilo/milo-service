@@ -207,9 +207,26 @@ redirect, not a refusal.
 of bits in here* and *what is an ohm* are the two cases, and they are the same
 case. Whether `TEACH` is served is the mechanism question this closes.
 
-**W7 · R10 gains the child's situation as a scored subject, or its ruling is
-narrowed to the machine and says so** — **measured after item 1 lands**, with
-the pre-fix rate from M-10 stated beside the post-fix rate.
+**W7 · R10's subject is resolved, in one of three forms.** Two were written
+before step 02; the third is what step 02's detector produced and neither of us
+had written down.
+
+1. **R10 gains the child's situation as a scored subject**, or
+2. **its ruling is narrowed to the machine and says so**, or
+3. **the subject is real and not machine-scoreable, and the honest instrument
+   is a person with a fixture.**
+
+The third is not a failure to build the first. It is a finding with a number
+behind it: step 02's detector disagreed with a person on **31% of seventy
+replies, every disagreement a missed assertion**, because the claim can be
+carried by an adverb (*you're **actually** on step 5*), by a modal (*the body
+should **already be** clipped on*) or by a bare imperative with no subject at
+all (*hold your hand near the sensor*). **All seven R10 families match
+propositions.** A claim with no propositional form has nothing for them to
+match.
+
+**Measured after item 1 lands**, with the pre-fix rate from M-10 and step 02
+stated beside the post-fix rate.
 
 **W8 · Carry-forward has a fixture built from a real conversation**, M-10's
 transcript and the not-started openers, and the three named behaviours are

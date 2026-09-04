@@ -114,7 +114,17 @@ def _surfaces(key):
     current step cannot see that, and in M-07 it did not.
     """
     f = corpus.BY_KEY[key]["failure"]
-    prompt = assembler.assemble(Turn(f["says"][0], key, None, 0), "L0").stage["prompt"]
+    # BD, M-11. The position is the child's now, and it defaults to step one —
+    # which is right for a child and wrong for this. This asks what the ladder
+    # withholds AT THE FAILURE, so it stands the child where the failure is.
+    #
+    # Left implicit, the default would have made this quieter rather than
+    # redder: at step one the prompt carries 15% less material across the
+    # fourteen chapters, so the rules would have had less to convict and the
+    # harness would have reported the same 0 fail for a worse reason.
+    prompt = assembler.assemble(
+        Turn(f["says"][0], key, None, 0, position=f.get("stage", 1)),
+        "L0").stage["prompt"]
     current = re.search(r"CURRENT STEP .*?\n(.*?)\n\n", prompt, re.S).group(1)
     done = re.search(r"^STEPS THEY HAVE ALREADY FINISHED.*?(?=\n\n)",
                      prompt, re.M | re.S)

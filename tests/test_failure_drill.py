@@ -54,10 +54,44 @@ def milo_answered(response):
         main.ModelUnavailable("the response carried no text"))),
 ])
 def test_the_bank_answers_however_the_model_fails(how, broken, monkeypatch):
+    """The assertion is on the mechanism, not on a memorised sentence.
+
+    It used to name chapter 01's step 07 text, and BD moved what the bank says
+    without moving whether it says anything: a fresh session is at step one, so
+    the floor is step one's instruction. That is the bank doing its stated job
+    — *the floor is the current step's instruction* — against a current step
+    that is now genuinely the child's.
+    """
     monkeypatch.setattr(main, "call_model", broken)
     r = a_turn(f"drill-{how}")
     assert milo_answered(r), how
-    assert r.json()["reply"].startswith("Leave the machine running"), how
+    first = " ".join(corpus.BY_KEY["01"]["stages"][0]["do"])
+    assert r.json()["reply"].startswith(first[:40]), how
+
+
+def test_the_bank_follows_the_child_and_the_failures_material_does_not():
+    """W3's second clause, corrected by measurement.
+
+    The order said *the bank still serves the failure's stage*. It does not and
+    should not: the stage instructions the bank floors on are the child's
+    current step. What does still come from the failure is the failure's own
+    material — the ask, the region, the fix — and that is gated by the rung,
+    not by the position. The two were conflated when W3 was written.
+    """
+    import assembler
+    import runtime
+    f = corpus.BY_KEY["01"]["failure"]
+    at_one = assembler.assemble(runtime.Turn("x", "01", None, 0, position=1), "L3")
+    at_fail = assembler.assemble(
+        runtime.Turn("x", "01", None, 0, position=f["stage"]), "L3")
+
+    # the instructions follow the child
+    assert at_one.stage["instructions"] != at_fail.stage["instructions"]
+    assert at_one.stage["instructions"] == corpus.BY_KEY["01"]["stages"][0]["do"]
+    # the failure's material does not
+    assert at_one.ask == at_fail.ask == f["ask"]
+    assert at_one.region == at_fail.region == f["region"]
+    assert at_one.fix == at_fail.fix == f["fix"]
 
 
 def test_the_bank_speaks_for_every_chapter_at_every_rung():
