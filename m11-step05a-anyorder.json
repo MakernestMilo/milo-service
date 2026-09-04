@@ -1,0 +1,260 @@
+{
+ "host": "https://milo-service.onrender.com",
+ "build": "19b1369",
+ "probe": "What is the board? Why do we even need a microcontroller?",
+ "n": 5,
+ "calls": [
+  {
+   "chapter": "11",
+   "run": 1,
+   "session": "m11s05a-11-1788530825-0",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the little computer on the green rectangle \u2014 it holds your instructions, reads whatever the sensor tells it, and decides what to do about it. You need it because a switch just reacts, but the board can compare a reading against a rule and act on the answer, even when nobody's watching.\n\nRight now you're at Open \u2014 go ahead and wake the machine up and tell me what you actually see happening.",
+   "level": "L0",
+   "latency_seconds": 3.488,
+   "claimed_on_the_machine": 18,
+   "opened_by_this_chapter": 0,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board",
+     "switch"
+    ],
+    "parts_named_from_the_box_set": []
+   },
+   "read_by_a_person": {
+    "board_as_theirs": false,
+    "asserts_progress": false,
+    "asks_if_they_have": false
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 2,
+   "session": "m11s05a-11-1788530825-1",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the microcontroller \u2014 a tiny computer that reads its inputs, does the arithmetic on them, and drives its outputs, over and over, for as long as it has power. You need it because the machine has to decide something while nobody's watching \u2014 like whether a reading has crossed a line you set \u2014 and it can only do that by comparing numbers against a rule someone wrote.\n\nRight now you're at Open \u2014 the machine should be awake. What do you actually see happening on it?",
+   "level": "L0",
+   "latency_seconds": 4.096,
+   "claimed_on_the_machine": 18,
+   "opened_by_this_chapter": 0,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board"
+    ],
+    "parts_named_from_the_box_set": []
+   },
+   "read_by_a_person": {
+    "board_as_theirs": false,
+    "asserts_progress": false,
+    "asks_if_they_have": false
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 3,
+   "session": "m11s05a-11-1788530825-2",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the small green computer in this build \u2014 it holds your instructions, reads whatever the sensors tell it, does the arithmetic, and decides what the outputs should do. You need it because a plain wire just reacts, but here the machine has to compare a reading against a rule and make a decision while nobody's watching.\n\nRight now you're on step 01, Open \u2014 you've woken the machine up. What's it actually doing, or not doing, in front of you?",
+   "level": "L0",
+   "latency_seconds": 4.495,
+   "claimed_on_the_machine": 18,
+   "opened_by_this_chapter": 0,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board"
+    ],
+    "parts_named_from_the_box_set": []
+   },
+   "read_by_a_person": {
+    "board_as_theirs": true,
+    "asserts_progress": true,
+    "asks_if_they_have": false
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 4,
+   "session": "m11s05a-11-1788530825-3",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is that green rectangle sitting in the middle of everything \u2014 it's basically a tiny computer that runs your instructions, reads whatever the sensors tell it, and decides what to do next. You need it because the machine has to make decisions while nobody's watching, like comparing a reading to a rule and acting on the answer, which a plain wire or switch can't do on its own.\n\nRight now you're at Open \u2014 you've just powered the machine up. What are you seeing it do, or not do?",
+   "level": "L0",
+   "latency_seconds": 4.094,
+   "claimed_on_the_machine": 18,
+   "opened_by_this_chapter": 0,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board",
+     "switch"
+    ],
+    "parts_named_from_the_box_set": []
+   },
+   "read_by_a_person": {
+    "board_as_theirs": true,
+    "asserts_progress": true,
+    "asks_if_they_have": false
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 5,
+   "session": "m11s05a-11-1788530825-4",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the green rectangle \u2014 it's a tiny computer that reads whatever's plugged into it, does some thinking, and tells the outputs what to do. You need it because a switch just reacts, but this machine has to make a decision on its own while nobody's watching \u2014 comparing a reading against a rule someone wrote in.\n\nRight now you're at Open, step one \u2014 the machine should be waking up and doing something. What are you actually seeing happen when you look at it?",
+   "level": "L0",
+   "latency_seconds": 4.465,
+   "claimed_on_the_machine": 18,
+   "opened_by_this_chapter": 0,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board",
+     "switch"
+    ],
+    "parts_named_from_the_box_set": []
+   },
+   "read_by_a_person": {
+    "board_as_theirs": false,
+    "asserts_progress": false,
+    "asks_if_they_have": false
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 1,
+   "session": "m11s05a-01-1788530825-0",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the green rectangle in your row \u2014 it's the microcontroller, basically the brain of the whole thing. You need it because something has to actually read the sensor's number and decide what to do with it while nobody's watching, rather than just reacting like a plain switch would.\n\nRight now though, you're just laying parts out for step 01 \u2014 have you got all eight sitting in front of you where you can see them?",
+   "level": "L0",
+   "latency_seconds": 3.911,
+   "claimed_on_the_machine": 8,
+   "opened_by_this_chapter": 8,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board"
+    ],
+    "parts_named_from_the_box_set": [
+     "switch"
+    ]
+   },
+   "read_by_a_person": {
+    "board_as_theirs": true,
+    "asserts_progress": false,
+    "asks_if_they_have": true
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 2,
+   "session": "m11s05a-01-1788530825-1",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is that green rectangle you're looking at \u2014 it's the microcontroller, basically the brain of the whole thing. You need it because something has to make decisions while nobody's watching: your sensor A just turns warmth into a number, but the board is what actually reads that number and decides what to do about it.\n\nRight now, though, you're on step 01 \u2014 have you got all eight parts laid out in front of you where you can see them?",
+   "level": "L0",
+   "latency_seconds": 3.874,
+   "claimed_on_the_machine": 8,
+   "opened_by_this_chapter": 8,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board",
+     "sensor A"
+    ],
+    "parts_named_from_the_box_set": []
+   },
+   "read_by_a_person": {
+    "board_as_theirs": true,
+    "asserts_progress": false,
+    "asks_if_they_have": true
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 3,
+   "session": "m11s05a-01-1788530825-2",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the microcontroller \u2014 the small green computer that runs your instructions and does the arithmetic for the machine. You need one because the machine has to decide something while nobody's watching: it reads a sensor, compares that number against a rule, and acts on the answer, which a plain switch could never do. Right now you're on step 01, laying all eight parts out in a row \u2014 have you got the board out and in front of you yet?",
+   "level": "L0",
+   "latency_seconds": 4.692,
+   "claimed_on_the_machine": 8,
+   "opened_by_this_chapter": 8,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board"
+    ],
+    "parts_named_from_the_box_set": [
+     "switch"
+    ]
+   },
+   "read_by_a_person": {
+    "board_as_theirs": false,
+    "asserts_progress": false,
+    "asks_if_they_have": true
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 4,
+   "session": "m11s05a-01-1788530825-3",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the microcontroller \u2014 a small computer on a single piece of plastic. It holds your instructions, reads whatever's plugged into it, does the maths, and drives whatever it's supposed to control, immediately, for as long as it has power.\n\nYou need one because the machine has to decide something while nobody's watching \u2014 a plain switch just reacts, but the board can compare a reading against a rule you wrote and act on the answer. Right now though, you're on step 01 \u2014 have you got all eight parts laid out where you can see them?",
+   "level": "L0",
+   "latency_seconds": 5.304,
+   "claimed_on_the_machine": 8,
+   "opened_by_this_chapter": 8,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board"
+    ],
+    "parts_named_from_the_box_set": [
+     "switch"
+    ]
+   },
+   "read_by_a_person": {
+    "board_as_theirs": false,
+    "asserts_progress": false,
+    "asks_if_they_have": true
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 5,
+   "session": "m11s05a-01-1788530825-4",
+   "probe": "What is the board? Why do we even need a microcontroller?",
+   "reply": "The board is the green rectangle in front of you \u2014 the small computer that runs your instructions and does the arithmetic. You need one because the machine has to decide something on its own, without you watching it: it takes a reading, compares it to a rule, and acts on the answer, instead of just reacting like a plain switch would.\n\nRight now you're on step 01, laying all eight parts out in a row \u2014 have you got the board and the rest of them out where you can see them?",
+   "level": "L0",
+   "latency_seconds": 4.996,
+   "claimed_on_the_machine": 8,
+   "opened_by_this_chapter": 8,
+   "detector": {
+    "treats_it_as_the_childs": false,
+    "says_unopened": false,
+    "parts_named_from_the_machine_set": [
+     "board"
+    ],
+    "parts_named_from_the_box_set": [
+     "switch"
+    ]
+   },
+   "read_by_a_person": {
+    "board_as_theirs": true,
+    "asserts_progress": false,
+    "asks_if_they_have": true
+   }
+  }
+ ]
+}
