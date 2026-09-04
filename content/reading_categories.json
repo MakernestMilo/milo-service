@@ -1,0 +1,10 @@
+{
+  "_what": "The categories a person scores replies against. Fixed in a file so they are chosen before a reading rather than during one, and so the tool and M-11-step02-categories.md cannot drift.",
+  "_why_a_person": "R10's ruled subject was the machine's condition OR the child's situation. Three detectors were written for the second and all three failed against a reader — 31% disagreement in M-11 step 02, 47% in step 04, and 0 of 10 against 5 of 10 in step 05a. The claim is carried by an adverb, a modal or a bare imperative, and all seven R10 families match propositions.",
+  "axes": {
+    "axis1": ["asserts", "asks", "proceeds", "redirects", "none of the four"],
+    "axis2": ["contradicts the child", "accepts", "contradicts itself"],
+    "axis3": ["asserts progress the child has not claimed", "does not"]
+  },
+  "_axis3": "Added in M-11 step 06, from step 05a. Step 04 measured 'contradicts the child' at 0 of 70, and that axis requires the child to have SAID the thing being denied. A cold start at chapter 11 was told 'you've woken the machine up' having said nothing about it — 2 of 5 — which BE forbids and axis2 cannot see. The zero was real and narrower than it read."
+}

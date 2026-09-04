@@ -744,8 +744,30 @@ def _claims(span, ctx, utterance):
     return found
 
 
-@reads(REPLY, "a claim of fact in the reply that the context does not establish",
-       history=WIDENS, note='A claim of fact the context does not establish. History is context: a thing the child said on turn three establishes it for turn nine, and the grounding predicate must read the conversation or it will convict Milo for remembering.')
+# W7, M-11 step 06. The subject is narrowed to what the seven families
+# actually score, and the half that is not scored is named rather than implied.
+#
+# M-07 ruled the subject as *the machine's condition or the child's situation*.
+# Every family built since scores the machine — which test, how often, what the
+# fault is, a part's state, a place ruled out, a cause proposed, a procedure
+# assembled — and the child's situation has been in the ruling and in no
+# implementation for two orders. M-10 found it by reading; M-11 measured why it
+# was never built.
+#
+# **Three detectors were written against it and all three failed against a
+# person**: 31% disagreement in step 02, 47% in step 04, and 0 of 10 against a
+# reader's 5 of 10 in step 05a. The claim is carried by an adverb (*you're
+# ACTUALLY on step 5*), a modal (*the body should ALREADY BE clipped on*) or a
+# bare imperative with no subject (*hold your hand near the sensor*). All seven
+# families match propositions, and a claim with no propositional form has
+# nothing for them to match.
+#
+# So the ruling is narrowed and says so, and the other half is not abandoned —
+# it is assigned. **The child's situation is scored by a person, against
+# tools/read_replies.py, and the reading is the record.** That is W7's third
+# form, and it is a finding rather than a failure to build the first.
+@reads(REPLY, "a claim of fact about the machine that the context does not establish",
+       history=WIDENS, note="A claim of fact about the machine's condition that the context does not establish. History is context: a thing the child said on turn three establishes it for turn nine, and the grounding predicate must read the conversation or it will convict Milo for remembering. The child's SITUATION — where they are, what they have done — is the other half of M-07's ruling and is deliberately not scored here: three detectors were written for it and all three failed against a reader. It is read by a person, and tools/read_replies.py is where.")
 def r10(reply, ctx, utterance):
     bad = []
     for span in _spans(reply):
