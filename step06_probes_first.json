@@ -1,0 +1,355 @@
+{
+ "host": "https://milo-service.onrender.com",
+ "build": "901b0ed",
+ "head": "ref: refs/heads/m10-step05-production",
+ "n": 5,
+ "calls": [
+  {
+   "label": "Why three wires",
+   "says": "Why are there three wires, and why does the black one matter?",
+   "session": "probe-1788494112-0-Whyth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 4.991,
+   "reply": "Three wires because the sensor needs three different jobs done \u2014 one carries power in, one carries the reading out, and the black one carries it back home so the circuit actually completes. Without a way home, the electricity has nowhere to go and nothing works, even if the other two are perfect. Right now you're on the pull-the-yellow-wire step \u2014 has the number on the display done anything since you pulled it?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "back",
+     "carries",
+     "circuit",
+     "out",
+     "power",
+     "pull",
+     "sensor",
+     "two",
+     "works"
+    ],
+    "of": 16,
+    "fraction": 0.56
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Why three wires",
+   "says": "Why are there three wires, and why does the black one matter?",
+   "session": "probe-1788494117-1-Whyth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 4.065,
+   "reply": "Three jobs, three wires: red brings power to sensor A, yellow carries the reading back, and black gives the current a way home to the board \u2014 without it the circuit isn't actually a loop, just a dead end. Right now you're on step 07, pulling the yellow one out on purpose \u2014 has the display changed since you did that?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "back",
+     "carries",
+     "circuit",
+     "out",
+     "power",
+     "sensor"
+    ],
+    "of": 16,
+    "fraction": 0.38
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Why three wires",
+   "says": "Why are there three wires, and why does the black one matter?",
+   "session": "probe-1788494121-2-Whyth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 4.109,
+   "reply": "Three wires because the sensor needs three jobs done: red brings it power, yellow carries the reading back, and black is the way home \u2014 a circuit only works if the electricity has a path back to where it started, and that's the black wire's whole job. Right now, where are you in the step \u2014 have you pulled the yellow wire yet?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "back",
+     "carries",
+     "circuit",
+     "power",
+     "sensor",
+     "works"
+    ],
+    "of": 16,
+    "fraction": 0.38
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Why three wires",
+   "says": "Why are there three wires, and why does the black one matter?",
+   "session": "probe-1788494125-3-Whyth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 3.596,
+   "reply": "Good question \u2014 three wires because the sensor needs three different jobs done at once: one carries power in, one is the path back out, and one carries the actual reading. The black one is that path back out \u2014 a circuit only works if the electricity has a way home, otherwise nothing flows at all.\n\nYou're on the \"break it on purpose\" step right now \u2014 have you pulled the yellow wire out yet?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "back",
+     "carries",
+     "circuit",
+     "out",
+     "power",
+     "sensor",
+     "works"
+    ],
+    "of": 16,
+    "fraction": 0.44
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Why three wires",
+   "says": "Why are there three wires, and why does the black one matter?",
+   "session": "probe-1788494128-4-Whyth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 4.937,
+   "reply": "Three wires because the sensor needs three different jobs done: the red one brings power in, the yellow one carries the reading out, and the black one is ground \u2014 the path the current takes back home to finish the circuit. Without ground, the signal has nowhere to complete its loop, so the reading won't work right even with power and signal connected.\n\nYou're at the \"break it on purpose\" step now \u2014 have you pulled the yellow wire yet, and what's the display doing?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "back",
+     "carries",
+     "circuit",
+     "ground",
+     "out",
+     "power",
+     "sensor"
+    ],
+    "of": 16,
+    "fraction": 0.44
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "What is an ohm",
+   "says": "What is an ohm, and why would I need a resistor?",
+   "session": "probe-1788494133-0-Whati",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 3.33,
+   "reply": "That's a real question, but it's outside what we're doing with this build \u2014 this kit doesn't use one, so we won't run into it here. Right now you're on \"break it on purpose\" \u2014 has the number on the display stopped moving yet, after you pulled the yellow wire?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "number"
+    ],
+    "of": 19,
+    "fraction": 0.05
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "What is an ohm",
+   "says": "What is an ohm, and why would I need a resistor?",
+   "session": "probe-1788494137-1-Whati",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 6.065,
+   "reply": "That's a good question for another day, but it's not something this kit has us using here \u2014 let's stay with what's in front of you. You're on \"break it on purpose\" \u2014 is the machine still running with the number showing right now?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "number"
+    ],
+    "of": 19,
+    "fraction": 0.05
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "What is an ohm",
+   "says": "What is an ohm, and why would I need a resistor?",
+   "session": "probe-1788494143-2-Whati",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 3.483,
+   "reply": "Good question, but there's no resistor in this box, so it's not something you'll run into here. Right now you're on \"Break it on purpose\" \u2014 the machine should still be running with the yellow wire pulled out. What's the display doing?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "out"
+    ],
+    "of": 19,
+    "fraction": 0.05
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "What is an ohm",
+   "says": "What is an ohm, and why would I need a resistor?",
+   "session": "probe-1788494146-3-Whati",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 7.194,
+   "reply": "That's a good question for another day's kit \u2014 this build doesn't use a resistor at all, so you won't need one here. Right now you're on \"break it on purpose\" \u2014 have you pulled the yellow wire out yet and watched the display?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "out"
+    ],
+    "of": 19,
+    "fraction": 0.05
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "What is an ohm",
+   "says": "What is an ohm, and why would I need a resistor?",
+   "session": "probe-1788494154-4-Whati",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 4.044,
+   "reply": "Ohm is just the unit for how much something resists electricity flowing through it \u2014 but there's no resistor in this box, so it's not something you need here. Right now you're on \"break it on purpose\": the machine should be running, so what does the display show at this exact second?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": {
+    "shared": [
+     "ohm",
+     "through",
+     "unit"
+    ],
+    "of": 19,
+    "fraction": 0.16
+   },
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Something you won't know",
+   "says": "How many amps does the board draw when the buzzer is on?",
+   "session": "probe-1788494158-0-Someth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 2.453,
+   "reply": "The buzzer isn't part of this build yet \u2014 it's still in the box for a later chapter, so there's no reading on it to give. Right now, are you at the part where you pull the yellow wire and watch the display?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": null,
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Something you won't know",
+   "says": "How many amps does the board draw when the buzzer is on?",
+   "session": "probe-1788494160-1-Someth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 2.34,
+   "reply": "The buzzer isn't part of this build yet \u2014 it's still in the box for a later chapter, and this kit only ever runs off the USB cable anyway. Right now, are you at the part where you pull the yellow wire and watch the display?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": null,
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Something you won't know",
+   "says": "How many amps does the board draw when the buzzer is on?",
+   "session": "probe-1788494162-2-Someth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 2.255,
+   "reply": "The buzzer isn't part of this build yet \u2014 it's still in the box for a later chapter, and this kit only ever runs off the USB cable anyway. Right now you're on \"break it on purpose\" \u2014 have you pulled the yellow wire out yet and watched the display?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": null,
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Something you won't know",
+   "says": "How many amps does the board draw when the buzzer is on?",
+   "session": "probe-1788494165-3-Someth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 2.065,
+   "reply": "The buzzer isn't part of this build yet \u2014 it's still in the box for a later chapter, so there's nothing wired to it right now. Right now you're on step 07, pulling the yellow wire while the machine runs \u2014 what's the display doing?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": null,
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  },
+  {
+   "label": "Something you won't know",
+   "says": "How many amps does the board draw when the buzzer is on?",
+   "session": "probe-1788494167-4-Someth",
+   "build": "901b0ed",
+   "level": "L0",
+   "turns": 0,
+   "latency_seconds": 2.392,
+   "reply": "The buzzer isn't part of this build yet \u2014 it's still in the box for a later chapter, so there's nothing to measure there right now. Right now you're at \"break it on purpose\" \u2014 have you pulled the yellow wire out and watched the display yet?",
+   "r10": null,
+   "r10_detail": [],
+   "r10_set": null,
+   "teach": null,
+   "names_a_current": false,
+   "says_origins_studio": false,
+   "from_the_bank": false
+  }
+ ]
+}
