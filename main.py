@@ -31,7 +31,18 @@ import store
 from store import Session
 
 
-app = FastAPI()
+# M-10 carried item 7. The schema and its two viewers are off.
+#
+# The panel's 404-rather-than-403 exists so that whoever finds the route learns
+# nothing from it. FastAPI's defaults published `/panel/{token}` and
+# `/panel/{token}/{session_id}` by name at /openapi.json, /docs and /redoc,
+# while a step 04 test asserted the child's page carried no `/panel` string.
+# The test was right about the page; the page was never how anyone would find
+# it.
+#
+# Nothing was ever readable without the token. What was published was the shape
+# of the door.
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 
 logging.basicConfig(

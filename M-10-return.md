@@ -178,7 +178,11 @@ the child's page carried no `/panel` string.** The test was right about the
 page and the page was never how anyone would find it.
 
 One line — `FastAPI(docs_url=None, redoc_url=None, openapi_url=None)` — and it
-is not taken here, because M-10 closes on the reading.
+**is** taken, on the architect's ruling at close: it re-earns nothing and the
+reason to defer during the order had gone. The test asserts the routes are not
+mounted rather than that they 404, because a 404 from a route that exists and
+a 404 from one that was never mounted look identical from outside, and only
+one of them survives someone re-enabling the schema to debug something.
 
 ---
 
