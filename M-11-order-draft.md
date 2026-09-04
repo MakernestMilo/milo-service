@@ -1,4 +1,4 @@
-# M-11 · the order — **engineer's draft**
+# M-11 · the order
 
 Written against `main` at `6a4251a` — 7,616 checks · 0 fail · 514 tests · the
 fourteen openers landed — and against `M-10-carried.md`.
@@ -12,8 +12,14 @@ lettered **W**.
 > entry below is marked *proposed* and none of them is in force.** The steps,
 > the measurements and what each closes are the engineer's and are not marked.
 >
-> **Item 1's product questions are in neither column.** They are the third
-> position's, and they are stated here without an answer.
+> **Taken as the order.** BD to BG adopted, C-34 to C-38 numbered, **BI ruled**
+> in its second form, BH proposed and standing. The one sentence still to be
+> authored is BI's question, written after step 01.
+>
+> **Previously:** BD, BE, BF and BG are adopted;
+> C-34 to C-38 are numbered. BH and BI are new and proposed. Item 1's product
+> question is answered by BD — the card carries the position — and what is left
+> of it is BI, which is stated here with its two forms and without a ruling.
 
 ---
 
@@ -29,6 +35,29 @@ is touched.
 4. **R10's subject** names the child's situation and no family scores it
 5. **Teaching a child who does not have the vocabulary** — the ohm refusal and
    *loads of bits in here*, ruled one item
+
+### Two things a child meets, and neither came from a rule
+
+**A fifth of the book expires mid-build, by design.** Sessions live six hours.
+Chapter 07 is authored *40 min + 7 days*; D and G are *Three sessions*. **The
+store's lifetime is shorter than the authored duration of three of the fourteen
+chapters, and the card says so.** BI.
+
+**Eighteen parts are served to a child at Sabotage who has opened none.**
+`part_sets()` builds the working set cumulatively by shelf order, so a child
+who starts anywhere but chapter 01 is told they have parts they have never
+opened. BH.
+
+| a child starting at | told they have | never opened by them | opened here |
+|---|---|---|---|
+| 02 | 10 | 8 | 2 |
+| 06 | 15 | 12 | 3 |
+| 09 | 16 | 15 | 1 |
+| 11 · 12 · G | **18** | **18** | **0** |
+
+Neither was found by a rule, a check or a harness. One came from reading the
+times on the cards and one from reading a function, and both are statements
+about what a child meets.
 
 **What is not in it:** bare `sensor` resolving through plain sense rather than
 the table. That is routing, not teaching, and it belongs with the alias
@@ -57,36 +86,74 @@ forward has to survive.
 
 ---
 
-## Decisions · **all proposed, none in force**
+## Decisions
 
-**BD · proposed · A session carries the child's position, and the assembler
-stops substituting a corpus constant for it.**
-`failure["stage"]` keeps its own job — selecting the stage whose instructions
-the bank serves. What it stops doing is standing in for a value the `Session`
-has never had. **Where the position comes from is not decided here.**
+**BD · A session carries the child's position, and it comes from the card.**
+Scanning the QR is a child deciding to begin that chapter, so **a fresh session
+starts at step one** — not unknown, and not a corpus constant. The position
+updates from what the child says. `failure["stage"]` keeps its own job,
+selecting the stage whose instructions the bank serves; what it stops doing is
+standing in for a value the `Session` has never had.
 
-**BE · proposed · Before it knows the position, Milo does not assert one.**
-The negative half of item 1, and it is separable from the positive half: not
-asserting is available immediately, and knowing is not. Turn 6 of M-10's
-transcript is the existing evidence that Milo can hold the uncertainty — it
-corrected itself against a prompt that told it otherwise.
+**BE · Milo does not assert progress it has not been told about.**
+Under BD there is no moment where Milo lacks a position, so this is not about
+the opening. It governs everything after it: the position advances on what the
+child says, and Milo does not narrate steps as finished on any other evidence.
+Turn 6 of M-10's transcript is the evidence it can hold that — it corrected
+itself against a prompt telling it otherwise.
 
-**BF · proposed · Teaching is not gated by the parts list.**
+**BF · Teaching is not gated by the parts list.**
 A child asking what an ohm is has not asked about a part. A child saying *loads
 of bits in here* has not named one. The guard that answers both — *never name a
 component that is not in the parts list* — was written to stop invention and is
 refusing instruction. **The `TEACH` glossary is the material this decision
 needs and it is currently served to nobody.**
 
-**BG · proposed · Generic child vocabulary is not added to the alias table.**
-The architect's ruling. Mapping *bits*, *pack*, *card shapes* onto specific
-parts is the misroute the uniqueness check exists to prevent — a child saying
-*bits* means all of them. The table maps wrong-names-for-right-parts; this is
-no-name-yet, and it is teaching rather than routing.
+**BG · Generic child vocabulary is not added to the alias table.**
+Mapping *bits*, *pack*, *card shapes* onto specific parts is the misroute the
+uniqueness check exists to prevent — a child saying *bits* means all of them.
+The table maps wrong-names-for-right-parts; this is no-name-yet, and it is
+teaching rather than routing.
+
+**BH · proposed · Chapters may be taken in any order, and `part_sets()`
+assumes they are not.**
+The base board grows and a child may jump; the architect has said so
+explicitly. But `part_sets()` builds the working set cumulatively **by shelf
+order**, so a child who starts anywhere but chapter 01 is told they have parts
+they have never opened. Nothing has ever checked this.
+
+**Measured, in the front matter above.** Six chapters open no parts at all —
+04, 07, D, 11, 12 and G — and the assembler has no way to know a child has
+never seen one.
+
+**This is C-35 again and the fixture that would catch it does not exist
+either**: every fixture in the repository starts a chapter as though the
+thirteen before it had been done.
+
+**BI · Milo asks once, on a session that is not the chapter's first.**
+
+Sessions expire at six hours, so under BD a returning child restarts at step
+one and Milo tells someone four steps in to lay out the kit — the position
+defect mirrored, and created by the fix.
+
+**Raising the TTL cannot reach it.** Seven days of durable session is a
+different product, and it would mean a child who abandons chapter 07 in March
+resumes it in April at the rung they left. The clock has been
+time-in-conversation since AT, so a paused session is not costing rungs.
+**What is missing is only the position, and a child can supply it in one
+turn.**
+
+This needs the store to carry whether a session is the chapter's first, which
+it does not. Small, and the same shape as the position itself — a fact the
+system has never held.
+
+The question is asked **once, on a returning scan, never on a first.** Its
+words are the architect's and are written **after step 01's baseline**, so that
+what Milo does unprompted is known before anything is authored to replace it.
 
 ---
 
-## Register · **all proposed, the architect's to number**
+## Register
 
 **C-34 · A cost measured in isolation is not the cost in the process that pays
 it.** Predict the movement from the process, or predict only the endpoint.
@@ -149,6 +216,16 @@ transcript and the not-started openers, and the three named behaviours are
 each either scored or ruled out of scope by name: a child pleading treated as
 silence, the L4 route surviving into L0, verbatim repetition.
 
+**W10 · The resumption case is in the fixture.** A session that has expired
+and been re-scanned, on a chapter the child was part-way through. Whichever
+form of BI is ruled, **the fixture holds the case before the code does** — that
+is the whole argument of this order applied to the defect it creates itself.
+
+**W11 · A child who starts at a chapter other than 01 is not told they have
+parts they have never opened.** BH, measured before it is judged: the count
+above is what the assembler serves today and the reading is a person's. n=5 on
+at least one chapter that opens nothing.
+
 **W9 · Every published figure is recomputed from the repository**, and every
 prediction is committed in its own commit before the run that reads it. Five
 orders, and every one has had figures corrected on checking.
@@ -167,15 +244,24 @@ each, recorded through the panel. Closes W1. **Nothing is changed first.**
 **02 · The categories, then the count.** W2's outcome set committed, then n=5
 per chapter. Closes W2 and produces the number item 1 is judged against.
 
-**03 · The position.** BD and BE. **The product ruling arrives written before
-this step runs** — where the position comes from, and what Milo says before it
-knows. Closes W3 and W4.
+**03 · The position.** BD, BE and BI. Closes W3, W4 and W10.
+
+The product question the draft carried — *what Milo says before it knows* — is
+answered by BD: there is no such moment. What remains is BI's question, asked
+once on a returning scan. **Its words arrive after step 01**, not before: the
+baseline must show what Milo does unprompted before anything is authored to
+replace it.
 
 **04 · The fixture runs again.** The same fourteen, the same categories, the
 same n. The movement is the result.
 
 **05 · Teaching without the vocabulary.** BF and BG, and the `TEACH` mechanism.
 Closes W5 and W6.
+
+**05a · Any order.** BH. One measurement against a chapter that opens nothing,
+read before it is judged. Closes W11. It is late deliberately — it is the only
+item that does not depend on the position, and it is the only one that could
+turn out to be nothing.
 
 **06 · R10's subject.** Closes W7, and it is deliberately here rather than
 earlier.
