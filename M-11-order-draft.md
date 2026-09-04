@@ -174,6 +174,17 @@ published by `/openapi.json` for the whole of M-10.
 occurring when the defect is fixed.** The sequencing argument above, in the
 register.
 
+**C-39 · The cost of the cause-word question has changed category.** Five
+orders, five disputed words, and until now the price of a false positive was a
+run and one authored sentence. It is now **a child not being told what a
+component in front of them is**: six glossary entries are withheld from six
+chapters on *anything*, *longer*, *happens* and *instead* — words doing no
+work in the sentences that carry them.
+
+The ruling against an exclusion list stands. What changes is what is being
+traded: the question stops being a matter of instrument hygiene and becomes a
+matter of what a child is taught. **Named, not fixed.**
+
 ---
 
 ## Acceptance

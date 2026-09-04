@@ -17,7 +17,31 @@ def _load():
     _fixes(chapters)
     _asks(chapters)
     _removals(chapters)
-    return chapters, withheld, _alias(raw["alias"]), raw["teach"]
+    return chapters, withheld, _alias(raw["alias"]), _teach(raw["teach"])
+
+
+def _teach(teach):
+    """Authored replacements for glossary entries.
+
+    Same shape as the fixes and the asks, and for the same reason: the source
+    stays as ported, the replacement names verbatim what it replaces, and a
+    change under this file fails at load rather than swapping out a sentence
+    that is no longer the one the architect read.
+
+    One entry today. `logging interval` stated chapter 07's withheld cause as
+    a general principle — R2 fired on it in M-11 step 05 and was right — and
+    the discovery belongs in the child's own chart at stage 05, not in a
+    glossary they can read at stage 01.
+    """
+    add = json.loads((CONTENT / "teach_additions.json").read_text(
+        encoding="utf-8"))["replace"]
+    for term, entry in add.items():
+        assert teach.get(term) == entry["was"], (
+            f"glossary {term!r}: the entry in the source is not the one this "
+            f"replacement was written against.\n  source: {teach.get(term)!r}\n"
+            f"  expected: {entry['was']!r}")
+        teach[term] = entry["now"]
+    return teach
 
 
 def _fixes(chapters):

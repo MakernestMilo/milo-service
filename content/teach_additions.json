@@ -1,0 +1,10 @@
+{
+ "_what": "Authored replacements for glossary entries. Same shape as the fixes and the asks: content/corpus.json stays as ported, the replacement names verbatim what it replaces, and a change under this file fails at load rather than swapping a sentence that is no longer the one the architect read.",
+ "replace": {
+  "logging interval": {
+   "_why": "M-11 step 05. R2 fired on this entry for chapter 07 and was right: 'long intervals last for weeks and miss anything short' states that chapter's withheld cause as a principle, and it is what the child is meant to discover by drawing their own chart at stage 05. The architect's rewrite teaches the trade without naming the failure — it is stage 02's own idea, that somebody has to choose how often to write one down, and stage 03 already prints the trade in days.",
+   "was": "How often a reading is written into memory. Short intervals see brief events and fill the memory quickly; long intervals last for weeks and miss anything short. The choice decides what the record can show.",
+   "now": "How often the machine writes a number down. It cannot keep every reading it ever takes, so somebody has to choose the spacing. Close together and you see fine detail across a short spell; far apart and you cover a long spell with less of what happened in between. There is no correct spacing. There is the one you chose, and what it can show you."
+  }
+ }
+}
