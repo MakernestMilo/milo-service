@@ -197,6 +197,12 @@ published by `/openapi.json` for the whole of M-10.
 occurring when the defect is fixed.** The sequencing argument above, in the
 register.
 
+**C-40 · Code that goes missing breaks a test. A measurement that goes missing
+leaves everything green.** M-09's `abe9bae` and M-11's step 04 were both
+pushed, both merged nowhere, and both found because something else needed the
+file. Nothing in a repository asserts that a result is in it — the harness
+passes, the suite passes, and the number the order turns on is on a branch.
+
 **C-39 · The cost of the cause-word question has changed category.** Five
 orders, five disputed words, and until now the price of a false positive was a
 run and one authored sentence. It is now **a child not being told what a
