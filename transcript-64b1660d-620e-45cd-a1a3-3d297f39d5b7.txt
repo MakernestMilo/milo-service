@@ -1,0 +1,48 @@
+# Milo · session 64b1660d-620e-45cd-a1a3-3d297f39d5b7
+# 6 turns
+
+------------------------------------------------------------------------
+turn 1 · 04:49:16 · rung L0 · clock Nones · asks 0 · absent 0s · history 0 · the model · in 3566 out 180
+
+  the child   Ok i will build a machine
+
+  milo        Good — you're already partway in, at the "break it on purpose" step. Right now the machine should be running with the display showing a number — what does the display say before you touch anything?
+
+------------------------------------------------------------------------
+turn 2 · 04:49:36 · rung L0 · clock Nones · asks 0 · absent 0s · history 2 · the model · in 3627 out 145
+
+  the child   What is this origin box
+
+  milo        MakerNest Origins is the kit you're building from — this chapter is called First Light, and in it you're making a machine that measures how warm the room is. It comes with a base, a board (the brain), a temperature sensor, a display, some wires, and a USB cable to power it all, plus a few parts for later builds still sitting in the box.
+
+You're on step 7, "Break it on purpose" — the machine should already be running with a number on the display. What does it say right now?
+
+------------------------------------------------------------------------
+turn 3 · 04:49:58 · rung L0 · clock Nones · asks 0 · absent 0s · history 4 · the model · in 3784 out 138
+
+  the child   Very nice , what are my steps
+
+  milo        You've already done the first six — laying everything out, mounting the board, wiring the sensor, getting your first reading, and hunting for readings around the room. Right now you're on step 7, "Break it on purpose," where the machine stays running and you watch what happens when you pull one wire loose.
+
+Is the display showing a number right now, before you touch anything?
+
+------------------------------------------------------------------------
+turn 4 · 04:50:16 · rung L0 · clock Nones · asks 0 · absent 0s · history 6 · the model · in 3903 out 48
+
+  the child   I havent done it yet
+
+  milo        That's fine, nothing's wrong yet. Look at the machine now — is the display lit up and showing a number?
+
+------------------------------------------------------------------------
+turn 5 · 04:50:31 · rung L0 · clock Nones · asks 0 · absent 0s · history 8 · the model · in 3947 out 67
+
+  the child   No i connot see
+
+  milo        Okay — do you mean the display is dark, or it's lit up but you can't read the number on it?
+
+------------------------------------------------------------------------
+turn 6 · 04:50:50 · rung L0 · clock Nones · asks 0 · absent 0s · history 10 · the model · in 3990 out 98
+
+  the child   No everything is still inside the box
+
+  milo        Ah, got it — nothing's built yet. Open the box and find the base, the board, the sensor, the display, and the wires — that's step one, laying everything out where you can see it all.
