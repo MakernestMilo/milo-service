@@ -71,15 +71,29 @@ def test_the_withhold_list_is_in_step_with_the_rule():
 
 
 def test_the_cost_of_the_gate_is_small_and_visible():
-    """Ten pairs withheld across six chapters, of which two earn it. Asserted
-    so that a change to the stopwords shows up as a number moving rather than
-    as entries quietly disappearing from children's prompts."""
+    """Seven pairs withheld across six chapters, of which **one** earns it.
+    Asserted so that a change to the stopwords shows up as a number moving
+    rather than as entries quietly disappearing from children's prompts."""
     pairs = sum(len(v) for v in WITHHELD.values())
-    assert pairs == 10, f"{pairs} entry-chapter pairs are now withheld"
+    assert pairs == 7, f"{pairs} entry-chapter pairs are now withheld"
     assert set(WITHHELD) == {"03", "05", "07", "09", "10", "12"}
-    # the two that earn it
-    assert "logging interval" in WITHHELD["07"]
+    # the one that earns it
     assert "why three wires" in WITHHELD["05"]
+    # and the one that did, until it was rewritten rather than withheld
+    assert "logging interval" not in WITHHELD.get("07", {})
+
+
+def test_the_rewritten_entry_is_served_to_the_chapter_it_was_withheld_from():
+    """C-39's other half. The architect rewrote `logging interval` so it
+    teaches the trade without naming chapter 07's failure, which is what the
+    child discovers from their own chart at stage 05. The test is that 07 now
+    gets it — a gate that stayed shut would have made the rewrite pointless."""
+    assert "- logging interval:" in prompt("07")
+    for key in corpus.BY_KEY:
+        assert "- logging interval:" in prompt(key), key
+    entry = corpus.TEACH["logging interval"]
+    assert "miss anything short" not in entry
+    assert "There is no correct spacing" in entry
 
 
 def test_the_glossary_is_an_addition_and_not_a_subtraction():
