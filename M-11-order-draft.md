@@ -88,12 +88,35 @@ forward has to survive.
 
 ## Decisions
 
-**BD · A session carries the child's position, and it comes from the card.**
-Scanning the QR is a child deciding to begin that chapter, so **a fresh session
-starts at step one** — not unknown, and not a corpus constant. The position
-updates from what the child says. `failure["stage"]` keeps its own job,
-selecting the stage whose instructions the bank serves; what it stops doing is
-standing in for a value the `Session` has never had.
+**BD · The position is a property of the machine on the table, and only the
+child can say what it is.**
+
+*Amended after step 05a, and the source is the kit's real setting.* This kit
+lives in a library or a lab: several children, months apart, the board
+dismantled and rebuilt, and one child continuing a build another started. So
+the position belongs to the **physical machine**, not to the session and not to
+the card. **The scan says which chapter. Nothing says what is already built.**
+
+The original ruling stands where it was right: `failure["stage"]` keeps its own
+job, the position is carried by the session rather than substituted from the
+corpus, and it advances on what the child says. What changes is its source.
+*A fresh session starts at step one* was the card's best guess and is wrong in a
+library — a child sitting down at a half-built machine is at neither step one
+nor a step anything can infer.
+
+**Two consequences, carried rather than built.**
+
+**BD-i · Milo has to ask.** A session's opening turn is a question about the
+machine — whether anything is built already, or the base is empty. Only the
+child can answer it. **The words are the architect's** and are written after
+step 06's baseline.
+
+**BD-ii · Six chapters have earlier chapters as their subject** — 11 and 12 by
+name, D and G by their session structure — and need a precondition Milo can
+state: *this one needs the machine from the earlier builds.* Step 05a measured
+what happens without it: a cold scan of Sabotage gets a mentor discussing a
+machine that does not exist, **2 of 5**, and asking whether it exists **0 of
+5**.
 
 **BE · Milo does not assert progress it has not been told about.**
 Under BD there is no moment where Milo lacks a position, so this is not about
