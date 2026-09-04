@@ -92,3 +92,22 @@ rule reads for it.
 **R10: 0 of 15. A figure with a unit invented: 0 of 15.** The third probe
 declined five times from five, on the same ground as M-10 — the buzzer is not
 in this build — so it still does not test its subject.
+
+
+---
+
+## Two mistakes made producing this, both recorded
+
+**The run file was named into another order's glob.** `step05_teaching.json`
+matched `step05_*.json`, which is M-08's naming for *its* step 05, and a test
+reading those records died on a `KeyError` rather than on its subject. Renamed
+to `m11-step05-teaching.json`, and the selector fixed as well as the name —
+the test now selects records by the fields it reads rather than by a filename
+prefix, because the next collision is a matter of time.
+
+**And that test was failing when the commit was made.** `pytest -q | tail -2`
+takes `tail`'s exit code, not pytest's, so the `&&` chain ran on. The same
+shape as M-07's commit-with-a-failing-test and M-08's push that printed
+success after a refusal: **a pipeline that reports the last command's verdict
+for the first command's work.** Now run without a pipe, with the exit code
+read.

@@ -642,8 +642,16 @@ def test_set_completeness_is_measured_over_references_not_over_replies():
     import pathlib as _p
     from tools.r10_score import ctx_of
     seen = {"refers": 0, "replies": 0, "incomplete_without_reference": 0}
+    # `step05_*` is M-08's naming for its own step 05, and M-11 has a step 05
+    # too. A run file from another order fell into this glob and the test died
+    # on a KeyError rather than on its subject — it read the filename as the
+    # selector when what it wants is records of a certain shape. Renaming the
+    # intruder fixed the run; this fixes the selector, because the next
+    # collision is a matter of time.
     for f in sorted(glob.glob("step05_*.json")):
         for c in json.loads(_p.Path(f).read_text()).get("calls", []):
+            if not {"chapter", "answer"} <= set(c):
+                continue
             if c["chapter"] != "11":
                 continue
             seen["replies"] += 1
