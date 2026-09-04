@@ -122,9 +122,32 @@ def teach_overlap(reply, key):
 
 
 def run(n, out_path, extra=False):
+    """The build check the docstring above has always claimed and never made.
+
+    It said *the run asserts the build before it makes a call and refuses if it
+    has moved*, and the function read `/health`, printed the build and carried
+    on. Written in M-10 step 06 and true of nothing since. Found in M-11 step
+    05 by production being a merge behind `main` and the tool not caring.
+
+    It checks the same narrow thing step 01's preflight does: not that the
+    commits match, but that **no file a child's turn passes through differs**.
+    """
+    import subprocess
     b = build()
-    head = (ROOT / ".git" / "HEAD").read_text().strip()
-    print(f"  production build {b}")
+    head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
+                          capture_output=True, text=True).stdout.strip()
+    SERVICE = ("main.py", "assembler.py", "corpus.py", "runtime.py", "store.py",
+               "qc.py", "content", "child", "panel")
+    if subprocess.run(["git", "cat-file", "-e", f"{b}^{{commit}}"], cwd=ROOT,
+                      capture_output=True).returncode != 0:
+        sys.exit(f"  production is at {b}, which this clone lacks — git fetch")
+    moved = [x for x in SERVICE
+             if subprocess.run(["git", "diff", "--quiet", b, "HEAD", "--", x],
+                               cwd=ROOT).returncode != 0]
+    if moved:
+        sys.exit(f"  refusing: production is at {b}, the tree at {head}, and "
+                 f"they differ in {moved}")
+    print(f"  production build {b} · the deployed service is the tree's")
     records = []
     for label, teach_key in (PROBES if not extra else EXTRA):
         says = BY_LABEL[label]["says"] if not extra else teach_key
