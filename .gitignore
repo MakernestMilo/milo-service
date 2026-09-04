@@ -4,3 +4,9 @@ __pycache__/
 .env
 .DS_Store
 card/_tmp-*
+
+# The panel token. Same discipline as MODEL_API_KEY: it is read from disk by
+# tools/read_transcript.py and never typed into a terminal, a commit or a
+# transcript. Four keys were rotated in one week because a value that reaches a
+# conversation has already left the building.
+.panel_token
