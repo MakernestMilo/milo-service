@@ -86,7 +86,7 @@ what is known about the cost:
 **So the absent mechanism does not leave a gap, it leaves an active refusal**,
 and the material that never arrives is the teaching rather than the answer.
 
-## 7 · The panel's routes are published
+## 7 · The panel's routes are published — **closed at M-10's close**
 
 `/openapi.json`, `/docs` and `/redoc` are open on production and name
 `/panel/{token}` and `/panel/{token}/{session_id}`. Nothing is readable without
@@ -94,7 +94,12 @@ the token and the 404 holds, but BB says the panel must not be a route a child
 can find, and the 404-rather-than-403 decision exists so that whoever finds it
 learns nothing.
 
-One line: `FastAPI(docs_url=None, redoc_url=None, openapi_url=None)`.
+Taken on the architect's ruling at close. `FastAPI(docs_url=None,
+redoc_url=None, openapi_url=None)`, with a test on the mounted routes rather
+than on the status codes.
+
+Carried anyway, because the shape recurs: **a framework default can undo a
+decision the code took deliberately, and nothing in the code will mention it.**
 
 ## 8 · Two R10 false positives
 

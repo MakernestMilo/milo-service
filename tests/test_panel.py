@@ -167,3 +167,21 @@ def test_a_probe_fires_into_a_session_of_the_panels_own(token, recorded):
 
 def test_an_unrecorded_session_is_a_404_not_an_empty_panel(token):
     assert client.get(f"/panel/{token}/never-happened").status_code == 404
+
+
+def test_the_schema_and_its_viewers_are_off():
+    """M-10 carried item 7.
+
+    Asserted on the routes the app actually has rather than on the response
+    codes alone: a 404 from a route that exists and a 404 from a route that
+    was never mounted look identical from outside, and only one of them stays
+    true when someone re-enables the schema for a debugging session.
+    """
+    mounted = {r.path for r in main.app.routes if hasattr(r, "path")}
+    for path in ("/openapi.json", "/docs", "/redoc", "/docs/oauth2-redirect"):
+        assert path not in mounted, f"{path} is still mounted"
+        assert client.get(path).status_code == 404
+
+    assert main.app.openapi_url is None
+    # and the routes that would have been named by it are still there
+    assert "/panel/{token}" in mounted and "/turn" in mounted
