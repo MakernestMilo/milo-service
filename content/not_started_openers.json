@@ -1,0 +1,24 @@
+{
+  "_what": "One utterance per chapter: what a child types on their first turn, having scanned the card to begin, before they have done anything. Written to sound like the child in transcript-64b1660d — plain, lowercase, often not a question, sometimes about the box rather than the build.",
+
+  "_constraint": "None may satisfy matched(). Each was written to avoid NEG's terms rather than to dodge them: a child who has not started has no failure to report, so failure vocabulary should not be reachable from an honest opener. Run tools/check_opener.py on each before landing.",
+
+  "_note_on_D": "D's opener deliberately says 'where do i begin' rather than 'where do i start'. The second is in NEG and the first is not. It is one word apart from the sentence that starts a clock in all fourteen chapters, and it is there so the fixture carries the trap rather than only avoiding it.",
+
+  "openers": {
+    "01": "ok ive got the box open, theres loads of bits in here",
+    "02": "im on the next one now. what do i do with the dial",
+    "03": "ive got the buzzer out. do i have to tell my mum first",
+    "04": "im ready to do this one, whats first",
+    "05": "just opened 05, theres another sensor in here",
+    "06": "got the switch and the magnet out of the pack",
+    "07": "ive found the chart card at the back of the book",
+    "08": "opened 08. theres a lamp on a long lead",
+    "09": "ive got the mounting kit out. do i have to go and ask someone",
+    "10": "two card shapes and some clips. what am i making",
+    "11": "im on sabotage now. do i wake it up first",
+    "12": "ive read back through all the cards. im not sure what to make yet",
+    "D": "this ones three sessions? where do i begin",
+    "G": "i picked my grandad. what do i ask him"
+  }
+}
