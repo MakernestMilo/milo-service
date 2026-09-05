@@ -69,6 +69,32 @@
    "tools/step01_openers.py",
    "tools/step02_count.py",
    "tools/step05a_anyorder.py"
+  ],
+  "M-12": [
+   "M-12-carried.md",
+   "M-12-order.md",
+   "M-12-return.md",
+   "M-12-step00-verification.md",
+   "M-12-step01-descriptions.md",
+   "M-12-step01-material.md",
+   "M-12-step02-baseline.md",
+   "M-12-step02-categories.md",
+   "M-12-step02-prediction.md",
+   "M-12-step03-recognition.md",
+   "M-12-step04-placing.md",
+   "M-12-step05-incomplete.md",
+   "M-12-step05-prediction.md",
+   "M-12-step05-result.md",
+   "M-12-step06-baseline.md",
+   "M-12-step06-build.md",
+   "M-12-step06-prediction.md",
+   "M-12-step06-prose-result.md",
+   "M-12-step06-result.md",
+   "M-12-step07-retention.md",
+   "content/board_descriptions.json",
+   "content/preconditions.json",
+   "content/recognition_set.json",
+   "m12-step06-prose.json"
   ]
  }
 }
