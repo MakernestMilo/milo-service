@@ -94,6 +94,15 @@ class Session:
     # substituted failure["stage"] for this, so every session in the project's
     # history was served as though six steps were behind it.
     position: int = 1
+    # BJ, M-12. The position is a property of the machine on the table and only
+    # the child can say what it is. Until one does, `position` is an ASSUMPTION
+    # — the card's, that a scan means beginning — and not a fact.
+    #
+    # Step 02 measured what conflating them costs: 70 of 70 replies read a
+    # description of a half-built board as the contents of the compartment the
+    # prompt had them in, and 7 of 10 that stated a physical fact were told it
+    # was not so. The prompt answered for the child.
+    position_established: bool = False
     # BI. Set once, on the first turn of a session that is a returning scan —
     # a session id whose record survives but whose session has expired. Nothing
     # is served from it yet: the question Milo asks is the architect's to write.

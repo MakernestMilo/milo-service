@@ -382,13 +382,33 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
                  "never bring them up):")
         L.extend(box)
 
+    # BJ, M-12. What the prompt ASSERTS about position, against what it serves.
+    #
+    # Until the child has said where they are, the position is the card's
+    # assumption — a scan means beginning — and the prompt says so instead of
+    # marking a step as theirs. The material below is unchanged: the bank is
+    # the floor and needs a step's instructions, and stage 01's are the honest
+    # default. What goes is the claim.
+    #
+    # Step 02 measured the claim's cost. 70 of 70 replies read a description of
+    # a half-built board as the contents of the compartment the prompt had them
+    # in; 3 of 5 told a child their machine was not strapped to a door having
+    # been told it was; 4 of 5 told a child their switch was not mounted.
+    known = turn.position_established
     L.append(f"\nALL STEPS OF {ch['name'].upper()}:")
     for i, x in enumerate(ch["stages"]):
         L.append(f"{x['n']}. {x['h']}"
-                 + ("  <-- THEY ARE HERE" if i == idx else "")
-                 + ("  (done)" if i in done else ""))
+                 + ("  <-- THEY ARE HERE" if known and i == idx else "")
+                 + ("  (done)" if known and i in done else ""))
+    if not known:
+        L.append("\nWHERE THEY ARE: not established. Nothing has told you which "
+                 "of those steps this child is on, or which they have done. The "
+                 "step named below is the chapter's own starting point, not a "
+                 "statement about this child."
+                 + (" What they have said in this conversation is the only "
+                    "evidence you have." if turn.child_said else ""))
 
-    scope = stages_in_scope(ch, idx, procedural, done)
+    scope = stages_in_scope(ch, idx, procedural, done) if known else [s]
     if len(scope) > 1:
         L.append("\nSTAGES YOU MAY SPEAK ABOUT: " + " · ".join(x["h"] for x in scope)
                  + "\nSay nothing about any stage after the current one.")
@@ -406,7 +426,8 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
                 L.append(f"- {x['n']}. {x['h']}: " + " ".join(x.get("do") or []))
 
     # Decision Q. Served at every level.
-    L.append(f"\nCURRENT STEP {s['n']} — {s['h']}  ({s['m']})")
+    L.append(f"\n{'CURRENT STEP' if known else 'THE STEP THIS CHAPTER STARTS AT'}"
+             f" {s['n']} — {s['h']}  ({s['m']})")
     L.append("What this step is: " + " ".join(s.get("do") or []))
 
     L.extend(wiring_block(ch))

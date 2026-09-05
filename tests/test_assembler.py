@@ -85,7 +85,12 @@ def test_teaching_material_is_served_at_every_level():
         t = assembler.render(turn, lvl)
         assert "the signal, the reading itself" in t, f"wiring commentary missing at {lvl}"
         assert "ON THE MACHINE" in t          # renamed by decision AA in M-06
-        assert "CURRENT STEP" in t
+        # The subject is that the step's MATERIAL is served at every level, and
+        # it asserted a heading. BJ renames the heading when the position is an
+        # assumption rather than a fact — `THE STEP THIS CHAPTER STARTS AT` —
+        # and the material below it is unchanged. Asserted on the material.
+        assert "What this step is: " in t
+        assert corpus.BY_KEY["01"]["stages"][0]["h"] in t
 
 
 def test_the_step_instruction_is_served_at_every_level():
