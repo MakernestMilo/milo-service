@@ -124,3 +124,34 @@ def test_the_set_is_derived_and_not_authored():
     assert "corpus.part_sets" in src and "card (" in src
     assert "failure" not in src.split('"""', 2)[-1], (
         "the generator has started reading failure material")
+
+
+# --- the case the harness's fixture is pinned away from ----------------------
+
+@pytest.mark.parametrize("established", [True, False])
+@pytest.mark.parametrize("key", sorted(corpus.BY_KEY))
+def test_no_cause_word_reaches_the_prompt_in_either_position_state(key, established):
+    """**Run with R2's own predicate, at both states, for every chapter and
+    every rung** — because the harness cannot do the second half.
+
+    `qc.py` pins `position_established=True`, which is right for its own
+    subject: it asks what the ladder withholds at the failure, and a child at
+    a failure has been building. The consequence nobody had drawn is that
+    **the harness's 7,616 checks never see the unestablished prompt** — which
+    is the prompt of every real first turn.
+
+    A leak lived there. The heading said *THE STEP THIS CHAPTER STARTS AT*, and
+    `starts` is chapter 08's cause word — *no step is ever checked before the
+    next one starts*. Five rungs of chapter 08, invisible to the harness.
+
+    Second time in two steps that scaffolding I wrote carried a cause word.
+    The first was `written`, chapter 07's, in the recognition block. That one
+    the harness caught because its fixture was in the state the leak was in.
+    """
+    words = qc.cause_words(corpus.BY_KEY[key])
+    for lvl in LEVELS:
+        ctx = assembler.assemble(
+            runtime.Turn("x", key, None, 0, position=1,
+                         position_established=established), lvl)
+        assert qc.r2(ctx, words) is None, (
+            f"{key}/{lvl} established={established}: {qc.r2(ctx, words)}")
