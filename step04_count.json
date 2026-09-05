@@ -1,0 +1,2089 @@
+{
+ "host": "https://milo-service.onrender.com",
+ "build": "a4461ce",
+ "head": "a4461ce",
+ "n": 5,
+ "categories": "M-11-step02-categories.md",
+ "after_the_position_fix": true,
+ "calls": [
+  {
+   "chapter": "01",
+   "run": 1,
+   "session": "m11s02-01-1788525988-0",
+   "opener": "ok ive got the box open, theres loads of bits in here",
+   "reply": "Nice, that's the fun bit. Do you see one long flat piece that looks like it's the base for everything else, plus a green rectangular board \u2014 can you spot those two first?",
+   "level": "L0",
+   "latency_seconds": 3.178,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 2,
+   "session": "m11s02-01-1788525988-1",
+   "opener": "ok ive got the box open, theres loads of bits in here",
+   "reply": "Nice, that's the fun part. You're on step one, so grab compartment 01 and tip out those eight bits into a row where you can actually see each one \u2014 what's the first thing your hand lands on?",
+   "level": "L0",
+   "latency_seconds": 3.455,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "bits"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 3,
+   "session": "m11s02-01-1788525988-2",
+   "opener": "ok ive got the box open, theres loads of bits in here",
+   "reply": "Nice \u2014 that's exactly where you should be for step one. Can you find compartment 01 in there, and start pulling the eight pieces out into a row so you can see them all at once?",
+   "level": "L0",
+   "latency_seconds": 2.894,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 4,
+   "session": "m11s02-01-1788525988-3",
+   "opener": "ok ive got the box open, theres loads of bits in here",
+   "reply": "Nice, that's the fun bit. Open compartment 01 and lay all eight parts out in a row so you can see each one \u2014 how many are you counting so far?",
+   "level": "L0",
+   "latency_seconds": 2.614,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "open"
+     ]
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "01",
+   "run": 5,
+   "session": "m11s02-01-1788525988-4",
+   "opener": "ok ive got the box open, theres loads of bits in here",
+   "reply": "Nice, that's the fun bit. Spread everything out from compartment 01 in a row where you can actually see each piece \u2014 how many separate things do you count?",
+   "level": "L0",
+   "latency_seconds": 2.699,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "02",
+   "run": 1,
+   "session": "m11s02-02-1788525988-0",
+   "opener": "im on the next one now. what do i do with the dial",
+   "reply": "The dial's just coming out of the box right now, in this step \u2014 you're not turning it yet. Right now it's about laying it next to the ring and reading card 01 again. What does the card say about which number felt too cold to you?",
+   "level": "L0",
+   "latency_seconds": 5.647,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "dial",
+      "next"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "02",
+   "run": 2,
+   "session": "m11s02-02-1788525988-1",
+   "opener": "im on the next one now. what do i do with the dial",
+   "reply": "Nice, that's step 01 still \u2014 you're opening compartment 02 and setting the dial and the ring out where you can see them. For right now the dial just needs to come out and sit next to the board; nothing to plug in yet. What does the dial look like to you \u2014 any markings or numbers on it?",
+   "level": "L0",
+   "latency_seconds": 5.541,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "dial",
+      "next"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "02",
+   "run": 3,
+   "session": "m11s02-02-1788525988-2",
+   "opener": "im on the next one now. what do i do with the dial",
+   "reply": "Right now the step is just about opening things up, not wiring anything yet \u2014 so take the dial out of compartment 02 and set it down next to the ring where you can see them both. Then have a look at card 01 again and jot down which of your numbers felt too cold. What does the card say for that part?",
+   "level": "L0",
+   "latency_seconds": 4.535,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "dial",
+      "next"
+     ]
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "02",
+   "run": 4,
+   "session": "m11s02-02-1788525988-3",
+   "opener": "im on the next one now. what do i do with the dial",
+   "reply": "The dial's the knob you turn \u2014 one click, one degree, from card 01. What does the page say to do with it right in front of you?",
+   "level": "L0",
+   "latency_seconds": 5.789,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "dial",
+      "one",
+      "with"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asks",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "02",
+   "run": 5,
+   "session": "m11s02-02-1788525988-4",
+   "opener": "im on the next one now. what do i do with the dial",
+   "reply": "Step 02 is \"the one idea\" \u2014 it's not about plugging the dial in yet, it's about card 01 and figuring out which of your numbers is too cold. What does your page say to do with the dial right now?",
+   "level": "L0",
+   "latency_seconds": 4.818,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "dial",
+      "one",
+      "with"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "03",
+   "run": 1,
+   "session": "m11s02-03-1788525988-0",
+   "opener": "ive got the buzzer out. do i have to tell my mum first",
+   "reply": "Yeah, that's part of this step \u2014 the buzzer's the whole point, it's loud on purpose. Have you actually given anyone in the house a heads up yet, or is that next?",
+   "level": "L0",
+   "latency_seconds": 2.702,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "buzzer"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "03",
+   "run": 2,
+   "session": "m11s02-03-1788525988-1",
+   "opener": "ive got the buzzer out. do i have to tell my mum first",
+   "reply": "Yep \u2014 that's actually part of this step, not just a suggestion. This buzzer is genuinely loud, the kind that reaches another room, so give your household a heads up before you go further. Who is your machine going to be telling, once it's set up?",
+   "level": "L0",
+   "latency_seconds": 2.913,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "buzzer"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "03",
+   "run": 3,
+   "session": "m11s02-03-1788525988-2",
+   "opener": "ive got the buzzer out. do i have to tell my mum first",
+   "reply": "Yep \u2014 that's part of the step, right there in the instructions. The buzzer's about to make a noise loud enough to reach another room, so give whoever's around a heads up before you plug it in. Once you've done that, who's your machine going to be telling \u2014 who's the alert for?",
+   "level": "L0",
+   "latency_seconds": 3.496,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "buzzer"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "03",
+   "run": 4,
+   "session": "m11s02-03-1788525988-3",
+   "opener": "ive got the buzzer out. do i have to tell my mum first",
+   "reply": "Yeah \u2014 this one's the actual noisemaker, so the step wants you to give the household a heads up before you go further. It's going to be loud enough for someone in another room to hear it, so a quick \"hey, I'm about to test something noisy\" saves everyone a fright. Once you've done that, who is your machine currently telling \u2014 who's it meant to alert if it goes off?",
+   "level": "L0",
+   "latency_seconds": 3.571,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "03",
+   "run": 5,
+   "session": "m11s02-03-1788525988-4",
+   "opener": "ive got the buzzer out. do i have to tell my mum first",
+   "reply": "Yeah, that's part of this step \u2014 before you make it beep, give whoever's around a heads up so it doesn't scare anyone. So, got the buzzer in your hand \u2014 what does it look like, and have you given anyone that warning yet?",
+   "level": "L0",
+   "latency_seconds": 7.282,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "buzzer"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 1,
+   "session": "m11s02-04-1788525988-0",
+   "opener": "im ready to do this one, whats first",
+   "reply": "You're on Open \u2014 the very first step, just waking the whole thing up. What does the page tell you to do with the board right now, plug it in or something else?",
+   "level": "L0",
+   "latency_seconds": 2.445,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 2,
+   "session": "m11s02-04-1788525988-1",
+   "opener": "im ready to do this one, whats first",
+   "reply": "Nice \u2014 you're on Open, the first step of the Chatterbox. It's quick: wake the machine up, then say out loud how you think it's going to know when to stop. What's the plug on the long cable look like \u2014 got a spot to plug that USB lead in on your board?",
+   "level": "L0",
+   "latency_seconds": 3.003,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 3,
+   "session": "m11s02-04-1788525988-2",
+   "opener": "im ready to do this one, whats first",
+   "reply": "Nice \u2014 you're at Open, the very first step of The Chatterbox. It's quick: wake the machine up, and before you touch anything else, say out loud how you *think* it should stop doing what it's doing. What's your guess \u2014 what makes this thing stop?",
+   "level": "L0",
+   "latency_seconds": 2.577,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 4,
+   "session": "m11s02-04-1788525988-3",
+   "opener": "im ready to do this one, whats first",
+   "reply": "Good \u2014 you're on step 01, Open, and it starts with waking the machine up. Plug in the long USB lead and tell me what happens on the display when it powers up.",
+   "level": "L0",
+   "latency_seconds": 2.415,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 5,
+   "session": "m11s02-04-1788525988-4",
+   "opener": "im ready to do this one, whats first",
+   "reply": "Nice \u2014 you're right at Open, the first step of teaching your Chatterbox when to stop. Before anything else: wake the machine up and just watch it for a second \u2014 what happens on the screen and the light when it powers on?",
+   "level": "L0",
+   "latency_seconds": 2.953,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "05",
+   "run": 1,
+   "session": "m11s02-05-1788525988-0",
+   "opener": "just opened 05, theres another sensor in here",
+   "reply": "Nice \u2014 that's sensor B, the second one, same as sensor A but it's going to sit a metre away from your machine using that long lead. What does it look like next to sensor A \u2014 same size, same colour, anything different you can spot?",
+   "level": "L0",
+   "latency_seconds": 3.097,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sensor"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "05",
+   "run": 2,
+   "session": "m11s02-05-1788525988-1",
+   "opener": "just opened 05, theres another sensor in here",
+   "reply": "That's sensor B \u2014 same little sensor as the first one, but this is the one that'll end up a metre away from the machine, on the long lead. What do you notice about it compared to the first one \u2014 does it look identical, or different in some way?",
+   "level": "L0",
+   "latency_seconds": 3.058,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sensor"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "05",
+   "run": 3,
+   "session": "m11s02-05-1788525988-2",
+   "opener": "just opened 05, theres another sensor in here",
+   "reply": "Nice \u2014 that's sensor B, the second one, sitting right next to the 1 m lead. It's identical to sensor A, just meant to sit somewhere else, a metre away from the machine.\n\nWhat are you picturing \u2014 where do you think you'll put this one?",
+   "level": "L0",
+   "latency_seconds": 3.493,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "just",
+      "sensor"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "05",
+   "run": 4,
+   "session": "m11s02-05-1788525988-3",
+   "opener": "just opened 05, theres another sensor in here",
+   "reply": "Nice \u2014 that's sensor B, the second one, identical to sensor A. Along with it there should be the long lead in there too, the 1 metre one that lets this sensor sit far from the machine. What does the sensor itself look like to you \u2014 same little black shape as the first one?",
+   "level": "L0",
+   "latency_seconds": 3.512,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sensor"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "05",
+   "run": 5,
+   "session": "m11s02-05-1788525988-4",
+   "opener": "just opened 05, theres another sensor in here",
+   "reply": "There it is \u2014 sensor B, same shape as sensor A, just a second one of them. It's meant to sit a metre away from the machine so it can measure somewhere different. What does it look like next to the lead in there \u2014 same little black sensor, or something different?",
+   "level": "L0",
+   "latency_seconds": 3.345,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "just",
+      "sensor"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "06",
+   "run": 1,
+   "session": "m11s02-06-1788525988-0",
+   "opener": "got the switch and the magnet out of the pack",
+   "reply": "Nice \u2014 the switch and the magnet, both out and in front of you. That switch is the one that notices the magnet arriving or leaving, so this chapter is all about counting events, not readings. What's the door you're going to guess about \u2014 got one in mind yet?",
+   "level": "L0",
+   "latency_seconds": 3.175,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "magnet",
+      "switch"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "06",
+   "run": 2,
+   "session": "m11s02-06-1788525988-1",
+   "opener": "got the switch and the magnet out of the pack",
+   "reply": "Nice \u2014 the switch and the magnet, out in the open. Take a look at them: the switch has two little tabs sticking out one end, and the magnet's just a small block or disc, right?\n\nThat's chapter 06's compartment sorted. Now \u2014 what's your guess for the door question: how many times do you think one door in your house opened yesterday?",
+   "level": "L0",
+   "latency_seconds": 3.48,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "magnet",
+      "switch"
+     ]
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "06",
+   "run": 3,
+   "session": "m11s02-06-1788525988-2",
+   "opener": "got the switch and the magnet out of the pack",
+   "reply": "Nice, the switch and the magnet \u2014 those are the two new bits for this chapter. The switch is what notices the magnet arriving and leaving, kind of like a door sensor. What does the switch itself look like to you \u2014 any writing or markings on it?",
+   "level": "L0",
+   "latency_seconds": 3.35,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "magnet",
+      "switch"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "06",
+   "run": 4,
+   "session": "m11s02-06-1788525988-3",
+   "opener": "got the switch and the magnet out of the pack",
+   "reply": "Nice \u2014 switch and magnet, both in hand. Take a look at the switch itself: does it look like a little sealed capsule, or more like a button you'd press?",
+   "level": "L0",
+   "latency_seconds": 2.902,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "magnet",
+      "switch"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "06",
+   "run": 5,
+   "session": "m11s02-06-1788525988-4",
+   "opener": "got the switch and the magnet out of the pack",
+   "reply": "Nice, the switch and the magnet \u2014 chapter 06's pair. Now open compartment 06 the rest of the way and pull out the pads too, since you'll want all three sitting in front of you for this step.",
+   "level": "L0",
+   "latency_seconds": 3.071,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "magnet",
+      "switch"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 1,
+   "session": "m11s02-07-1788525988-0",
+   "opener": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's the first thing this step asks for. Now the second part \u2014 is there a household phone charger nearby you can borrow, the kind you'd plug a phone into?",
+   "level": "L0",
+   "latency_seconds": 2.965,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 2,
+   "session": "m11s02-07-1788525988-1",
+   "opener": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's step one done. Now the second part \u2014 you're hunting for a household phone charger that isn't in the box, so it can power the machine over those 7 days. Do you have one you can borrow?",
+   "level": "L0",
+   "latency_seconds": 3.266,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 3,
+   "session": "m11s02-07-1788525988-2",
+   "opener": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's step one done. Now the next bit on that page \u2014 go find a household phone charger, since it's not in the box. Have you got one nearby you can use?",
+   "level": "L0",
+   "latency_seconds": 2.879,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asks",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": true,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asks",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 4,
+   "session": "m11s02-07-1788525988-3",
+   "opener": "ive found the chart card at the back of the book",
+   "reply": "Nice \u2014 that's the first thing this step asks for. Now the other part: is there a household phone charger nearby you can borrow for this, or do you need to go hunt one down?",
+   "level": "L0",
+   "latency_seconds": 2.973,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 5,
+   "session": "m11s02-07-1788525988-4",
+   "opener": "ive found the chart card at the back of the book",
+   "reply": "Nice \u2014 that's the first thing this step asks for. Now the second part: is there a household phone charger near your build spot, or do you still need to track one down?",
+   "level": "L0",
+   "latency_seconds": 2.959,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "08",
+   "run": 1,
+   "session": "m11s02-08-1788525988-0",
+   "opener": "opened 08. theres a lamp on a long lead",
+   "reply": "There it is \u2014 the lamp on its own long lead, so it can sit in a room away from the machine. Before you plug anything in, try the other half of this step: think of a fire alarm, or a kettle, and tell me what it does first, second, and third when it goes off.",
+   "level": "L0",
+   "latency_seconds": 3.282,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "lamp",
+      "lead",
+      "long"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "08",
+   "run": 2,
+   "session": "m11s02-08-1788525988-1",
+   "opener": "opened 08. theres a lamp on a long lead",
+   "reply": "There it is \u2014 the lamp on its long lead, so it can sit somewhere else in the room while the rest of the machine stays put. Before you plug anything in, this step just wants a memory: think of a fire alarm going off, or a kettle finishing \u2014 can you tell me what happens first, then next, then last?",
+   "level": "L0",
+   "latency_seconds": 3.481,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "lamp",
+      "lead",
+      "long"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "08",
+   "run": 3,
+   "session": "m11s02-08-1788525988-2",
+   "opener": "opened 08. theres a lamp on a long lead",
+   "reply": "That's the lamp \u2014 the one with the metre-long lead so it can sit in a whole different room from the machine. Now, before you plug anything in: from memory, can you describe what a fire alarm actually does when it goes off?",
+   "level": "L0",
+   "latency_seconds": 3.007,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "lamp",
+      "lead",
+      "long"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "08",
+   "run": 4,
+   "session": "m11s02-08-1788525988-3",
+   "opener": "opened 08. theres a lamp on a long lead",
+   "reply": "There it is \u2014 the lamp on its own long lead, so it can sit somewhere else in the room while the rest of the machine stays put. Now try the other bit of this step: from memory, walk me through what happens when a fire alarm goes off \u2014 what's the first thing, then the next?",
+   "level": "L0",
+   "latency_seconds": 3.171,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "lamp",
+      "lead",
+      "long"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "08",
+   "run": 5,
+   "session": "m11s02-08-1788525988-4",
+   "opener": "opened 08. theres a lamp on a long lead",
+   "reply": "Nice, that's the lamp \u2014 the one on its own long lead, so it can sit in a whole different room from the rest of the machine. Now, before you plug anything in: can you picture a fire alarm, or a kettle, and tell me what happens first, second, and third when it does its job?",
+   "level": "L0",
+   "latency_seconds": 3.075,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "lamp",
+      "lead",
+      "long"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 1,
+   "session": "m11s02-D-1788525988-0",
+   "opener": "this ones three sessions? where do i begin",
+   "reply": "Yep, three sessions total for this build, called The Doorkeeper \u2014 you're at the very start, step 1 of 8, called \"the brief.\" It's quick: just write down what you think this whole thing should actually do, before you read any further in the book. What's your guess \u2014 what do you think a door-watching machine like this is for?",
+   "level": "L0",
+   "latency_seconds": 2.881,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sessions",
+      "three"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 2,
+   "session": "m11s02-D-1788525988-1",
+   "opener": "this ones three sessions? where do i begin",
+   "reply": "This one's a bigger build \u2014 three sessions, eight steps total, and you're right at the very start of it. Step one is just \"the brief\": before you read anything else, write down what you think this door-watcher thing should actually do.\n\nWhat's your guess \u2014 what do you think it should do?",
+   "level": "L0",
+   "latency_seconds": 2.506,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sessions",
+      "three"
+     ]
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 3,
+   "session": "m11s02-D-1788525988-2",
+   "opener": "this ones three sessions? where do i begin",
+   "reply": "Yep \u2014 three sessions, eight steps total, and you're right at the start of the first one. Step 01 is called \"The brief,\" and it's just five minutes: before you build anything, you write down what you think this thing should actually do.\n\nHave you had a look at what it's called yet \u2014 \"The Doorkeeper\"? What's your first guess about what it does?",
+   "level": "L0",
+   "latency_seconds": 3.176,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sessions",
+      "three"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 4,
+   "session": "m11s02-D-1788525988-3",
+   "opener": "this ones three sessions? where do i begin",
+   "reply": "This one's the big one \u2014 three sessions, eight steps total, but you're only doing step 1 right now: writing down what you think this door-watcher should do, before you read any further.\n\nGrab a pencil or open a note, and just jot down \u2014 what do you want this thing to actually do?",
+   "level": "L0",
+   "latency_seconds": 2.723,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sessions",
+      "three"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 5,
+   "session": "m11s02-D-1788525988-4",
+   "opener": "this ones three sessions? where do i begin",
+   "reply": "Yep \u2014 three sessions total, and you're right at the very start of the first one. Before you touch any parts, this step wants you to just write down what you think this thing should do, before you read further in the book \u2014 what's your guess?",
+   "level": "L0",
+   "latency_seconds": 2.499,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "sessions",
+      "three"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "09",
+   "run": 1,
+   "session": "m11s02-09-1788525988-0",
+   "opener": "ive got the mounting kit out. do i have to go and ask someone",
+   "reply": "Yeah, that's the actual point of this step \u2014 the mounting kit part is quick, but this build is about finding a real annoyance to solve. Go find someone nearby and ask what's bugging them and where it happens, then write down their exact words.",
+   "level": "L0",
+   "latency_seconds": 3.891,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "ask",
+      "kit",
+      "mounting",
+      "someone"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "09",
+   "run": 2,
+   "session": "m11s02-09-1788525988-1",
+   "opener": "ive got the mounting kit out. do i have to go and ask someone",
+   "reply": "Yeah, that's the actual point of this step \u2014 before building anything, you need a real annoyance from a real person, in their own words. Go find someone nearby and ask them what's annoying them and where it happens, then write down what they say.",
+   "level": "L0",
+   "latency_seconds": 3.214,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "ask",
+      "someone"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "09",
+   "run": 3,
+   "session": "m11s02-09-1788525988-2",
+   "opener": "ive got the mounting kit out. do i have to go and ask someone",
+   "reply": "Yeah, that's the actual point of this step \u2014 go find someone nearby and ask them what's annoying them and where it happens. It doesn't have to be fancy, just write down what they say in their own words. Who are you thinking of asking?",
+   "level": "L0",
+   "latency_seconds": 3.193,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "ask",
+      "someone"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "09",
+   "run": 4,
+   "session": "m11s02-09-1788525988-3",
+   "opener": "ive got the mounting kit out. do i have to go and ask someone",
+   "reply": "Yeah, that's the actual step \u2014 go find a person and ask what's annoying them and where it happens. It doesn't have to be fancy, just something that bugs them regularly, like \"the door left open\" or \"the room too dark.\" What matters is writing it down in their own words, so who's around you right now?",
+   "level": "L0",
+   "latency_seconds": 3.576,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "ask"
+     ]
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "09",
+   "run": 5,
+   "session": "m11s02-09-1788525988-4",
+   "opener": "ive got the mounting kit out. do i have to go and ask someone",
+   "reply": "Yeah, that's the actual point of this step \u2014 not just the pads and bracket. You're hunting for a real annoyance, in someone's actual words, because that's what this whole build is going to try to catch. Who are you thinking of asking?",
+   "level": "L0",
+   "latency_seconds": 3.43,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "someone"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "10",
+   "run": 1,
+   "session": "m11s02-10-1788525988-0",
+   "opener": "two card shapes and some clips. what am i making",
+   "reply": "Right \u2014 the two card shapes and the four clips are the body for your creature. This step is just about opening compartment 10 and deciding what your machine actually is before you build the shell around it \u2014 what does your machine do, in your own words?",
+   "level": "L0",
+   "latency_seconds": 3.198,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "card",
+      "clips",
+      "shapes",
+      "two"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "10",
+   "run": 2,
+   "session": "m11s02-10-1788525988-1",
+   "opener": "two card shapes and some clips. what am i making",
+   "reply": "So the two card shapes and the four clips are compartment 10 \u2014 this is the body for your creature, whatever you decide it is. Step 01 is just opening it up and deciding: what is your machine actually going to be?",
+   "level": "L0",
+   "latency_seconds": 3.049,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "card",
+      "clips",
+      "shapes",
+      "two"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "10",
+   "run": 3,
+   "session": "m11s02-10-1788525988-2",
+   "opener": "two card shapes and some clips. what am i making",
+   "reply": "You've got the two card shapes and the four clips \u2014 that's compartment 10, right on schedule. This chapter's about giving your machine a body: something it wears, not a costume for its own sake, since it still has to keep reading and working underneath. Before you touch the card, what's the one idea you want this body to say about what your machine does?",
+   "level": "L0",
+   "latency_seconds": 3.776,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "card",
+      "clips",
+      "shapes",
+      "two"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "10",
+   "run": 4,
+   "session": "m11s02-10-1788525988-3",
+   "opener": "two card shapes and some clips. what am i making",
+   "reply": "You've got the two card shapes and the four clips, right there \u2014 that's compartment 10 open. Those templates are the start of a body for your machine, and the clips are what hold it on and let you pull it off again fast.\n\nSo \u2014 what does your machine actually do, and what should it look like? That's the \"one idea\" you get to decide before you start cutting or shaping anything.",
+   "level": "L0",
+   "latency_seconds": 4.208,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "proceeds",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "card",
+      "clips",
+      "shapes",
+      "two"
+     ]
+    },
+    "ties": [
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "10",
+   "run": 5,
+   "session": "m11s02-10-1788525988-4",
+   "opener": "two card shapes and some clips. what am i making",
+   "reply": "Right \u2014 two card shapes and four clips, that's compartment 10 open. You're at the start of building The Creature's body: something to hold on the outside of what you've already wired up.\n\nSo \u2014 what does your machine actually do? What's the \"one idea\" you'd tell someone in a sentence?",
+   "level": "L0",
+   "latency_seconds": 3.844,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts itself",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": true,
+     "redirects": false,
+     "shared_with_the_child": [
+      "card",
+      "clips",
+      "shapes",
+      "two"
+     ]
+    },
+    "ties": [
+     "asserts",
+     "proceeds"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 1,
+   "session": "m11s02-11-1788525988-0",
+   "opener": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 plug it in and see what actually happens when it powers up. What do you see: does the display light up, stay dark, show numbers, anything at all?",
+   "level": "L0",
+   "latency_seconds": 3.631,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 2,
+   "session": "m11s02-11-1788525988-1",
+   "opener": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 that's exactly what step 01 is asking for. Plug it in and watch what the machine actually does, then say out loud what you notice isn't happening.",
+   "level": "L0",
+   "latency_seconds": 2.968,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 3,
+   "session": "m11s02-11-1788525988-2",
+   "opener": "im on sabotage now. do i wake it up first",
+   "reply": "Yep \u2014 plug it in and watch what happens on the machine. Then just say out loud what you actually see it doing, and what you were expecting it to do that it isn't.",
+   "level": "L0",
+   "latency_seconds": 3.176,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 4,
+   "session": "m11s02-11-1788525988-3",
+   "opener": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 get it powered up with the USB cable and just watch it for a minute, no touching anything yet. What do you see happening on it right now?",
+   "level": "L0",
+   "latency_seconds": 3.135,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 5,
+   "session": "m11s02-11-1788525988-4",
+   "opener": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 plug it in and see what it does right now. Tell me what you're actually seeing on it: any lights, any numbers on the display, anything at all?",
+   "level": "L0",
+   "latency_seconds": 2.885,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 1,
+   "session": "m11s02-12-1788525988-0",
+   "opener": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "That's exactly the right place to be at this point \u2014 eleven cards is a lot to hold in your head at once. What jumped out at you when you went through them, even just one thing that seemed interesting or useful?",
+   "level": "L0",
+   "latency_seconds": 3.469,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "cards",
+      "through"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 2,
+   "session": "m11s02-12-1788525988-1",
+   "opener": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "That's actually the point of this step \u2014 reading them all back is the work. What's pulling at you a little \u2014 was there a card that made you think \"oh, I could use that for something\"?",
+   "level": "L0",
+   "latency_seconds": 3.263,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "contradicts the child",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "all",
+      "back"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 3,
+   "session": "m11s02-12-1788525988-2",
+   "opener": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "Okay, you've got all eleven cards in your head now \u2014 that's the whole toolbox for this build. What's pulling at you most: something you want to know about (like warmth, or light) or something you want to happen (like a sound, or a light turning on)?",
+   "level": "L0",
+   "latency_seconds": 3.424,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "all",
+      "cards"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "proceeds",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 4,
+   "session": "m11s02-12-1788525988-3",
+   "opener": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "That's the real work of this step \u2014 you've got eleven parts and you're trying to see what they add up to. What caught your attention most as you read back through \u2014 an input, or an output?",
+   "level": "L0",
+   "latency_seconds": 3.586,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "back",
+      "read",
+      "through"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 5,
+   "session": "m11s02-12-1788525988-4",
+   "opener": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "That's the whole point of this step, so you're right on track. You've got sensors, a dial, a switch, and outputs like the display, the ring, the buzzer, the lamp \u2014 what's one thing in the world you'd actually want a machine to notice or warn you about?",
+   "level": "L0",
+   "latency_seconds": 3.524,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": []
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 1,
+   "session": "m11s02-G-1788525988-0",
+   "opener": "i picked my grandad. what do i ask him",
+   "reply": "Nice, grandad's a good choice. Right now you're just on step one though \u2014 the actual questions come in step two, so for now write down who you picked and why you picked him.",
+   "level": "L0",
+   "latency_seconds": 3.722,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "grandad",
+      "him",
+      "picked"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 2,
+   "session": "m11s02-G-1788525988-1",
+   "opener": "i picked my grandad. what do i ask him",
+   "reply": "Your grandad \u2014 nice pick. Right now step one is just about writing down who and why you chose him, not the questions yet \u2014 those come in step two. What's the why for you \u2014 what made him the one?",
+   "level": "L0",
+   "latency_seconds": 3.117,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "grandad",
+      "him"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 3,
+   "session": "m11s02-G-1788525988-2",
+   "opener": "i picked my grandad. what do i ask him",
+   "reply": "Nice \u2014 grandad's a good pick. Right now step one is just about the who and the why, so before you think about questions, what made you choose him?",
+   "level": "L0",
+   "latency_seconds": 3.451,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "grandad",
+      "him"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 4,
+   "session": "m11s02-G-1788525988-3",
+   "opener": "i picked my grandad. what do i ask him",
+   "reply": "Grandad's a good pick. Right now you're still on step one though \u2014 the job here is just writing down who you picked and why you chose him, not the questions yet. What's the reason you thought of him first?",
+   "level": "L0",
+   "latency_seconds": 4.959,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "asserts",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": true,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "grandad",
+      "him",
+      "picked"
+     ]
+    },
+    "ties": [
+     "asserts"
+    ]
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 5,
+   "session": "m11s02-G-1788525988-4",
+   "opener": "i picked my grandad. what do i ask him",
+   "reply": "Nice, your grandad \u2014 good pick. Right now step one is just about the who and the why, so before you get to any questions, write down the reason you chose him.",
+   "level": "L0",
+   "latency_seconds": 4.514,
+   "from_the_bank": false,
+   "detector": {
+    "axis1": "none of the four",
+    "axis2": "accepts",
+    "hits": {
+     "asserts": false,
+     "asks": false,
+     "proceeds": false,
+     "redirects": false,
+     "shared_with_the_child": [
+      "grandad",
+      "him"
+     ]
+    },
+    "ties": []
+   },
+   "read_by_a_person": {
+    "axis1": "asserts",
+    "axis2": "accepts"
+   }
+  }
+ ]
+}
