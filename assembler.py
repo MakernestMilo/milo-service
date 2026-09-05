@@ -287,6 +287,50 @@ _WITHHELD = json.loads(
     .read_text())["withheld"]
 
 
+# BL as amended, M-12 step 03. What a build LOOKS like, for all fourteen.
+#
+# This is the first time the assembled prompt has carried anything outside the
+# chapter in play, and every gating decision since M-01 assumes it does not. So
+# the bound is a file rather than a filter: `content/recognition_set.json`
+# holds the parts each chapter opens, the ports they occupy and the numbered
+# cards it leaves written on — and **nothing else**. No stage text, no ask, no
+# region, no fix, no cause. X5 asserts that on the assembled string.
+#
+# The chapter in play is excluded. Milo already has all of it, in full, and
+# repeating it here would put the same material under two headings.
+_RECOGNITION = json.loads(
+    (pathlib.Path(__file__).parent / "content" / "recognition_set.json")
+    .read_text())["chapters"]
+
+
+def recognition_block(key):
+    """The other thirteen builds, as objects rather than as chapters.
+
+    Step 02 measured what its absence costs: **0 of 70** replies treated a
+    description of a board as evidence about which chapter a child was in.
+    Every one read it as the contents of the compartment it was already in.
+    """
+    # The wording of this block is checked against every chapter's cause words,
+    # not only read for sense. The first version said "leaves written on", and
+    # `written` is chapter 07's cause word — 544 harness checks red on a phrase
+    # of scaffolding that carried no information about chapter 07 at all.
+    L = ["\nWHAT THE OTHER BUILDS LOOK LIKE — for recognising a machine a child "
+         "describes, and for nothing else. Parts, ports, and the card each one "
+         "leaves filled in. You are not told what those chapters do, ask, or "
+         "go wrong at, and you may not say."]
+    for other, row in _RECOGNITION.items():
+        if other == key:
+            continue
+        bits = [f"{other} {row['name']}",
+                f"opens: {', '.join(row['opens']) or 'no new parts'}",
+                f"ports: {', '.join(row['ports'])}",
+                f"leaves filled in: "
+                + (", ".join('card ' + c for c in row['cards_written_on'])
+                   or 'no card of its own')]
+        L.append("- " + " · ".join(bits))
+    return L
+
+
 def glossary_block(key):
     """BF, M-11. The twenty-one `TEACH` entries, served.
 
@@ -366,6 +410,7 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     L.append("What this step is: " + " ".join(s.get("do") or []))
 
     L.extend(wiring_block(ch))
+    L.extend(recognition_block(turn.chapter))
     L.extend(glossary_block(turn.chapter))
 
     # C-08. What the level does not permit is not assembled.

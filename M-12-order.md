@@ -156,8 +156,8 @@ chapter 01's end state; whether Milo reaches it is the measurement.
 fourteen chapters with the descriptions the fixture uses, by the same
 `check_opener.py` route the openers took.
 
-**X5 · The recognition set is bounded and the bound is tested.** Parts and ports
-only. A test asserting that no stage text, no `ask`, no `region`, no `fix` and
+**X5 · The recognition set is bounded and the bound is tested.** Parts, ports
+and the visible artefact only — BL as amended at step 01. A test asserting that no stage text, no `ask`, no `region`, no `fix` and
 no cause material from any chapter other than the one in play reaches the
 prompt — asserted on the assembled string, not on the intent.
 
