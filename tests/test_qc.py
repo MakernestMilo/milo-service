@@ -895,3 +895,51 @@ def test_a_gesture_at_the_set_is_not_cleared_by_an_earlier_turn():
 def test_a_gesture_that_names_all_five_is_complete():
     assert qc.r10_set("The five: power, sensor, rule, output, sequence.",
                       "11", _set_ctx()) is None
+
+
+def test_no_string_the_assembler_emits_contains_a_cause_word():
+    """The lint above, made to read the code rather than a list.
+
+    `test_no_authored_block_contains_a_cause_word` names five blocks by hand,
+    and in M-12 two phrases walked past it in consecutive steps — `written` in
+    the recognition block's header and `starts` in a heading. **The architect's
+    words: the lint exists for authored blocks and headings aren't blocks.**
+
+    This reads every string literal in `assembler.py` that is not a docstring,
+    so a sixth block, a heading, a label or a joined f-string fragment is
+    covered without anyone remembering to add it.
+
+    Docstrings are excluded because they discuss cause words deliberately —
+    the comment recording the `starts` leak has to be able to say `starts`.
+    """
+    import ast
+    import pathlib as _p
+    src = (_p.Path(__file__).resolve().parent.parent / "assembler.py").read_text()
+    tree = ast.parse(src)
+
+    docstrings = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef,
+                             ast.ClassDef)):
+            body = node.body
+            if (body and isinstance(body[0], ast.Expr)
+                    and isinstance(body[0].value, ast.Constant)
+                    and isinstance(body[0].value.value, str)):
+                docstrings.add(id(body[0].value))
+
+    causes = {}
+    for c in corpus.CHAPTERS:
+        for w in qc.cause_words(c):
+            causes.setdefault(w, []).append(c["key"])
+
+    bad = []
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Constant) and isinstance(node.value, str)
+                and id(node) not in docstrings):
+            for w in sorted(set(re.findall(r"[a-z]{4,}", node.value.lower()))):
+                if w in causes:
+                    bad.append(f"assembler.py:{node.lineno} has {w!r}, a cause "
+                               f"word of chapter {','.join(causes[w])}, in "
+                               f"{node.value[:48]!r}")
+    assert not bad, ("a string the assembler emits carries a cause word:\n  "
+                     + "\n  ".join(bad))

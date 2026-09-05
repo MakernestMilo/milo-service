@@ -123,6 +123,17 @@ proves an absence, so its verdict improves as the artefact shrinks.
 prediction.** M-11's Q1 passed at ≥3, was falsified below 2, and measured
 exactly 2.
 
+**C-45 · A fixture pinned to one state proves nothing about the other, and the
+other may be the one every child is in.** `qc.py` pins
+`position_established=True` — correctly, because the harness asks what the
+ladder withholds at the failure and a child at a failure has been building.
+The consequence nobody drew is that **7,616 checks never see the unestablished
+prompt, which is the prompt of every real first turn.** A cause word leaked at
+all five rungs of chapter 08 in that state, with the harness green throughout,
+and was found by unpinning a fixture by hand to answer a question about a
+register entry. C-44's shape and sharper: not a predicate with no coverage, a
+whole prompt state with none.
+
 **C-44 · The thing every child's session begins with was the least tested logic
 in the system.** `matched()` decides whether a real child's clock starts, and
 `runtime.level` reads it only where the answer is `L0` either way — so it

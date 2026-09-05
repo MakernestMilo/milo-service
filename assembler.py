@@ -325,7 +325,7 @@ def recognition_block(key):
                 f"opens: {', '.join(row['opens']) or 'no new parts'}",
                 f"ports: {', '.join(row['ports'])}",
                 f"leaves filled in: "
-                + (", ".join('card ' + c for c in row['cards_written_on'])
+                + (", ".join('card ' + c for c in row['cards_filled_in'])
                    or 'no card of its own')]
         L.append("- " + " · ".join(bits))
     return L
@@ -426,7 +426,13 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
                 L.append(f"- {x['n']}. {x['h']}: " + " ".join(x.get("do") or []))
 
     # Decision Q. Served at every level.
-    L.append(f"\n{'CURRENT STEP' if known else 'THE STEP THIS CHAPTER STARTS AT'}"
+    # The heading, and the second time in two steps that a phrase of my own
+    # scaffolding carried a chapter's cause word. This one said THE STEP THIS
+    # CHAPTER STARTS AT, and `starts` is chapter 08's — *no step is ever
+    # checked before the next one starts*. It leaked at every rung of chapter
+    # 08 and only in the unestablished case, which is the case every real first
+    # turn is in and the one the harness's fixture is pinned away from.
+    L.append(f"\n{'CURRENT STEP' if known else 'THIS CHAPTER OPENS AT STEP'}"
              f" {s['n']} — {s['h']}  ({s['m']})")
     L.append("What this step is: " + " ".join(s.get("do") or []))
 

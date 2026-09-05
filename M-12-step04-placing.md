@@ -48,33 +48,54 @@ it — and holds the rest of `matched()`, which had no coverage at all until ste
 
 ---
 
-## What it cost to land, and the harness saw all of it
+## A correction, and it is the finding of this step
 
-**544 checks red, twice, for two different reasons.**
+**I told the architect the harness went red because it saw material vanish.
+That is false, and it was a reading of a verdict rather than a measurement of
+one.**
 
-The first was step 03's leak. The second was this change: every Turn built
-without the new flag became unestablished, so the harness's own fixtures lost
-their current step and their completed stages — **less material again**, and
-this time the harness went red rather than quiet, because R-rules read the
-prompt for what must be *absent* and the shape of the prompt had changed.
+The 544 checks were **R2 on chapter 08, on the word `starts`** — from a heading
+I wrote, *THE STEP THIS CHAPTER STARTS AT*. Chapter 08's cause is *no step is
+ever checked before the next one starts.*
 
-`qc.py`, `gate_publicity` and `step05_calls` now pin `position_established=True`
-for the same reason they pin the position: **the harness asks what the ladder
-withholds at the failure, and a child at a failure has been building.** An
-unestablished fixture would ask a different question and a quieter one.
+So both of this order's 544s are the same fault: **a phrase of my own
+scaffolding carrying a chapter's cause word**, twice in two consecutive steps.
+Step 03's was `written`, chapter 07's, in the recognition block. This was
+`starts`, chapter 08's, in a heading.
 
-**Twenty-eight tests failed and none was a surprise**, but two are worth
-naming:
+**Nothing went red for the removal.** C-41 stands exactly as written: an
+absence-proving harness reports success on any change that removes material,
+and it did again.
+
+### And the leak was one the harness could not have seen
+
+`qc.py` pins `position_established=True`, which is right for its own subject —
+it asks what the ladder withholds at the failure, and a child at a failure has
+been building. **The consequence nobody had drawn is that the harness's 7,616
+checks never see the unestablished prompt**, which is the prompt of every real
+first turn.
+
+`starts` leaked at all five rungs of chapter 08, in the unestablished case
+only. The harness was green throughout. **It was found by unpinning the fixture
+by hand to answer a question about the register**, and it would otherwise have
+reached a child.
+
+The heading is now *THIS CHAPTER OPENS AT STEP*, and the check is a test that
+runs **R2's own predicate at both position states**, for every chapter at every
+rung — because a rule cannot catch what its fixture is pinned away from.
+
+## What else it cost to land
+
+Twenty-eight tests failed and two are worth naming.
 
 **`test_a_fresh_session_is_at_step_one` was M-11's and BJ supersedes it.** It
-is rewritten rather than deleted: the assertion that a fresh session is *marked*
-at step one is gone, and what M-11 established — that the material served is
-stage 01's and the bank has a floor — is still tested. A second test now holds
-the two states side by side so neither can drift into the other.
+is rewritten rather than deleted: the assertion that a fresh session is
+*marked* at step one is gone, and what M-11 established — that the material
+served is stage 01's and the bank has a floor — is still tested. A second test
+holds the two states side by side so neither can drift into the other.
 
 **`test_teaching_material_is_served_at_every_level` asserted a heading.** Its
 subject is that the step's *material* reaches every rung; it checked for the
-string `CURRENT STEP`, which BJ renames when the position is an assumption. The
-material is unchanged. Asserted on the material now.
+string `CURRENT STEP`, which BJ renames. Asserted on the material now.
 
 **775 tests, from 756. Harness 7,616 · 0 fail.**
