@@ -103,11 +103,11 @@ def test_thirteen_of_fourteen_are_distinguished_by_a_card():
     The cards raise it to thirteen, and they were in the corpus all along —
     M-08's port audit found them referenced thirty-one times and never
     modelled."""
-    with_card = [k for k, v in SET.items() if v["cards_written_on"]]
+    with_card = [k for k, v in SET.items() if v["cards_filled_in"]]
     assert len(with_card) == 13
-    assert SET["G"]["cards_written_on"] == [], (
+    assert SET["G"]["cards_filled_in"] == [], (
         "G has gained a card — the one chapter this column cannot distinguish")
-    seen = [c for v in SET.values() for c in v["cards_written_on"]]
+    seen = [c for v in SET.values() for c in v["cards_filled_in"]]
     assert len(seen) == len(set(seen)), "two chapters claim the same card"
 
 

@@ -325,7 +325,7 @@ def recognition_block(key):
                 f"opens: {', '.join(row['opens']) or 'no new parts'}",
                 f"ports: {', '.join(row['ports'])}",
                 f"leaves filled in: "
-                + (", ".join('card ' + c for c in row['cards_written_on'])
+                + (", ".join('card ' + c for c in row['cards_filled_in'])
                    or 'no card of its own')]
         L.append("- " + " · ".join(bits))
     return L

@@ -57,7 +57,7 @@ def build():
             "opens": sorted(opens),
             "on_the_machine": len(machine),
             "ports": sorted((ch.get("card") or {}).get("pins") or []),
-            "cards_written_on": mine,
+            "cards_filled_in": mine,
         }
     return {
         "_what": "What a build LOOKS like, for all fourteen chapters — BL as "
@@ -89,8 +89,8 @@ if __name__ == "__main__":
         print("  in step with the corpus")
     else:
         OUT.write_text(json.dumps(built, indent=1, ensure_ascii=False) + "\n")
-        n = sum(1 for v in built["chapters"].values() if v["cards_written_on"])
+        n = sum(1 for v in built["chapters"].values() if v["cards_filled_in"])
         print(f"  fourteen chapters · {n} distinguished by a card they leave written on")
         for k, v in built["chapters"].items():
             print(f"    {k:4s} opens {len(v['opens']):d}  ports {len(v['ports']):2d}  "
-                  f"cards {v['cards_written_on'] or '— none —'}")
+                  f"cards {v['cards_filled_in'] or '— none —'}")
