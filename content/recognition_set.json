@@ -1,0 +1,294 @@
+{
+ "_what": "What a build LOOKS like, for all fourteen chapters — BL as amended. Parts opened, ports occupied, and the numbered cards this chapter leaves written on. Derived from the corpus by tools/recognition_set.py; nothing here is authored.",
+ "_why_cards": "Step 01 measured seven distinct board states across fourteen chapters, because seven open no new part. Thirteen of the fourteen leave a numbered card written on, which raises what a description can distinguish from seven to thirteen.",
+ "_G": "G leaves no numbered card. It is the one chapter this column cannot distinguish, and it is named rather than papered over: what G leaves is a machine given to somebody else with their name on it, and putting that into words is the architect's.",
+ "chapters": {
+  "01": {
+   "name": "First Light",
+   "opens": [
+    "base",
+    "board",
+    "display",
+    "sensor A",
+    "the 1 m lead",
+    "the black wire",
+    "the red wire",
+    "the yellow wire"
+   ],
+   "on_the_machine": 8,
+   "ports": [
+    "3V",
+    "A0",
+    "DSP",
+    "GND"
+   ],
+   "cards_written_on": [
+    "01"
+   ]
+  },
+  "02": {
+   "name": "The Tripwire",
+   "opens": [
+    "dial",
+    "ring"
+   ],
+   "on_the_machine": 10,
+   "ports": [
+    "3V",
+    "A0",
+    "DIAL",
+    "DSP",
+    "GND",
+    "RING"
+   ],
+   "cards_written_on": [
+    "02"
+   ]
+  },
+  "03": {
+   "name": "The Noisemaker",
+   "opens": [
+    "buzzer"
+   ],
+   "on_the_machine": 11,
+   "ports": [
+    "3V",
+    "A0",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "RING"
+   ],
+   "cards_written_on": [
+    "03"
+   ]
+  },
+  "04": {
+   "name": "The Chatterbox",
+   "opens": [],
+   "on_the_machine": 11,
+   "ports": [
+    "3V",
+    "A0",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "RING"
+   ],
+   "cards_written_on": [
+    "04"
+   ]
+  },
+  "05": {
+   "name": "Sensor Duel",
+   "opens": [
+    "sensor B",
+    "the 1 m lead"
+   ],
+   "on_the_machine": 12,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "RING"
+   ],
+   "cards_written_on": [
+    "05"
+   ]
+  },
+  "06": {
+   "name": "The Witness",
+   "opens": [
+    "magnet",
+    "mounting kit",
+    "switch"
+   ],
+   "on_the_machine": 15,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "06"
+   ]
+  },
+  "07": {
+   "name": "The Night Shift",
+   "opens": [],
+   "on_the_machine": 15,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "07"
+   ]
+  },
+  "08": {
+   "name": "Chain Reaction",
+   "opens": [
+    "lamp"
+   ],
+   "on_the_machine": 16,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "08"
+   ]
+  },
+  "D": {
+   "name": "The Doorkeeper",
+   "opens": [],
+   "on_the_machine": 16,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "D1",
+    "D3"
+   ]
+  },
+  "09": {
+   "name": "Stakeout",
+   "opens": [
+    "mounting kit"
+   ],
+   "on_the_machine": 16,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "09"
+   ]
+  },
+  "10": {
+   "name": "The Creature",
+   "opens": [
+    "clips",
+    "templates"
+   ],
+   "on_the_machine": 18,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "10"
+   ]
+  },
+  "11": {
+   "name": "Sabotage",
+   "opens": [],
+   "on_the_machine": 18,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "11"
+   ]
+  },
+  "12": {
+   "name": "Your Own Machine",
+   "opens": [],
+   "on_the_machine": 18,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": [
+    "12"
+   ]
+  },
+  "G": {
+   "name": "The Gift",
+   "opens": [],
+   "on_the_machine": 18,
+   "ports": [
+    "3V",
+    "A0",
+    "A1",
+    "BUZ",
+    "DIAL",
+    "DSP",
+    "GND",
+    "LMP",
+    "RING",
+    "SW"
+   ],
+   "cards_written_on": []
+  }
+ }
+}
