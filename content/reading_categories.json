@@ -1,10 +1,49 @@
 {
-  "_what": "The categories a person scores replies against. Fixed in a file so they are chosen before a reading rather than during one, and so the tool and M-11-step02-categories.md cannot drift.",
-  "_why_a_person": "R10's ruled subject was the machine's condition OR the child's situation. Three detectors were written for the second and all three failed against a reader — 31% disagreement in M-11 step 02, 47% in step 04, and 0 of 10 against 5 of 10 in step 05a. The claim is carried by an adverb, a modal or a bare imperative, and all seven R10 families match propositions.",
-  "axes": {
-    "axis1": ["asserts", "asks", "proceeds", "redirects", "none of the four"],
-    "axis2": ["contradicts the child", "accepts", "contradicts itself"],
-    "axis3": ["asserts progress the child has not claimed", "does not"]
-  },
-  "_axis3": "Added in M-11 step 06, from step 05a. Step 04 measured 'contradicts the child' at 0 of 70, and that axis requires the child to have SAID the thing being denied. A cold start at chapter 11 was told 'you've woken the machine up' having said nothing about it — 2 of 5 — which BE forbids and axis2 cannot see. The zero was real and narrower than it read."
+ "_what": "The categories a person scores replies against. Fixed in a file so they are chosen before a reading rather than during one, and so the tool and M-11-step02-categories.md cannot drift.",
+ "_why_a_person": "R10's ruled subject was the machine's condition OR the child's situation. Three detectors were written for the second and all three failed against a reader — 31% disagreement in M-11 step 02, 47% in step 04, and 0 of 10 against 5 of 10 in step 05a. The claim is carried by an adverb, a modal or a bare imperative, and all seven R10 families match propositions.",
+ "axes": {
+  "axis1": [
+   "asserts",
+   "asks",
+   "proceeds",
+   "redirects",
+   "none of the four"
+  ],
+  "axis2": [
+   "contradicts the child",
+   "accepts",
+   "contradicts itself"
+  ],
+  "axis3": [
+   "asserts progress the child has not claimed",
+   "does not"
+  ]
+ },
+ "_axis3": "Added in M-11 step 06, from step 05a. Step 04 measured 'contradicts the child' at 0 of 70, and that axis requires the child to have SAID the thing being denied. A cold start at chapter 11 was told 'you've woken the machine up' having said nothing about it — 2 of 5 — which BE forbids and axis2 cannot see. The zero was real and narrower than it read.",
+ "_sets": "Named category sets. `axes` is M-11's, for what a reply does about the child's position. `placing` is M-12's, for what a reply does with a description of a board. read_replies.py takes --set and defaults to `axes`, so M-11's readings are unaffected.",
+ "placing": {
+  "axis1": [
+   "places to one chapter",
+   "places to a board state",
+   "asks for more before placing",
+   "teaches",
+   "proceeds as if empty",
+   "none of these"
+  ],
+  "axis2": [
+   "correct",
+   "over-precise",
+   "wrong",
+   "did not place"
+  ],
+  "axis3": [
+   "teaches",
+   "asks again without teaching",
+   "places anyway",
+   "not applicable"
+  ]
+ },
+ "_placing_axis1": "What the reply does. `places to a board state` means it names or hedges across the set the description actually supports — *you're somewhere around the creature or the sabotage chapter* — rather than choosing one. `teaches` is BK: explaining what a part is, in the course of finding out whether the child has it.",
+ "_placing_axis2": "Whether the placing is right AGAINST WHAT THE CHILD DESCRIBED, not against what the fixture intended — X3. This is the axis the ceiling makes necessary. Seven of the fourteen chapters share a board with others, so a description of the 18-part board supports 10, 11, 12 and G equally. **`over-precise` is naming one chapter when the description supports several**, and it is a failure that looks exactly like success: a confident correct-sounding answer that the evidence does not carry.",
+ "_placing_axis3": "X6 and BK, and it applies only to the two cannot_place descriptions. The failure mode is a loop: Milo asks what is on the board, the child cannot say, and Milo asks again. `TEACH` is the material and has been served since M-11."
 }

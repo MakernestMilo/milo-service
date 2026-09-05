@@ -1,0 +1,36 @@
+{
+  "_what": "What a child says on their first turn when something is already built. Written against the seven distinct board states rather than the fourteen chapters, because parts and ports collapse to seven and the fixture should test the ceiling rather than pretend it isn't there.",
+
+  "_voice": "The same child as the fourteen openers and as transcript-64b1660d — plain, lowercase, describing objects rather than naming them. A child in a library has not read the earlier chapters and has no vocabulary for what the last child built.",
+
+  "_constraint": "None may satisfy matched(). A child describing a half-built board is not reporting a fault, and BM says so. Run check_opener.py on each.",
+
+  "by_board_state": {
+    "b1_8parts_4ports": "theres a green board screwed onto a black tray and a little screen and some wires going to a black bead",
+    "b2_10parts_6ports": "same kind of thing but its got a knob on it and a ring that lights up",
+    "b3_11parts_7ports": "theres a buzzer stuck on the side of it as well",
+    "b4_12parts_8ports": "theres two of the little black beads, one of them on a long wire going off somewhere",
+    "b5_15parts_9ports": "theres a switch and a magnet stuck on with pads, and the rest of it like before",
+    "b6_16parts_10ports": "theres a lamp on a really long lead as well as everything else",
+    "b7_18parts_10ports": "its got a card shape clipped round the outside like a body"
+  },
+
+  "by_artefact": {
+    "_why": "These test the amended BL — the visible artefact rather than the parts. Each belongs to a chapter that shares its board state with three others, so parts and ports cannot place them and the artefact can.",
+    "chart_card_filled": "theres a bit of card with loads of dots drawn on it in pencil next to the machine",
+    "mounted_on_door": "the machine is strapped to the back of a door, i didnt put it there",
+    "broken_on_purpose": "someone has been at this one. it looks finished but its not doing what the card says it should"
+  },
+
+  "mid_chapter": {
+    "_why": "X1's second case. A board part-built rather than at a chapter's end — the child has done some of the steps and stopped.",
+    "01_midway": "the green board is on the tray but the wires are all still in the bag",
+    "06_midway": "the switch is stuck on the door frame but the magnet is just sitting on the table"
+  },
+
+  "cannot_place": {
+    "_why": "X1's third case, and the one nothing in the repository has ever had. Not a short description — an utterance that genuinely fails to place, from a child who has no words for any of it. The measurement is whether Milo teaches or asks again.",
+    "no_vocabulary": "theres already stuff on it",
+    "no_vocabulary_2": "i dont know what any of this is, someone left it like this"
+  }
+}
