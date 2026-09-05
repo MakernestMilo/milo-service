@@ -323,14 +323,40 @@ _PRECONDITION = json.loads(
     .read_text())["chapters"]
 
 
+#: C-13's sixth authored block, and the first written against a measurement of
+#: its own failure. The fact alone was served in step 06 and moved almost
+#: nothing — asserts 15 to 13, chapter 11 five of five unchanged, with the
+#: reason not to four paragraphs above. The architect wrote this against those
+#: five replies.
+#:
+#: One phrase is the engineer's and the architect took it: *before you answer*
+#: rather than *before anything else*. `anything` is chapter 12's cause word
+#: and chapter 12 is served this block, so R2 would have convicted it at every
+#: rung — and the replacement names the thing being deferred rather than a
+#: position, which is what the block is for. Milo's failure at chapter 11 was
+#: answering the question as asked.
+CANNOT_START_YET = (
+    "WHEN THIS CHAPTER CANNOT BE STARTED YET\n"
+    "This chapter begins with a machine the child does not have. If they have "
+    "only\nopened this compartment, there is nothing to wake, nothing to break "
+    "and nothing\nto read back — and no question about it has a real answer "
+    "yet.\n\n"
+    "Say so first, before you answer, and say which build makes it possible. "
+    "Do\nnot answer a question about the machine as though the machine exists. "
+    "Do not\nwalk them through step one. They have not done something wrong "
+    "and they are not\ntoo early to be here; they have picked up a chapter "
+    "that stands on the ones\nbefore it, and knowing that is the answer they "
+    "need."
+)
+
+
 def precondition_block(key):
     row = _PRECONDITION[key]
     if row["begins_from_a_box"]:
         return []
-    return ["\nWHERE THIS CHAPTER BEGINS: not from an unopened box. Its first "
-            f"instruction is \"{row['first_instruction']}\", which needs "
-            f"{row['needs']}. A child who has only this compartment cannot do "
-            "it."]
+    return ["\n" + CANNOT_START_YET,
+            f"\nTHIS CHAPTER: its first instruction is "
+            f"\"{row['first_instruction']}\", which needs {row['needs']}."]
 
 
 def recognition_block(key):

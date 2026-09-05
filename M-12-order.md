@@ -123,6 +123,24 @@ proves an absence, so its verdict improves as the artefact shrinks.
 prediction.** M-11's Q1 passed at ≥3, was falsified below 2, and measured
 exactly 2.
 
+**C-39 · amended, and the amendment is that the cost has moved twice while
+the ruling has not moved once.** Opened in M-11, where the price of the
+cause-word question was named as having gone from **instrument hygiene** —
+a run and one authored sentence — to **what a child is taught**, when six
+glossary entries were withheld from six chapters on words doing no work in
+them, `LED / lamp` kept from chapter 07 on *longer*, as in a leg, with the
+lamp in front of the child.
+
+M-12 adds the third step: **what the architect may write.** `anything` blocked
+an authored line about a child holding an unopened box, because chapter 12's
+cause reads *does not name anything anybody could look at* and chapter 12 is
+served that block. Five disputed words now across six orders — *anything*,
+*longer*, *happens*, *instead*, *listening*.
+
+**The ruling against an exclusion list stands.** Only the cost has moved, and
+it has moved twice. Recorded here rather than rewritten into M-11's closed
+order.
+
 **C-45 · A fixture pinned to one state proves nothing about the other, and the
 other may be the one every child is in.** `qc.py` pins
 `position_established=True` — correctly, because the harness asks what the
