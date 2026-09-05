@@ -185,8 +185,19 @@ def advance(session: Session, text: str) -> runtime.Turn:
     # time, and never past the last. Nothing else moves it — not the clock, not
     # the rung, not a guess from the reply.
     stages = len(corpus.BY_KEY[session.chapter]["stages"])
-    if runtime.advanced(text) and session.position < stages:
-        session.position += 1
+    if runtime.advanced(text):
+        # BJ. A child saying they have finished something is a child saying
+        # where they are, which is the only thing that establishes it. Until
+        # then the position is the card's assumption and the prompt says so.
+        #
+        # **The gap this leaves is named rather than hidden**: nothing else
+        # establishes a position. A child who describes a board and is placed
+        # by Milo has not moved the session — the placing lives in the
+        # transcript, which the prompt points at, and step 05 measures whether
+        # that is enough.
+        session.position_established = True
+        if session.position < stages:
+            session.position += 1
 
     if runtime.OVERRIDE.search(text):
         session.direct_asks += 1
@@ -202,7 +213,8 @@ def advance(session: Session, text: str) -> runtime.Turn:
                         tuple(t["said"] for t in session.turns
                               if t["who"] == "child"),
                         position=session.position,
-                        returning=session.returning)
+                        returning=session.returning,
+                        position_established=session.position_established)
 
 
 class ModelUnavailable(RuntimeError):
@@ -615,6 +627,7 @@ async def turn(payload: TurnRequest):
             "history": [dict(m) for m in prior],  # as the model received it
             "history_turns": len(kept),
             "position": session.position,
+            "position_established": session.position_established,
             "returning": session.returning,
             "clock": {
                 "elapsed": runtime.elapsed(turn),

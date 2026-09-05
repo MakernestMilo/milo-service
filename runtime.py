@@ -30,6 +30,10 @@ class Turn:
     # a session is a child at the beginning, which is the honest assumption and
     # the one the harness should be testing.
     position: int = 1
+    # BJ. False until the child has said where they are. The material served is
+    # unchanged — the bank is the floor and needs a step — but what the prompt
+    # ASSERTS is not.
+    position_established: bool = False
     # BI. True when this session id has been used before and its session has
     # expired — a returning scan. The prompt does not act on it yet; the
     # question Milo asks is the architect's to write.

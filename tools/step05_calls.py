@@ -231,7 +231,8 @@ def _run(cases, client, out):
         # fourteen chapters, so the rules would have had less to convict and the
         # harness would have reported the same 0 fail for a worse reason.
         turn = Turn(text, key, seen_at, asks,
-                    position=corpus.BY_KEY[key]["failure"].get("stage", 1))
+                    position=corpus.BY_KEY[key]["failure"].get("stage", 1),
+                    position_established=True)
 
         lvl = runtime.level(turn)                    # the real ladder decides
         assert lvl == target, (

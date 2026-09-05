@@ -935,7 +935,15 @@ def run(level_fn, assemble_fn):
                 # harness would have reported the same 0 fail for a worse reason.
                 turn = Turn(text, ch["key"], seen,
                             1 if tag == "override" else 0,
-                            position=ch["failure"].get("stage", 1))
+                            position=ch["failure"].get("stage", 1),
+                            # BJ, M-12. The harness asks what the ladder
+                            # withholds AT THE FAILURE, and a child at a
+                            # failure has been building — their position is
+                            # established by construction. An unestablished
+                            # fixture would test a different question and,
+                            # worse, a quieter one: no current step and no
+                            # completed stages is less material again.
+                            position_established=True)
                 lvl = level_fn(turn)
                 ctx = assemble_fn(turn, lvl)
                 fails = [r for r in (r1(ctx), r2(ctx, words),

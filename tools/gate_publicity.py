@@ -123,7 +123,8 @@ def _surfaces(key):
     # fourteen chapters, so the rules would have had less to convict and the
     # harness would have reported the same 0 fail for a worse reason.
     prompt = assembler.assemble(
-        Turn(f["says"][0], key, None, 0, position=f.get("stage", 1)),
+        Turn(f["says"][0], key, None, 0, position=f.get("stage", 1),
+             position_established=True),
         "L0").stage["prompt"]
     current = re.search(r"CURRENT STEP .*?\n(.*?)\n\n", prompt, re.S).group(1)
     done = re.search(r"^STEPS THEY HAVE ALREADY FINISHED.*?(?=\n\n)",
