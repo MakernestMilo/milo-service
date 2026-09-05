@@ -23,6 +23,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 import corpus   # noqa: E402
+sys.path.insert(0, str(ROOT / 'tools'))
+import preflight as preflight_check   # noqa: E402
 
 HOST = "https://milo-service.onrender.com"
 SSL = ssl.create_default_context(cafile=certifi.where())
@@ -52,16 +54,11 @@ def fetch(path, body=None):
 
 def preflight():
     build = json.loads(fetch("/health"))["build"]
-    SERVICE = ("main.py", "assembler.py", "corpus.py", "runtime.py", "store.py",
-               "qc.py", "content", "child", "panel")
-    if subprocess.run(["git", "cat-file", "-e", f"{build}^{{commit}}"], cwd=ROOT,
-                      capture_output=True).returncode != 0:
-        sys.exit(f"  production is at {build}, which this clone lacks — git fetch")
-    moved = [x for x in SERVICE
-             if subprocess.run(["git", "diff", "--quiet", build, "HEAD", "--", x],
-                               cwd=ROOT).returncode != 0]
-    if moved:
-        sys.exit(f"  refusing: the tree differs from production in {moved}")
+    head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
+                          capture_output=True, text=True).stdout.strip()
+    problems = preflight_check.check(build, head)
+    if problems:
+        sys.exit("  refusing to run:\n  - " + "\n  - ".join(problems))
     return build
 
 
