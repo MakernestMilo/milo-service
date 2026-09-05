@@ -67,7 +67,14 @@ OVERRIDE = re.compile(
 NEG = re.compile(
     r"(doesn'?t|does not|won'?t|isn'?t|not) (work|working|change|changing|move|moving"
     r"|stop|stopping|settle|start|starting|come on|turn on)"
-    r"|blank|dead|broken|stuck|frozen|weird|wrong|nothing (happens|is happening)"
+    # M-12 step 01. `stuck` is two words. A child says *it's stuck* about a
+    # machine and *stuck on with pads* about a magnet, and this class is for
+    # the first. Measured over 294 authored utterances x 14 chapters: the
+    # exclusion changes 13 pairs, all of them `stuck on alarm` — chapter 02's
+    # own symptom — firing in thirteen chapters that do not describe it.
+    # `it's stuck` is untouched at fourteen of fourteen.
+    r"|blank|dead|broken|stuck(?! (?:on|onto|to|down|under|behind))|frozen"
+    r"|weird|wrong|nothing (happens|is happening)"
     r"|no number|no noise|where do i start|keeps? (going|clicking|beeping)"
     r"|now it doesn'?t|used to work", re.I)
 

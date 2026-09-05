@@ -123,6 +123,13 @@ proves an absence, so its verdict improves as the artefact shrinks.
 prediction.** M-11's Q1 passed at ≥3, was falsified below 2, and measured
 exactly 2.
 
+**C-44 · The thing every child's session begins with was the least tested logic
+in the system.** `matched()` decides whether a real child's clock starts, and
+`runtime.level` reads it only where the answer is `L0` either way — so it
+cannot change a harness row's rung. Removing a whole term from `NEG` moves
+nought of 7,616 checks. **Not C-41's shape, where a harness goes quiet on less
+material: this is a harness that was never looking.**
+
 **C-43 · The tools that produce every measurement are the least examined code in
 the repository.** Item 8a. Twelve files, one test between them, and every
 finding in six orders came through them.
