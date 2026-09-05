@@ -1,0 +1,1075 @@
+{
+ "host": "https://milo-service.onrender.com",
+ "build": "455fbc1",
+ "head": "455fbc1",
+ "n": 5,
+ "categories": "placing",
+ "what": "X2 \u00b7 the pre-placing baseline",
+ "calls": [
+  {
+   "description": "b1_8parts_4ports",
+   "group": "by_board_state",
+   "said": "theres a green board screwed onto a black tray and a little screen and some wires going to a black bead",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 1,
+   "session": "m12s02-b1_8parts_4ports-1788590621-0",
+   "reply": "The green board and the black tray sound like the board mounted on the base \u2014 nice, that's step 03 territory. What's the little black bead wired up to, and are all its wires plugged in somewhere on the board?",
+   "level": "L0",
+   "latency_seconds": 2.584,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b1_8parts_4ports",
+   "group": "by_board_state",
+   "said": "theres a green board screwed onto a black tray and a little screen and some wires going to a black bead",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 2,
+   "session": "m12s02-b1_8parts_4ports-1788590621-1",
+   "reply": "The green board on the tray is the board, and the black bead is sensor A \u2014 sounds like you've got a good handful there. What's the screen doing right now, is it showing any numbers or is it blank?",
+   "level": "L0",
+   "latency_seconds": 2.252,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b1_8parts_4ports",
+   "group": "by_board_state",
+   "said": "theres a green board screwed onto a black tray and a little screen and some wires going to a black bead",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 3,
+   "session": "m12s02-b1_8parts_4ports-1788590621-2",
+   "reply": "The green board is the board, the black tray is the base, and that little black bead is sensor A \u2014 you've basically got your parts laid out already. What's the number doing on the screen right now, is it moving at all or stuck on one value?",
+   "level": "L0",
+   "latency_seconds": 2.073,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b1_8parts_4ports",
+   "group": "by_board_state",
+   "said": "theres a green board screwed onto a black tray and a little screen and some wires going to a black bead",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 4,
+   "session": "m12s02-b1_8parts_4ports-1788590621-3",
+   "reply": "The number stuck on that screen \u2014 is it just sitting there not changing at all, or does it move a little and then stop?",
+   "level": "L0",
+   "latency_seconds": 2.208,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b1_8parts_4ports",
+   "group": "by_board_state",
+   "said": "theres a green board screwed onto a black tray and a little screen and some wires going to a black bead",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 5,
+   "session": "m12s02-b1_8parts_4ports-1788590621-4",
+   "reply": "The number stuck, the little black bead not changing \u2014 is that what's on the screen right now, the same number sitting there no matter what you do near it?",
+   "level": "L0",
+   "latency_seconds": 2.17,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b2_10parts_6ports",
+   "group": "by_board_state",
+   "said": "same kind of thing but its got a knob on it and a ring that lights up",
+   "chapter": "02",
+   "supports": [
+    "02"
+   ],
+   "run": 1,
+   "session": "m12s02-b2_10parts_6ports-1788590621-0",
+   "reply": "Right, so you've got the dial and the ring out on the table now \u2014 that's the two new pieces for this chapter. Where are you at with them: are they just sitting there next to the base, or have you started plugging either one in?",
+   "level": "L0",
+   "latency_seconds": 2.258,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b2_10parts_6ports",
+   "group": "by_board_state",
+   "said": "same kind of thing but its got a knob on it and a ring that lights up",
+   "chapter": "02",
+   "supports": [
+    "02"
+   ],
+   "run": 2,
+   "session": "m12s02-b2_10parts_6ports-1788590621-1",
+   "reply": "It sounds like you're at the part where the dial and the ring come out of their compartment. What are you seeing right now \u2014 is the ring lit up, or still dark?",
+   "level": "L0",
+   "latency_seconds": 1.888,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b2_10parts_6ports",
+   "group": "by_board_state",
+   "said": "same kind of thing but its got a knob on it and a ring that lights up",
+   "chapter": "02",
+   "supports": [
+    "02"
+   ],
+   "run": 3,
+   "session": "m12s02-b2_10parts_6ports-1788590621-2",
+   "reply": "Nice \u2014 sounds like you're at the start of chapter 02, where the dial and the ring come out of the box. The stuck-on-red thing you're describing, is that happening right now with the machine actually built and running, or are you just looking at the parts laid out?",
+   "level": "L0",
+   "latency_seconds": 2.319,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b2_10parts_6ports",
+   "group": "by_board_state",
+   "said": "same kind of thing but its got a knob on it and a ring that lights up",
+   "chapter": "02",
+   "supports": [
+    "02"
+   ],
+   "run": 4,
+   "session": "m12s02-b2_10parts_6ports-1788590621-3",
+   "reply": "Got it \u2014 sounds like you're looking at the dial and the ring, the two new bits for this chapter. What are they doing right now \u2014 are they both just sitting there loose, or have you already plugged one in?",
+   "level": "L0",
+   "latency_seconds": 2.189,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b2_10parts_6ports",
+   "group": "by_board_state",
+   "said": "same kind of thing but its got a knob on it and a ring that lights up",
+   "chapter": "02",
+   "supports": [
+    "02"
+   ],
+   "run": 5,
+   "session": "m12s02-b2_10parts_6ports-1788590621-4",
+   "reply": "Got it \u2014 the knob is the dial and the light-up ring is, well, the ring, and it sounds like you've got both of those out on the table now. Tell me what's happening when you turn the dial \u2014 does the ring change color or stay stuck the same?",
+   "level": "L0",
+   "latency_seconds": 2.403,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b3_11parts_7ports",
+   "group": "by_board_state",
+   "said": "theres a buzzer stuck on the side of it as well",
+   "chapter": "03",
+   "supports": [
+    "03",
+    "04"
+   ],
+   "run": 1,
+   "session": "m12s02-b3_11parts_7ports-1788590621-0",
+   "reply": "The buzzer \u2014 that's the part this whole chapter is about, the loud one that gets someone's attention from another room. Is it just sitting loose near the build, or does it look like it's plugged into a spot on the board?",
+   "level": "L0",
+   "latency_seconds": 2.119,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b3_11parts_7ports",
+   "group": "by_board_state",
+   "said": "theres a buzzer stuck on the side of it as well",
+   "chapter": "03",
+   "supports": [
+    "03",
+    "04"
+   ],
+   "run": 2,
+   "session": "m12s02-b3_11parts_7ports-1788590621-1",
+   "reply": "That's the buzzer \u2014 the one you just pulled out of compartment 03 for this chapter. What does it look like sitting there, is it loose on top or does it seem to click into a spot on the base?",
+   "level": "L0",
+   "latency_seconds": 2.49,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b3_11parts_7ports",
+   "group": "by_board_state",
+   "said": "theres a buzzer stuck on the side of it as well",
+   "chapter": "03",
+   "supports": [
+    "03",
+    "04"
+   ],
+   "run": 3,
+   "session": "m12s02-b3_11parts_7ports-1788590621-2",
+   "reply": "The buzzer \u2014 nice, that's the loud one for this build. Is it still sitting loose in its compartment, or has it already gone into the base somewhere?",
+   "level": "L0",
+   "latency_seconds": 2.151,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b3_11parts_7ports",
+   "group": "by_board_state",
+   "said": "theres a buzzer stuck on the side of it as well",
+   "chapter": "03",
+   "supports": [
+    "03",
+    "04"
+   ],
+   "run": 4,
+   "session": "m12s02-b3_11parts_7ports-1788590621-3",
+   "reply": "That's the buzzer \u2014 the part you're opening in this step. What does it look like, round or square, and does it have anything written on it?",
+   "level": "L0",
+   "latency_seconds": 2.221,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b3_11parts_7ports",
+   "group": "by_board_state",
+   "said": "theres a buzzer stuck on the side of it as well",
+   "chapter": "03",
+   "supports": [
+    "03",
+    "04"
+   ],
+   "run": 5,
+   "session": "m12s02-b3_11parts_7ports-1788590621-4",
+   "reply": "The buzzer \u2014 nice, that's the noisemaker part of this build, the one that makes noise instead of showing it. Is it just sitting loose next to the machine right now, or is it actually plugged in with wires already?",
+   "level": "L0",
+   "latency_seconds": 2.272,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b4_12parts_8ports",
+   "group": "by_board_state",
+   "said": "theres two of the little black beads, one of them on a long wire going off somewhere",
+   "chapter": "05",
+   "supports": [
+    "05"
+   ],
+   "run": 1,
+   "session": "m12s02-b4_12parts_8ports-1788590621-0",
+   "reply": "Right, that's sensor A and sensor B \u2014 same part, twice. One sits close on the base, and the other rides out on the 1 m lead so it can measure somewhere else entirely, like across the room or outside a window.\n\nWhat are you noticing about where that long-wire one could reach \u2014 anywhere interesting near you?",
+   "level": "L0",
+   "latency_seconds": 2.752,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b4_12parts_8ports",
+   "group": "by_board_state",
+   "said": "theres two of the little black beads, one of them on a long wire going off somewhere",
+   "chapter": "05",
+   "supports": [
+    "05"
+   ],
+   "run": 2,
+   "session": "m12s02-b4_12parts_8ports-1788590621-1",
+   "reply": "Yes \u2014 that's sensor A on its regular wire, and sensor B sitting at the end of the long lead, so it can sit somewhere else in the room while A stays near the machine. You're at the start of this chapter, where you open that compartment and think about what B might say if it were touching A right now \u2014 do they feel like they're in the same kind of spot, or different?",
+   "level": "L0",
+   "latency_seconds": 2.853,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b4_12parts_8ports",
+   "group": "by_board_state",
+   "said": "theres two of the little black beads, one of them on a long wire going off somewhere",
+   "chapter": "05",
+   "supports": [
+    "05"
+   ],
+   "run": 3,
+   "session": "m12s02-b4_12parts_8ports-1788590621-2",
+   "reply": "Nice \u2014 that's exactly right, that's sensor A and sensor B sitting there, and the long wire is the 1 m lead so B can sit somewhere far from the machine. You're at the very start of this chapter, opening compartment 05.\n\nBefore you plug anything in \u2014 what do you think B will say if you hold it right up against A, same spot, same moment?",
+   "level": "L0",
+   "latency_seconds": 3.148,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b4_12parts_8ports",
+   "group": "by_board_state",
+   "said": "theres two of the little black beads, one of them on a long wire going off somewhere",
+   "chapter": "05",
+   "supports": [
+    "05"
+   ],
+   "run": 4,
+   "session": "m12s02-b4_12parts_8ports-1788590621-3",
+   "reply": "Nice \u2014 sounds like you've found sensor B, the second little black bead, and the 1 m lead is the long wire letting it sit off away from the machine. Before you plug anything in: what do you think it'll show if you hold it right next to the first one?",
+   "level": "L0",
+   "latency_seconds": 2.614,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b4_12parts_8ports",
+   "group": "by_board_state",
+   "said": "theres two of the little black beads, one of them on a long wire going off somewhere",
+   "chapter": "05",
+   "supports": [
+    "05"
+   ],
+   "run": 5,
+   "session": "m12s02-b4_12parts_8ports-1788590621-4",
+   "reply": "Nice, that's exactly right \u2014 one is sensor A, already in the machine, and the other is sensor B, which is the new one you just opened, sitting on the long lead so it can sit a metre away and measure somewhere different. Before you plug anything in, what do you think it's going to read compared to the first one \u2014 same number, or different?",
+   "level": "L0",
+   "latency_seconds": 2.674,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b5_15parts_9ports",
+   "group": "by_board_state",
+   "said": "theres a switch and a magnet stuck on with pads, and the rest of it like before",
+   "chapter": "06",
+   "supports": [
+    "06",
+    "07"
+   ],
+   "run": 1,
+   "session": "m12s02-b5_15parts_9ports-1788590621-0",
+   "reply": "That's compartment 06 open, right on track. So you've got the switch and the magnet sitting there loose on their pads, plus everything from before still in place \u2014 what's the first thing the step is asking you to do with them?",
+   "level": "L0",
+   "latency_seconds": 2.455,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b5_15parts_9ports",
+   "group": "by_board_state",
+   "said": "theres a switch and a magnet stuck on with pads, and the rest of it like before",
+   "chapter": "06",
+   "supports": [
+    "06",
+    "07"
+   ],
+   "run": 2,
+   "session": "m12s02-b5_15parts_9ports-1788590621-1",
+   "reply": "It sounds like you've got compartment 06 open and laid out \u2014 the switch, the magnet, and the pads, sitting alongside everything from before. That's exactly right for the start of this chapter. Have you had a go at guessing how many times one door in your house opened yesterday yet?",
+   "level": "L0",
+   "latency_seconds": 2.363,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b5_15parts_9ports",
+   "group": "by_board_state",
+   "said": "theres a switch and a magnet stuck on with pads, and the rest of it like before",
+   "chapter": "06",
+   "supports": [
+    "06",
+    "07"
+   ],
+   "run": 3,
+   "session": "m12s02-b5_15parts_9ports-1788590621-2",
+   "reply": "Nice \u2014 sounds like you've got compartment 06 open: the switch, the magnet, and the pads for sticking them down. That's exactly the start of this chapter, where you're counting something that happens without anyone watching.\n\nSo before anything else \u2014 how many times do you think one door in your house opened yesterday?",
+   "level": "L0",
+   "latency_seconds": 2.391,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b5_15parts_9ports",
+   "group": "by_board_state",
+   "said": "theres a switch and a magnet stuck on with pads, and the rest of it like before",
+   "chapter": "06",
+   "supports": [
+    "06",
+    "07"
+   ],
+   "run": 4,
+   "session": "m12s02-b5_15parts_9ports-1788590621-3",
+   "reply": "Nice \u2014 sounds like you've got compartment 06 fully open: the switch and the magnet, plus the sticky pads for mounting them later. That's step one of this chapter done.\n\nNow \u2014 before you attach anything, have you had a go at guessing how many times one door in your house opened yesterday?",
+   "level": "L0",
+   "latency_seconds": 2.346,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b5_15parts_9ports",
+   "group": "by_board_state",
+   "said": "theres a switch and a magnet stuck on with pads, and the rest of it like before",
+   "chapter": "06",
+   "supports": [
+    "06",
+    "07"
+   ],
+   "run": 5,
+   "session": "m12s02-b5_15parts_9ports-1788590621-4",
+   "reply": "It sounds like you've got compartment 06 open and everything's laid out \u2014 the switch, the magnet, and the sticky pads all there. So this is the start of chapter 06, where you're counting something instead of just measuring it, like a door opening.\n\nBefore anything else: how many times do you reckon a door in your house opened yesterday?",
+   "level": "L0",
+   "latency_seconds": 2.739,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b6_16parts_10ports",
+   "group": "by_board_state",
+   "said": "theres a lamp on a really long lead as well as everything else",
+   "chapter": "08",
+   "supports": [
+    "08",
+    "D",
+    "09"
+   ],
+   "run": 1,
+   "session": "m12s02-b6_16parts_10ports-1788590621-0",
+   "reply": "Yeah, that long lead one is the lamp \u2014 it lets you put a light somewhere across the room from the rest of the machine, instead of stuck right on the base. You've got everything opened up for this chapter, then.\n\nHave you had a look at the step yet, or want to say what you already know about a fire alarm or a kettle first?",
+   "level": "L0",
+   "latency_seconds": 2.552,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b6_16parts_10ports",
+   "group": "by_board_state",
+   "said": "theres a lamp on a really long lead as well as everything else",
+   "chapter": "08",
+   "supports": [
+    "08",
+    "D",
+    "09"
+   ],
+   "run": 2,
+   "session": "m12s02-b6_16parts_10ports-1788590621-1",
+   "reply": "Yes, the lamp \u2014 that's the new part for this chapter, and it's the one on the long lead so it can sit somewhere across the room from the rest of the machine. Have you found compartment 08 fully open, or is there more still in there to pull out?",
+   "level": "L0",
+   "latency_seconds": 2.46,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b6_16parts_10ports",
+   "group": "by_board_state",
+   "said": "theres a lamp on a really long lead as well as everything else",
+   "chapter": "08",
+   "supports": [
+    "08",
+    "D",
+    "09"
+   ],
+   "run": 3,
+   "session": "m12s02-b6_16parts_10ports-1788590621-2",
+   "reply": "Yeah, that's the 1 m lead on the lamp \u2014 it lets the light sit a metre away from the rest of the machine, in another room even. You're at the start of Chain Reaction, step one, just opening the compartment and pulling that out. Have you got everything else from the box out too, or is it just the lamp so far?",
+   "level": "L0",
+   "latency_seconds": 3.839,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b6_16parts_10ports",
+   "group": "by_board_state",
+   "said": "theres a lamp on a really long lead as well as everything else",
+   "chapter": "08",
+   "supports": [
+    "08",
+    "D",
+    "09"
+   ],
+   "run": 4,
+   "session": "m12s02-b6_16parts_10ports-1788590621-3",
+   "reply": "That's the lamp \u2014 the long lead is so it can sit in a room you're not in, away from the rest of the machine. You've got everything for this chapter now, right at the start where you take it out of compartment 08.",
+   "level": "L0",
+   "latency_seconds": 2.233,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b6_16parts_10ports",
+   "group": "by_board_state",
+   "said": "theres a lamp on a really long lead as well as everything else",
+   "chapter": "08",
+   "supports": [
+    "08",
+    "D",
+    "09"
+   ],
+   "run": 5,
+   "session": "m12s02-b6_16parts_10ports-1788590621-4",
+   "reply": "It sounds like you've just opened compartment 08 and found the lamp \u2014 the one on the long lead, right, so it can sit in a room you're not even in. Have you found the rest of what's in there too, or is the lamp the first thing you pulled out?",
+   "level": "L0",
+   "latency_seconds": 2.425,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b7_18parts_10ports",
+   "group": "by_board_state",
+   "said": "its got a card shape clipped round the outside like a body",
+   "chapter": "10",
+   "supports": [
+    "10",
+    "11",
+    "12",
+    "G"
+   ],
+   "run": 1,
+   "session": "m12s02-b7_18parts_10ports-1788590621-0",
+   "reply": "That's exactly what step one is about \u2014 the template card wrapped round with the clips holding it on. Is it sitting flat, or is it pressing against anything on the board underneath?",
+   "level": "L0",
+   "latency_seconds": 2.151,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b7_18parts_10ports",
+   "group": "by_board_state",
+   "said": "its got a card shape clipped round the outside like a body",
+   "chapter": "10",
+   "supports": [
+    "10",
+    "11",
+    "12",
+    "G"
+   ],
+   "run": 2,
+   "session": "m12s02-b7_18parts_10ports-1788590621-1",
+   "reply": "That's the template on with the clips, then \u2014 how many of the four clips did you end up using to hold it on?",
+   "level": "L0",
+   "latency_seconds": 2.049,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b7_18parts_10ports",
+   "group": "by_board_state",
+   "said": "its got a card shape clipped round the outside like a body",
+   "chapter": "10",
+   "supports": [
+    "10",
+    "11",
+    "12",
+    "G"
+   ],
+   "run": 3,
+   "session": "m12s02-b7_18parts_10ports-1788590621-2",
+   "reply": "That's the templates you're talking about, the card shape clipped on with the four clips. So the body's on and mounted up \u2014 what made you want to check in about it right now?",
+   "level": "L0",
+   "latency_seconds": 2.189,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b7_18parts_10ports",
+   "group": "by_board_state",
+   "said": "its got a card shape clipped round the outside like a body",
+   "chapter": "10",
+   "supports": [
+    "10",
+    "11",
+    "12",
+    "G"
+   ],
+   "run": 4,
+   "session": "m12s02-b7_18parts_10ports-1788590621-3",
+   "reply": "That's the body on and clipped down, nice. So what's it doing right now \u2014 is it just sitting there, or is something on the display or the light acting different since you put it on?",
+   "level": "L0",
+   "latency_seconds": 2.221,
+   "read_by_a_person": null
+  },
+  {
+   "description": "b7_18parts_10ports",
+   "group": "by_board_state",
+   "said": "its got a card shape clipped round the outside like a body",
+   "chapter": "10",
+   "supports": [
+    "10",
+    "11",
+    "12",
+    "G"
+   ],
+   "run": 5,
+   "session": "m12s02-b7_18parts_10ports-1788590621-4",
+   "reply": "That's the templates you're talking about, clipped on with the four clips \u2014 nice, sounds like the body's actually on there now. What made you pick that shape for it?",
+   "level": "L0",
+   "latency_seconds": 1.99,
+   "read_by_a_person": null
+  },
+  {
+   "description": "chart_card_filled",
+   "group": "by_artefact",
+   "said": "theres a bit of card with loads of dots drawn on it in pencil next to the machine",
+   "chapter": "07",
+   "supports": [
+    "07"
+   ],
+   "run": 1,
+   "session": "m12s02-chart_card_filled-1788590621-0",
+   "reply": "That sounds like the chart card you tore out of the back of the book for this step. What's on it right now \u2014 has anything actually been marked on the grid, or is it still empty?",
+   "level": "L0",
+   "latency_seconds": 1.924,
+   "read_by_a_person": null
+  },
+  {
+   "description": "chart_card_filled",
+   "group": "by_artefact",
+   "said": "theres a bit of card with loads of dots drawn on it in pencil next to the machine",
+   "chapter": "07",
+   "supports": [
+    "07"
+   ],
+   "run": 2,
+   "session": "m12s02-chart_card_filled-1788590621-1",
+   "reply": "That's the chart card \u2014 the one you tear out of the back of the book in this step. What's written next to the dots, or is it just dots so far?",
+   "level": "L0",
+   "latency_seconds": 1.995,
+   "read_by_a_person": null
+  },
+  {
+   "description": "chart_card_filled",
+   "group": "by_artefact",
+   "said": "theres a bit of card with loads of dots drawn on it in pencil next to the machine",
+   "chapter": "07",
+   "supports": [
+    "07"
+   ],
+   "run": 3,
+   "session": "m12s02-chart_card_filled-1788590621-2",
+   "reply": "That's the chart card you tore out in this step \u2014 the one with the empty grid you fill in over the next few days. Are the dots pencil marks you've already started plotting, or is it still blank and you're just looking at the grid?",
+   "level": "L0",
+   "latency_seconds": 2.4,
+   "read_by_a_person": null
+  },
+  {
+   "description": "chart_card_filled",
+   "group": "by_artefact",
+   "said": "theres a bit of card with loads of dots drawn on it in pencil next to the machine",
+   "chapter": "07",
+   "supports": [
+    "07"
+   ],
+   "run": 4,
+   "session": "m12s02-chart_card_filled-1788590621-3",
+   "reply": "That's the chart card you tore out at the start \u2014 the one with the dots is where you write down the reading each time you check it. What's on it right now, just the dots and nothing filled in, or has some of it got numbers written on it too?",
+   "level": "L0",
+   "latency_seconds": 2.331,
+   "read_by_a_person": null
+  },
+  {
+   "description": "chart_card_filled",
+   "group": "by_artefact",
+   "said": "theres a bit of card with loads of dots drawn on it in pencil next to the machine",
+   "chapter": "07",
+   "supports": [
+    "07"
+   ],
+   "run": 5,
+   "session": "m12s02-chart_card_filled-1788590621-4",
+   "reply": "That's the chart card you tore out the back of the book \u2014 the one where you write down your answer, four in the morning or four in the afternoon. What are the dots doing on it, are they scattered all over or is there a pattern you can see?",
+   "level": "L0",
+   "latency_seconds": 2.663,
+   "read_by_a_person": null
+  },
+  {
+   "description": "mounted_on_door",
+   "group": "by_artefact",
+   "said": "the machine is strapped to the back of a door, i didnt put it there",
+   "chapter": "D",
+   "supports": [
+    "D"
+   ],
+   "run": 1,
+   "session": "m12s02-mounted_on_door-1788590621-0",
+   "reply": "This is step one, the brief \u2014 before any wiring, you write down what you think this machine should do. So put the door aside for a second: what do you imagine The Doorkeeper is supposed to notice, and what should it do when it notices it?",
+   "level": "L0",
+   "latency_seconds": 2.405,
+   "read_by_a_person": null
+  },
+  {
+   "description": "mounted_on_door",
+   "group": "by_artefact",
+   "said": "the machine is strapped to the back of a door, i didnt put it there",
+   "chapter": "D",
+   "supports": [
+    "D"
+   ],
+   "run": 2,
+   "session": "m12s02-mounted_on_door-1788590621-1",
+   "reply": "It sounds like you're describing where it's mounted, not something that's gone wrong yet \u2014 what's it doing right now that made you want to tell me this?",
+   "level": "L0",
+   "latency_seconds": 2.204,
+   "read_by_a_person": null
+  },
+  {
+   "description": "mounted_on_door",
+   "group": "by_artefact",
+   "said": "the machine is strapped to the back of a door, i didnt put it there",
+   "chapter": "D",
+   "supports": [
+    "D"
+   ],
+   "run": 3,
+   "session": "m12s02-mounted_on_door-1788590621-2",
+   "reply": "This is step 01, the brief \u2014 before any wiring or code, just writing down what you think the machine should do. So nothing's actually strapped to a door yet, unless you mean something you're imagining or a picture in the book \u2014 which one is it?",
+   "level": "L0",
+   "latency_seconds": 2.353,
+   "read_by_a_person": null
+  },
+  {
+   "description": "mounted_on_door",
+   "group": "by_artefact",
+   "said": "the machine is strapped to the back of a door, i didnt put it there",
+   "chapter": "D",
+   "supports": [
+    "D"
+   ],
+   "run": 4,
+   "session": "m12s02-mounted_on_door-1788590621-3",
+   "reply": "That's a real thing to notice \u2014 someone else set this up before you got here. What made you go looking at it, was something happening that made you curious about what it's doing?",
+   "level": "L0",
+   "latency_seconds": 2.152,
+   "read_by_a_person": null
+  },
+  {
+   "description": "mounted_on_door",
+   "group": "by_artefact",
+   "said": "the machine is strapped to the back of a door, i didnt put it there",
+   "chapter": "D",
+   "supports": [
+    "D"
+   ],
+   "run": 5,
+   "session": "m12s02-mounted_on_door-1788590621-4",
+   "reply": "This is step 1 \u2014 the brief \u2014 so nothing's actually built yet, right? Tell me what you're picturing: what do you think this machine on a door should notice, and what should it do about it?",
+   "level": "L0",
+   "latency_seconds": 2.307,
+   "read_by_a_person": null
+  },
+  {
+   "description": "broken_on_purpose",
+   "group": "by_artefact",
+   "said": "someone has been at this one. it looks finished but its not doing what the card says it should",
+   "chapter": "11",
+   "supports": [
+    "11"
+   ],
+   "run": 1,
+   "session": "m12s02-broken_on_purpose-1788590621-0",
+   "reply": "Okay \u2014 that's exactly what this step is for. You've already got it built and it's not matching the card, so before anything else: what is it actually doing right now, and what does the card say it should be doing instead?",
+   "level": "L0",
+   "latency_seconds": 2.3,
+   "read_by_a_person": null
+  },
+  {
+   "description": "broken_on_purpose",
+   "group": "by_artefact",
+   "said": "someone has been at this one. it looks finished but its not doing what the card says it should",
+   "chapter": "11",
+   "supports": [
+    "11"
+   ],
+   "run": 2,
+   "session": "m12s02-broken_on_purpose-1788590621-1",
+   "reply": "Okay \u2014 so something looks right but isn't behaving right. Before we guess what's wrong, tell me exactly what you expect it to do and what it's actually doing instead \u2014 what do you see happening right now?",
+   "level": "L0",
+   "latency_seconds": 2.868,
+   "read_by_a_person": null
+  },
+  {
+   "description": "broken_on_purpose",
+   "group": "by_artefact",
+   "said": "someone has been at this one. it looks finished but its not doing what the card says it should",
+   "chapter": "11",
+   "supports": [
+    "11"
+   ],
+   "run": 3,
+   "session": "m12s02-broken_on_purpose-1788590621-2",
+   "reply": "Okay \u2014 that's exactly the situation this chapter is about, so you're right where you're meant to be. Somebody did something to it and didn't tell you what, and your job right now isn't to fix it, it's just to name one idea: what's the first thing you think could be wrong with it?",
+   "level": "L0",
+   "latency_seconds": 2.355,
+   "read_by_a_person": null
+  },
+  {
+   "description": "broken_on_purpose",
+   "group": "by_artefact",
+   "said": "someone has been at this one. it looks finished but its not doing what the card says it should",
+   "chapter": "11",
+   "supports": [
+    "11"
+   ],
+   "run": 4,
+   "session": "m12s02-broken_on_purpose-1788590621-3",
+   "reply": "Okay \u2014 so it looks all built, but whatever it's meant to show or do isn't happening. What is it actually doing right now instead \u2014 is the number frozen, blank, wrong, or is it not lighting up or beeping at all?",
+   "level": "L0",
+   "latency_seconds": 2.367,
+   "read_by_a_person": null
+  },
+  {
+   "description": "broken_on_purpose",
+   "group": "by_artefact",
+   "said": "someone has been at this one. it looks finished but its not doing what the card says it should",
+   "chapter": "11",
+   "supports": [
+    "11"
+   ],
+   "run": 5,
+   "session": "m12s02-broken_on_purpose-1788590621-4",
+   "reply": "It looks finished but it's not doing what the card says \u2014 good, that's exactly the starting point for this step. So the job now isn't fixing it, it's naming one idea about what could be wrong, and saying what test would prove it's not that. What's the first thing you'd guess?",
+   "level": "L0",
+   "latency_seconds": 2.445,
+   "read_by_a_person": null
+  },
+  {
+   "description": "01_midway",
+   "group": "mid_chapter",
+   "said": "the green board is on the tray but the wires are all still in the bag",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 1,
+   "session": "m12s02-01_midway-1788590621-0",
+   "reply": "That's exactly where you should be at step one \u2014 nothing gets plugged in yet, just laid out so you can see it all. Have you got the frame, the little black sensor, and the display out on the tray too, or is it just the green board so far?",
+   "level": "L0",
+   "latency_seconds": 2.354,
+   "read_by_a_person": null
+  },
+  {
+   "description": "01_midway",
+   "group": "mid_chapter",
+   "said": "the green board is on the tray but the wires are all still in the bag",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 2,
+   "session": "m12s02-01_midway-1788590621-1",
+   "reply": "That's exactly right for where you are \u2014 step 01 is just laying everything out, not wiring anything up yet. Have you got all eight parts out where you can see them: the frame, the green board, the little black sensor, the display, the three coloured wires, and the long USB lead?",
+   "level": "L0",
+   "latency_seconds": 2.492,
+   "read_by_a_person": null
+  },
+  {
+   "description": "01_midway",
+   "group": "mid_chapter",
+   "said": "the green board is on the tray but the wires are all still in the bag",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 3,
+   "session": "m12s02-01_midway-1788590621-2",
+   "reply": "That's a fine place to be \u2014 the board's out and the wires are waiting their turn. Is the display out of its bag too, so you've got all eight parts sitting in a row where you can actually see them?",
+   "level": "L0",
+   "latency_seconds": 2.227,
+   "read_by_a_person": null
+  },
+  {
+   "description": "01_midway",
+   "group": "mid_chapter",
+   "said": "the green board is on the tray but the wires are all still in the bag",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 4,
+   "session": "m12s02-01_midway-1788590621-3",
+   "reply": "That's exactly where you should be for step one \u2014 everything laid out where you can see it, nothing connected yet. Go ahead and get the wires out of the bag so all eight parts are sitting in a row: the frame, the board, the little black sensor, the display, the three coloured wires, and the long usb lead. Once they're all out, does it look like all eight are there, or is anything missing?",
+   "level": "L0",
+   "latency_seconds": 2.807,
+   "read_by_a_person": null
+  },
+  {
+   "description": "01_midway",
+   "group": "mid_chapter",
+   "said": "the green board is on the tray but the wires are all still in the bag",
+   "chapter": "01",
+   "supports": [
+    "01"
+   ],
+   "run": 5,
+   "session": "m12s02-01_midway-1788590621-4",
+   "reply": "That's exactly where step one should have you \u2014 everything out where you can see it before anything gets connected. Have you got all eight parts out of compartment 01 next to each other, or is the bag of wires the last thing left to open?",
+   "level": "L0",
+   "latency_seconds": 2.615,
+   "read_by_a_person": null
+  },
+  {
+   "description": "06_midway",
+   "group": "mid_chapter",
+   "said": "the switch is stuck on the door frame but the magnet is just sitting on the table",
+   "chapter": "06",
+   "supports": [
+    "06"
+   ],
+   "run": 1,
+   "session": "m12s02-06_midway-1788590621-0",
+   "reply": "That's actually exactly where you should be right now \u2014 this step is just about opening compartment 06 and getting a look at the switch, the magnet, and the pads, not mounting anything permanently yet. So having the magnet loose on the table is fine for now.\n\nBefore you stick anything down: have you made your guess yet for how many times one door in your house opened yesterday?",
+   "level": "L0",
+   "latency_seconds": 3.07,
+   "read_by_a_person": null
+  },
+  {
+   "description": "06_midway",
+   "group": "mid_chapter",
+   "said": "the switch is stuck on the door frame but the magnet is just sitting on the table",
+   "chapter": "06",
+   "supports": [
+    "06"
+   ],
+   "run": 2,
+   "session": "m12s02-06_midway-1788590621-1",
+   "reply": "Open compartment 06: the switch, the magnet, the pads. Guess how many times one door in your house opened yesterday.",
+   "level": "L0",
+   "latency_seconds": 0.52,
+   "read_by_a_person": null
+  },
+  {
+   "description": "06_midway",
+   "group": "mid_chapter",
+   "said": "the switch is stuck on the door frame but the magnet is just sitting on the table",
+   "chapter": "06",
+   "supports": [
+    "06"
+   ],
+   "run": 3,
+   "session": "m12s02-06_midway-1788590621-2",
+   "reply": "Open compartment 06: the switch, the magnet, the pads. Guess how many times one door in your house opened yesterday.",
+   "level": "L0",
+   "latency_seconds": 0.504,
+   "read_by_a_person": null
+  },
+  {
+   "description": "06_midway",
+   "group": "mid_chapter",
+   "said": "the switch is stuck on the door frame but the magnet is just sitting on the table",
+   "chapter": "06",
+   "supports": [
+    "06"
+   ],
+   "run": 4,
+   "session": "m12s02-06_midway-1788590621-3",
+   "reply": "Open compartment 06: the switch, the magnet, the pads. Guess how many times one door in your house opened yesterday.",
+   "level": "L0",
+   "latency_seconds": 0.512,
+   "read_by_a_person": null
+  },
+  {
+   "description": "06_midway",
+   "group": "mid_chapter",
+   "said": "the switch is stuck on the door frame but the magnet is just sitting on the table",
+   "chapter": "06",
+   "supports": [
+    "06"
+   ],
+   "run": 5,
+   "session": "m12s02-06_midway-1788590621-4",
+   "reply": "Open compartment 06: the switch, the magnet, the pads. Guess how many times one door in your house opened yesterday.",
+   "level": "L0",
+   "latency_seconds": 0.606,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary",
+   "group": "cannot_place",
+   "said": "theres already stuff on it",
+   "chapter": "01",
+   "supports": [],
+   "run": 1,
+   "session": "m12s02-no_vocabulary-1788590621-0",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.628,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary",
+   "group": "cannot_place",
+   "said": "theres already stuff on it",
+   "chapter": "01",
+   "supports": [],
+   "run": 2,
+   "session": "m12s02-no_vocabulary-1788590621-1",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.494,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary",
+   "group": "cannot_place",
+   "said": "theres already stuff on it",
+   "chapter": "01",
+   "supports": [],
+   "run": 3,
+   "session": "m12s02-no_vocabulary-1788590621-2",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.526,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary",
+   "group": "cannot_place",
+   "said": "theres already stuff on it",
+   "chapter": "01",
+   "supports": [],
+   "run": 4,
+   "session": "m12s02-no_vocabulary-1788590621-3",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.481,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary",
+   "group": "cannot_place",
+   "said": "theres already stuff on it",
+   "chapter": "01",
+   "supports": [],
+   "run": 5,
+   "session": "m12s02-no_vocabulary-1788590621-4",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.545,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary_2",
+   "group": "cannot_place",
+   "said": "i dont know what any of this is, someone left it like this",
+   "chapter": "01",
+   "supports": [],
+   "run": 1,
+   "session": "m12s02-no_vocabulary_2-1788590621-0",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.612,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary_2",
+   "group": "cannot_place",
+   "said": "i dont know what any of this is, someone left it like this",
+   "chapter": "01",
+   "supports": [],
+   "run": 2,
+   "session": "m12s02-no_vocabulary_2-1788590621-1",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.611,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary_2",
+   "group": "cannot_place",
+   "said": "i dont know what any of this is, someone left it like this",
+   "chapter": "01",
+   "supports": [],
+   "run": 3,
+   "session": "m12s02-no_vocabulary_2-1788590621-2",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.491,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary_2",
+   "group": "cannot_place",
+   "said": "i dont know what any of this is, someone left it like this",
+   "chapter": "01",
+   "supports": [],
+   "run": 4,
+   "session": "m12s02-no_vocabulary_2-1788590621-3",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.488,
+   "read_by_a_person": null
+  },
+  {
+   "description": "no_vocabulary_2",
+   "group": "cannot_place",
+   "said": "i dont know what any of this is, someone left it like this",
+   "chapter": "01",
+   "supports": [],
+   "run": 5,
+   "session": "m12s02-no_vocabulary_2-1788590621-4",
+   "reply": "Open compartment 01. Lay all eight parts out in a row where you can see them. Check nothing is missing before you start.",
+   "level": "L0",
+   "latency_seconds": 0.509,
+   "read_by_a_person": null
+  }
+ ]
+}
