@@ -105,3 +105,52 @@ The 1-hour TTL costs **2× on writes** and would suit a session's rhythm. Which
 is right is a measurement against real turn gaps, and **no session in this
 project has ever held a real child's** — the same gap named at AT and still
 open.
+
+---
+
+## 3 · The machine-lifetime record, and the identity it depends on
+
+**BN's ruling, and the artefact it names.** Retention stays at thirty days
+because a record keyed to a browser session is a conversation, not a board's
+history. The artefact M-12 described is real and was not built.
+
+**It cannot be built before BJ is revisited.** Two children on the same board,
+months apart, produce two records with nothing joining them, because the board
+carries no identity. Raising `RECORD_TTL_SECONDS` would have produced a longer
+list of unjoinable conversations and called it a machine's history — C-18.
+
+BJ recorded the two rejected forms — a number on the base, a code on the board
+— precisely so a later order would find the reasoning rather than re-derive it.
+**This is that order's dependency, stated before it opens.**
+
+---
+
+## 4 · X6 and X7, the two acceptance items M-12 did not meet
+
+Both are the same failure and it is C-46's:
+
+| | |
+|---|---|
+| **X6** a child who cannot describe the board is taught rather than asked again | `no_vocabulary` — *theres already stuff on it* — **5 of 5 ask again without teaching**, unchanged by placing |
+| **X7** the six chapters state their precondition when it is unmet | **3 of 30**, all of it chapter 04 |
+
+Both required Milo to **withhold** an answer it could already give. Neither
+moved on served material — a fact, then authored prose. **The next attempt
+should not be more text in the prompt**, because C-46 says in advance what that
+buys: 1 of 15, then 3 of 15.
+
+What has not been tried is changing what the *request* is, rather than what the
+prompt says — the model asked to establish where the child is before it is
+asked what to say. That is a mechanism rather than material, and it is the
+thing C-46 predicts would work.
+
+---
+
+## 5 · The tools, still
+
+**C-43, and it acted twice in M-12.** `check_opener.py --all-descriptions`
+graded its own flag and reported *clean*; a deployment check compared `main` to
+`main` and reported *identical*. Both were true statements about the wrong
+subject, and both were caught by accident rather than by a test.
+
+Twelve tool files. Item 8a has now been carried from M-11 through M-12.

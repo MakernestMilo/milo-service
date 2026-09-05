@@ -159,6 +159,17 @@ cannot change a harness row's rung. Removing a whole term from `NEG` moves
 nought of 7,616 checks. **Not C-41's shape, where a harness goes quiet on less
 material: this is a harness that was never looking.**
 
+**C-46 · This architecture takes up material when it needs it to produce an
+answer, and passes over material that constrains an answer it can already
+give.** The architect's, verbatim, and M-12's finding. Four cases across two
+orders: `TEACH`'s three-wires entry 0 of 5, the recognition set 0 places on a
+four-chapter board, the precondition as a derived fact 1 of 15, the
+precondition as authored prose 3 of 15 — against the ohm, 1 of 5 to 5 of 5,
+which moved because Milo genuinely did not have it. The three that failed all
+constrain; the one that worked supplies. **It outranks the fix**, and it
+predicts that any future order proposing to change behaviour by adding text to
+the prompt is proposing the weaker of the two mechanisms available to it.
+
 **C-43 · The tools that produce every measurement are the least examined code in
 the repository.** Item 8a. Twelve files, one test between them, and every
 finding in six orders came through them.
