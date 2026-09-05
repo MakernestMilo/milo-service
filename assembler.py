@@ -303,6 +303,36 @@ _RECOGNITION = json.loads(
     .read_text())["chapters"]
 
 
+# X7, M-12 step 06. Whether this chapter can be begun from a box.
+#
+# Three of fourteen cannot: 04 and 11 open with *wake the machine*, and 12 with
+# *read back through all eleven cards*. A child who has scanned one of those
+# cards holding an unopened box has nothing to open and no machine.
+#
+# The baseline measured what silence costs: those three told the child to plug
+# in a machine that does not exist, or listed eight parts they had never opened
+# as built and tested — **5 of 5 each**, against **0 of 5** for the three that
+# open no parts and start perfectly well.
+#
+# **The fact is served and the wording is Milo's.** The architect's ruling: an
+# authored sentence would be judged against a baseline chosen to beat it, and
+# b2's *this one's further along than the first build* is evidence Milo says
+# structural things in its own register when it has the fact.
+_PRECONDITION = json.loads(
+    (pathlib.Path(__file__).parent / "content" / "preconditions.json")
+    .read_text())["chapters"]
+
+
+def precondition_block(key):
+    row = _PRECONDITION[key]
+    if row["begins_from_a_box"]:
+        return []
+    return ["\nWHERE THIS CHAPTER BEGINS: not from an unopened box. Its first "
+            f"instruction is \"{row['first_instruction']}\", which needs "
+            f"{row['needs']}. A child who has only this compartment cannot do "
+            "it."]
+
+
 def recognition_block(key):
     """The other thirteen builds, as objects rather than as chapters.
 
@@ -437,6 +467,7 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     L.append("What this step is: " + " ".join(s.get("do") or []))
 
     L.extend(wiring_block(ch))
+    L.extend(precondition_block(turn.chapter))
     L.extend(recognition_block(turn.chapter))
     L.extend(glossary_block(turn.chapter))
 

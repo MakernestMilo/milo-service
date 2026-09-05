@@ -1,0 +1,91 @@
+{
+ "_what": "Whether a child holding an unopened box can do the first thing each chapter asks. Derived from the first instruction of stage 01 alone — not the chapter's subject, not what it opens, not anyone's reading of what it is about.",
+ "_why_not_opens_no_parts": "Opening no parts picks six chapters and three of them start perfectly well from a box: tear a card out of the book, write a brief, pick a person. The two properties are different and only this one is what a precondition is for.",
+ "_validated_by": "M-12 step 06's baseline. The three that cannot be begun asserted the precondition met 5 of 5 each; the three that open no parts but can be begun asserted it 0 of 5. --check holds the derivation to that split.",
+ "chapters": {
+  "01": {
+   "first_instruction": "Open compartment 01.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "02": {
+   "first_instruction": "Open compartment 02 and lay out the dial and the ring.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "03": {
+   "first_instruction": "Open compartment 03 and take out the buzzer.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "04": {
+   "first_instruction": "Wake the machine.",
+   "begins_from_a_box": false,
+   "needs": "a machine built in the chapters before it",
+   "matched": "Wake the machine"
+  },
+  "05": {
+   "first_instruction": "Open compartment 05: sensor B and the lead.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "06": {
+   "first_instruction": "Open compartment 06: the switch, the magnet, the pads.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "07": {
+   "first_instruction": "Tear the chart card out of the back of the book.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "08": {
+   "first_instruction": "Open compartment 08 and take out the lamp on its lead.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "D": {
+   "first_instruction": "Write down what you think it should do, before you read on.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "09": {
+   "first_instruction": "Open compartment 09 and lay out the mounting kit.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "10": {
+   "first_instruction": "Open compartment 10: two templates, paper tape, four clips.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  },
+  "11": {
+   "first_instruction": "Wake the machine and watch what it does.",
+   "begins_from_a_box": false,
+   "needs": "a machine built in the chapters before it",
+   "matched": "Wake the machine"
+  },
+  "12": {
+   "first_instruction": "Read back through all eleven cards.",
+   "begins_from_a_box": false,
+   "needs": "the cards filled in during the chapters before it",
+   "matched": "all eleven cards"
+  },
+  "G": {
+   "first_instruction": "Pick somebody in your house or near it.",
+   "begins_from_a_box": true,
+   "needs": null,
+   "matched": null
+  }
+ }
+}
