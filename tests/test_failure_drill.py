@@ -10,6 +10,7 @@ The distinction that runs through it: the bank is the floor for *the model
 failed*. It is not the floor for *the service failed*, and those are not the
 same event even though they look identical from the table.
 """
+import json
 import pytest
 from fastapi.testclient import TestClient
 
@@ -244,3 +245,42 @@ def test_the_bank_has_five_things_to_say_per_chapter_at_most():
     assert max(counts.values()) == 5
     # chapter 11 has three: its region was removed in M-08 and it has no fix.
     assert counts["11"] == 3
+
+
+# --- telling one failure from another ---------------------------------------
+
+def test_health_says_whether_a_key_is_configured_and_never_what_it_is():
+    """The first fork of every diagnosis, and it took a broken run to notice
+    it was missing. M-12 step 05 lost fourteen calls to a key that stopped
+    working, and nothing the service exposed could tell *nothing is set* from
+    *what is set is refused*.
+
+    Presence only. The value never leaves the environment — no committed file,
+    no example, no fixture, and not this."""
+    body = client.get("/health").json()
+    assert "model_key_configured" in body
+    assert isinstance(body["model_key_configured"], bool)
+    blob = json.dumps(body)
+    assert "sk-" not in blob and "api" not in blob.lower().replace("chapters", "")
+
+
+def test_the_log_records_which_failure_it_was_and_not_the_message(monkeypatch, caplog):
+    """M-05 keeps request and response bodies out of the log, and an SDK error
+    message can carry response text. The class name cannot, and *which* failure
+    it was — unset, refused, out of credit, rate-limited — is the whole of the
+    diagnosis."""
+    import logging
+
+    class OutOfCredit(RuntimeError):
+        pass
+
+    def broken(*a, **k):
+        raise OutOfCredit("your credit balance is too low: acct_12345")
+
+    monkeypatch.setattr(main, "call_model", broken)
+    with caplog.at_level(logging.ERROR, logger="milo-service"):
+        assert milo_answered(a_turn("drill-reason"))
+    line = " ".join(r.getMessage() for r in caplog.records)
+    assert "reason=OutOfCredit" in line
+    assert "acct_12345" not in line, "the exception's message reached the log"
+    assert "credit balance" not in line

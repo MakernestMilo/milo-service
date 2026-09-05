@@ -1,4 +1,5 @@
 import os
+import sys
 import hmac
 import html
 import json
@@ -508,6 +509,11 @@ def health():
         # with a reason is degraded and says so.
         "session_store_degraded_from": getattr(SESSIONS, "degraded_from", None),
         "pause_seconds": store.PAUSE_SECONDS,
+        # Whether a key is configured — never whether it works, and never any
+        # part of its value. It separates "nothing is set" from "what is set
+        # is refused", which is the first fork of every diagnosis and took a
+        # broken run to notice was missing.
+        "model_key_configured": bool(os.getenv("MODEL_API_KEY")),
     }
 
 
@@ -597,8 +603,18 @@ async def turn(payload: TurnRequest):
         from_bank = True
         # Failed, slow and malformed all land here and all answer from the
         # bank. The child never gets silence, and never learns which it was.
-        logger.error("model call failed request_id=%s level=%s — serving the bank",
-                     getattr(request_state(), "request_id", "unknown"), lvl)
+        # The exception's TYPE, never its message. M-05 keeps request and
+        # response bodies out of the log and an SDK error message can carry
+        # response text; the class name cannot.
+        #
+        # Added because a key stopped working mid-run in M-12 step 05 and the
+        # log said only that the call had failed. *Which* failure it was —
+        # unset, refused, out of credit, rate-limited — is the whole of the
+        # diagnosis, and it was the one thing not recorded.
+        logger.error("model call failed request_id=%s level=%s reason=%s "
+                     "— serving the bank",
+                     getattr(request_state(), "request_id", "unknown"), lvl,
+                     type(sys.exc_info()[1]).__name__)
         reply = bank(ctx, lvl)
 
     # Both sides of this turn join the conversation, in order. Milo's answer is
