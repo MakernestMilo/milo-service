@@ -1,0 +1,466 @@
+{
+ "host": "https://milo-service.onrender.com",
+ "build": "101b74c",
+ "head": "d1c2133",
+ "n": 5,
+ "six": [
+  "04",
+  "07",
+  "D",
+  "11",
+  "12",
+  "G"
+ ],
+ "calls": [
+  {
+   "chapter": "04",
+   "run": 1,
+   "session": "m12s06-04-1788594025-0",
+   "said": "im ready to do this one, whats first",
+   "reply": "First step is just waking the machine up \u2014 plug it in and watch what the display does. Then, before anything else, say out loud what you think will make it stop \u2014 like what number or moment you think should end things. What's your guess?",
+   "level": "L0",
+   "latency_seconds": 3.33,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 2,
+   "session": "m12s06-04-1788594025-1",
+   "said": "im ready to do this one, whats first",
+   "reply": "First thing is just waking it up \u2014 plug in the 1 m lead and let the machine power on. Once it's running, the step wants you to say out loud, in your own words, how you think it decides to stop \u2014 no wrong answer, just your guess. What's your gut say?",
+   "level": "L0",
+   "latency_seconds": 2.736,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 3,
+   "session": "m12s06-04-1788594025-2",
+   "said": "im ready to do this one, whats first",
+   "reply": "At the very start of chapter 4 \u2014 \"First run.\" Open your book to step 01, and just wake the machine up: plug it in, and before anything lights up, say out loud how you *think* it's going to stop. What's your guess?",
+   "level": "L0",
+   "latency_seconds": 2.363,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 4,
+   "session": "m12s06-04-1788594025-3",
+   "said": "im ready to do this one, whats first",
+   "reply": "Nice \u2014 this is chapter 04, \"Teach it when to stop,\" and step 01 is just about waking the machine up. Plug it in, and once it's running, say out loud how you *think* it should know when to stop \u2014 before we test anything.\n\nWhat's your guess?",
+   "level": "L0",
+   "latency_seconds": 2.771,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "04",
+   "run": 5,
+   "session": "m12s06-04-1788594025-4",
+   "said": "im ready to do this one, whats first",
+   "reply": "Right, chapter open \u2014 this is step 01, \"Open.\" First thing: get the board powered up with the 1 m lead into the USB socket, and once it's awake, say out loud what you think will make this machine stop and do its thing. What's your guess for what it's watching for?",
+   "level": "L0",
+   "latency_seconds": 2.751,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 1,
+   "session": "m12s06-07-1788594025-0",
+   "said": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's the tear-out card for this chapter. What does it look like \u2014 is it blank with some boxes to fill in, or does it already have writing on it?",
+   "level": "L0",
+   "latency_seconds": 2.198,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 2,
+   "session": "m12s06-07-1788594025-1",
+   "said": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's the one you'll be filling in over the next week. What does it look like \u2014 is it a grid, a graph, something with boxes to tick?",
+   "level": "L0",
+   "latency_seconds": 2.307,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 3,
+   "session": "m12s06-07-1788594025-2",
+   "said": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's the piece you need for this step. What does it look like \u2014 is it a grid you fill in, or something you're meant to cut out first?",
+   "level": "L0",
+   "latency_seconds": 3.024,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 4,
+   "session": "m12s06-07-1788594025-3",
+   "said": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's step one sorted. Now \u2014 can you spot a household phone charger for the USB cable, or do you need to go find one?",
+   "level": "L0",
+   "latency_seconds": 2.196,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "07",
+   "run": 5,
+   "session": "m12s06-07-1788594025-4",
+   "said": "ive found the chart card at the back of the book",
+   "reply": "Nice, that's the one you'll be filling in over the next few days. Now, before you write anything on it \u2014 have you tracked down a household phone charger yet, the kind that's not from this kit?",
+   "level": "L0",
+   "latency_seconds": 2.46,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 1,
+   "session": "m12s06-D-1788594025-0",
+   "said": "this ones three sessions? where do i begin",
+   "reply": "This one's the big one \u2014 three sessions, eight steps, and you're right at the start of it. Step one is called \"the brief,\" and it's not building anything yet \u2014 it's just you writing down what you think this machine should do, before you read what it actually does.\n\nGot a notebook or scrap paper handy for that?",
+   "level": "L0",
+   "latency_seconds": 2.653,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 2,
+   "session": "m12s06-D-1788594025-1",
+   "said": "this ones three sessions? where do i begin",
+   "reply": "This one's the big one \u2014 three sessions, eight steps altogether, building up to a machine that watches for a whole week before you read back what it saw. You begin at step 01, \"The brief,\" which just means writing down what you think it should do, before you read any further in the book.\n\nGot a pencil? What do you think this thing is supposed to do, just from the name \u2014 The Doorkeeper?",
+   "level": "L0",
+   "latency_seconds": 3.592,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 3,
+   "session": "m12s06-D-1788594025-2",
+   "said": "this ones three sessions? where do i begin",
+   "reply": "This one's the big one \u2014 three sessions, eight steps, and everything you've learnt so far gets used at once. You begin right where you are: step one, \"the brief,\" and it just wants you to write down what you think this machine should do before you read any further. What's your guess?",
+   "level": "L0",
+   "latency_seconds": 2.449,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 4,
+   "session": "m12s06-D-1788594025-3",
+   "said": "this ones three sessions? where do i begin",
+   "reply": "This one's the big one \u2014 three sessions, eight steps, everything you've learned so far all coming together at one door. You begin at the brief: before you read any further in the book, write down what you think this thing should actually do. What's your first guess?",
+   "level": "L0",
+   "latency_seconds": 2.502,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "D",
+   "run": 5,
+   "session": "m12s06-D-1788594025-4",
+   "said": "this ones three sessions? where do i begin",
+   "reply": "This one's the big one \u2014 three sessions to build The Doorkeeper, eight steps total. You begin at step one, \"The brief,\" which just means grabbing a pencil and writing down what you think this thing should actually do, before you read what it's supposed to do.\n\nDo you have your book open to that first page?",
+   "level": "L0",
+   "latency_seconds": 2.621,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 1,
+   "session": "m12s06-11-1788594025-0",
+   "said": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 plug it in and see what it actually does before anything else. Watch the whole thing for a second: does anything light up, does anything show a number, does anything look off?",
+   "level": "L0",
+   "latency_seconds": 2.186,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 2,
+   "session": "m12s06-11-1788594025-1",
+   "said": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 plug it in and watch what actually lights up or shows a number, and what stays dark or blank. What do you see happening right now?",
+   "level": "L0",
+   "latency_seconds": 2.183,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 3,
+   "session": "m12s06-11-1788594025-2",
+   "said": "im on sabotage now. do i wake it up first",
+   "reply": "Yep \u2014 plug it in and see what it does. Watch the display and the light, and tell me what actually happens versus what you'd expect.",
+   "level": "L0",
+   "latency_seconds": 2.316,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 4,
+   "session": "m12s06-11-1788594025-3",
+   "said": "im on sabotage now. do i wake it up first",
+   "reply": "Yes \u2014 plug it in and see what actually happens on the display or the board before you touch anything else. So what do you see right now: nothing at all, some numbers, or something that looks wrong?",
+   "level": "L0",
+   "latency_seconds": 2.354,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "11",
+   "run": 5,
+   "session": "m12s06-11-1788594025-4",
+   "said": "im on sabotage now. do i wake it up first",
+   "reply": "Yep \u2014 plug it in and see what it actually does when it powers up. Watch the display and tell me: does anything light up at all, or is it completely blank?",
+   "level": "L0",
+   "latency_seconds": 2.166,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 1,
+   "session": "m12s06-12-1788594025-0",
+   "said": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "You've got eleven cards behind you \u2014 sensors, a dial, a display, a ring, a buzzer, a lamp, a switch. What's stuck with you most from all that \u2014 something that measures, something that reacts, or something that keeps watch while you're not there?",
+   "level": "L0",
+   "latency_seconds": 2.622,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 2,
+   "session": "m12s06-12-1788594025-1",
+   "said": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "That's the real work of this step, so you're right on track, not stuck. You've got sensor A, sensor B, the dial, the switch, the ring, the buzzer, the lamp, and the display all built and tested by now \u2014 what's one thing, out of all of them, that you keep wanting to check on or be warned about?",
+   "level": "L0",
+   "latency_seconds": 2.869,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 3,
+   "session": "m12s06-12-1788594025-2",
+   "said": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "You've got eleven cards behind you \u2014 sensors reading warmth and light, a dial, a switch, a ring, a buzzer, a lamp, all wired up to that board. What's one part in there that you keep thinking about, more than the others?",
+   "level": "L0",
+   "latency_seconds": 2.559,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 4,
+   "session": "m12s06-12-1788594025-3",
+   "said": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "You've got a lot to work with \u2014 sensors, dial, ring, buzzer, lamp, switch, all the wires. What's something in your actual house or room that you wish told you a number, or told you when something happened?",
+   "level": "L0",
+   "latency_seconds": 2.458,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "12",
+   "run": 5,
+   "session": "m12s06-12-1788594025-4",
+   "said": "ive read back through all the cards. im not sure what to make yet",
+   "reply": "That's the whole point of this step \u2014 eleven cards is a lot to hold at once. Of everything you've built so far, which card did you enjoy the most, or which part are you itching to use again?",
+   "level": "L0",
+   "latency_seconds": 2.711,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "asserts it is met"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 1,
+   "session": "m12s06-G-1788594025-0",
+   "said": "i picked my grandad. what do i ask him",
+   "reply": "That's step one done \u2014 picking him is the hard part. What are you noticing right now, are you stuck on what the three questions should even be, or just staring at the page?",
+   "level": "L0",
+   "latency_seconds": 2.14,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 2,
+   "session": "m12s06-G-1788594025-1",
+   "said": "i picked my grandad. what do i ask him",
+   "reply": "That's step 1 in the book \u2014 picking who this is for. Have you gotten to step 2 yet, the three questions? What does the page say about how those three questions should work?",
+   "level": "L0",
+   "latency_seconds": 2.322,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 3,
+   "session": "m12s06-G-1788594025-2",
+   "said": "i picked my grandad. what do i ask him",
+   "reply": "That's step 1, picking who it's for \u2014 and step 2 is where the three questions come in, so you're right on track. Before you get to writing them down: what made you pick your grandad over anyone else in the house?",
+   "level": "L0",
+   "latency_seconds": 2.394,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 4,
+   "session": "m12s06-G-1788594025-3",
+   "said": "i picked my grandad. what do i ask him",
+   "reply": "That's step 1 \u2014 you've picked your person, nice. Step 2 is where the three questions come in, so hold off on asking him anything yet \u2014 what made you land on your grandad?",
+   "level": "L0",
+   "latency_seconds": 2.418,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  },
+  {
+   "chapter": "G",
+   "run": 5,
+   "session": "m12s06-G-1788594025-4",
+   "said": "i picked my grandad. what do i ask him",
+   "reply": "Nice \u2014 that's a good pick. Right now step one just wants you to write down who you picked and why him; the actual questions come next, once that's down on the page.",
+   "level": "L0",
+   "latency_seconds": 3.07,
+   "detector": {
+    "states_a_precondition": false
+   },
+   "read_by_a_person": {
+    "precondition": "neither"
+   }
+  }
+ ]
+}
