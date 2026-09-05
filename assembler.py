@@ -336,17 +336,14 @@ _PRECONDITION = json.loads(
 #: position, which is what the block is for. Milo's failure at chapter 11 was
 #: answering the question as asked.
 CANNOT_START_YET = (
-    "WHEN THIS CHAPTER CANNOT BE STARTED YET\n"
-    "This chapter begins with a machine the child does not have. If they have "
-    "only\nopened this compartment, there is nothing to wake, nothing to break "
-    "and nothing\nto read back — and no question about it has a real answer "
-    "yet.\n\n"
-    "Say so first, before you answer, and say which build makes it possible. "
-    "Do\nnot answer a question about the machine as though the machine exists. "
-    "Do not\nwalk them through step one. They have not done something wrong "
-    "and they are not\ntoo early to be here; they have picked up a chapter "
-    "that stands on the ones\nbefore it, and knowing that is the answer they "
-    "need."
+    "WHEN THIS CHAPTER STANDS ON EARLIER ONES\n"
+    "This one is built on chapters before it. If they have only opened this\n"
+    "compartment, there is nothing here to wake, break or read back yet — and "
+    "the\nhelp they need is a route, not a refusal.\n\n"
+    "Name which build comes first and offer to go there with them. Origins is\n"
+    "numbered and worked in order: First Light is 1, and each chapter grows the "
+    "same\nmachine. A child who has picked this up early is not lost — they are "
+    "early, and\nthe way through is the earlier card."
 )
 
 
@@ -354,9 +351,13 @@ def precondition_block(key):
     row = _PRECONDITION[key]
     if row["begins_from_a_box"]:
         return []
+    # The withholding, part one. Until M-13 this line served the chapter's own
+    # first instruction verbatim — "Wake the machine and watch what it does." —
+    # four paragraphs below a block forbidding its delivery. C-46 as amended:
+    # when the prompt carries a claim and its contradiction, the claim wins,
+    # and this was the claim. What the block needs is `needs`, not the step.
     return ["\n" + CANNOT_START_YET,
-            f"\nTHIS CHAPTER: its first instruction is "
-            f"\"{row['first_instruction']}\", which needs {row['needs']}."]
+            f"\nTHIS CHAPTER: it needs {row['needs']}."]
 
 
 def recognition_block(key):
@@ -371,7 +372,7 @@ def recognition_block(key):
     # `written` is chapter 07's cause word — 544 harness checks red on a phrase
     # of scaffolding that carried no information about chapter 07 at all.
     L = ["\nWHAT THE OTHER BUILDS LOOK LIKE — for recognising a machine a child "
-         "describes, and for nothing else. Parts, ports, and the card each one "
+         "describes, and for naming which build comes before this one. Not for teaching another chapter's build. Parts, ports, and the card each one "
          "leaves filled in. You are not told what those chapters do, ask, or "
          "go wrong at, and you may not say."]
     for other, row in _RECOGNITION.items():
@@ -490,7 +491,12 @@ def render(turn: Turn, lvl: str, *, procedural=False, done=(), name=None) -> str
     # turn is in and the one the harness's fixture is pinned away from.
     L.append(f"\n{'CURRENT STEP' if known else 'THIS CHAPTER OPENS AT STEP'}"
              f" {s['n']} — {s['h']}  ({s['m']})")
-    L.append("What this step is: " + " ".join(s.get("do") or []))
+    # The withholding, part two. Naming the step is not delivering it — sheet 1
+    # — and for a chapter that does not begin from a box, delivered to a child
+    # whose position is unestablished, the instruction is the competing claim.
+    # The heading above still names the step. Only the doing is withheld.
+    if known or _PRECONDITION[turn.chapter]["begins_from_a_box"]:
+        L.append("What this step is: " + " ".join(s.get("do") or []))
 
     L.extend(wiring_block(ch))
     L.extend(precondition_block(turn.chapter))
