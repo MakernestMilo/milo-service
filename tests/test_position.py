@@ -22,6 +22,10 @@ import main
 import runtime
 import store
 
+PRE = json.loads(
+    (pathlib.Path(__file__).resolve().parent.parent
+     / "content" / "preconditions.json").read_text())["chapters"]
+
 
 client = TestClient(main.app)
 OPENERS = json.loads((pathlib.Path(__file__).resolve().parent.parent
@@ -57,10 +61,21 @@ def test_a_fresh_session_asserts_no_position(key):
         assert "<-- THEY ARE HERE" not in p, f"{key}/{lvl} still claims a position"
         assert "CURRENT STEP" not in p
         assert "WHERE THEY ARE: not established" in p
-        # and the material is unchanged
+        # and the material is unchanged — except where M-13 withholds it.
+        # A chapter that does not begin from a box no longer serves stage 01's
+        # instruction to a child whose position is unestablished: it was the
+        # claim contradicting the block four paragraphs below it, and C-46 as
+        # amended says the claim wins. The step is still *named* in every case,
+        # which is the half sheet 1 permits. Both directions, all fourteen, are
+        # asserted in test_preconditions.py::
+        # test_the_step_instruction_is_withheld_only_where_it_competes.
         first = corpus.BY_KEY[key]["stages"][0]
         assert first["h"] in p
-        assert " ".join(first.get("do") or [])[:40] in p
+        doing = " ".join(first.get("do") or [])[:40]
+        if PRE[key]["begins_from_a_box"]:
+            assert doing in p, f"{key}/{lvl} lost its step instruction"
+        else:
+            assert doing not in p, f"{key}/{lvl} still serves the competing claim"
 
 
 @pytest.mark.parametrize("key", sorted(corpus.BY_KEY))
