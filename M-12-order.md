@@ -170,6 +170,35 @@ constrain; the one that worked supplies. **It outranks the fix**, and it
 predicts that any future order proposing to change behaviour by adding text to
 the prompt is proposing the weaker of the two mechanisms available to it.
 
+**C-46 · amended after M-12 closed, and the amendment replaces the law rather
+than the cost.** The original entry — the architect's — reads: *this
+architecture takes up material when it needs it to produce an answer, and
+passes over material that constrains an answer it can already give.* It stands
+as the description of the four failures and the ohm, and it is superseded as a
+design constraint, because it does not survive its own test. Milo has never
+lacked an answer about the child's position: M-11 measured it **contradicting
+the child** to defend a position it invented, which is the opposite of the ohm.
+By C-46 as written, a stated position falls on the failing side — yet the two
+changes that served position moved 32 contradictions to 0 and 44
+proceeds-as-if-empty to 0.
+
+**The cut that separates them: both successes removed a false claim, and all
+four failures added a true one.** M-12 step 04 gated off `<-- THEY ARE HERE`,
+the `(done)` markers and the completed stages; the prompt got shorter and the
+number went to zero. M-12 step 06 added a fact and then authored prose, and
+moved 0 → 1 → 3 of 30.
+
+**The law, and it is testable where the first was not: when the prompt carries
+a claim and its contradiction, the claim wins.** The evidence is on `main`.
+Chapters 04, 11 and 12 each serve their own first instruction verbatim —
+*What this step is: Wake the machine and watch what it does.* — in the same
+prompt, four paragraphs below *do not walk them through step one*, and again
+inside the block's own fact line. Milo does what the prompt shows, not what it
+says: **five of five, three runs.**
+
+The engineer's cut, ruled by the architect. Serving material still works; it
+works by replacing a claim, not by accompanying one.
+
 **C-43 · The tools that produce every measurement are the least examined code in
 the repository.** Item 8a. Twelve files, one test between them, and every
 finding in six orders came through them.
