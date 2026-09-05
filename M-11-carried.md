@@ -100,6 +100,26 @@ done* and is not advanced repeats themselves** — a quieter failure than being
 contradicted, and nothing has measured it. It needs a multi-turn session with a
 real child.
 
+## 8a · C-40 has a second form, and it is worse
+
+The entry says **code that goes missing breaks a test**. It does not, when the
+code is a tool.
+
+`main` carried a preflight requiring production's build to **equal** HEAD —
+which refuses every run made from a branch carrying its own tooling, which is
+every run this project makes. The correction was on a branch nobody merged and
+**nothing failed**, because tool code had no tests. The same merge lost
+`step02_count.py`'s `--after` flag, which is the guard that stops a post-fix
+count being taken as a pre-fix one.
+
+Three copies of one check is how the fix to one of them went missing.
+`tools/preflight.py` is now the single definition, with the lookups injected so
+it is testable without a network, and nine tests hold it.
+
+**Carried, because the class is not closed**: `tools/` is 12 files and had one
+test between them before this. A tool that goes wrong produces a wrong
+measurement, and the measurement is what this project keeps.
+
 ## 9 · The store is not below the bank
 
 Carried unchanged from M-10. A store outage takes the whole turn while the bank
@@ -127,6 +147,9 @@ answer it.
   has never been pasted into a conversation.
 - Render is Starter, no sleep. `MODEL_API_KEY`, `SESSION_STORE_URL` and
   `PANEL_TOKEN` are set there and exist nowhere in this tree.
-- **`origin/m11-step04` can be closed rather than merged** once this lands: its
-  two files are on the return branch, because the return could not cite a
-  figure that was on no path to `main`.
+- **Four branches were unmerged when M-11 closed and three had carried
+  something.** `m11-step04`'s two files came across with the return.
+  `m11-step01-baseline` held the fourteen-for-fourteen document,
+  `m11-step01-preflight` held a fix `main` did not have, and `step02_count.py`'s
+  `--after` flag had gone with step 04's tool change. All recovered; the four
+  branches can now be closed rather than merged.

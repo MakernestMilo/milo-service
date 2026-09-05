@@ -24,6 +24,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 import corpus     # noqa: E402
+sys.path.insert(0, str(ROOT / 'tools'))
+import preflight as preflight_check   # noqa: E402
 import runtime    # noqa: E402
 import store      # noqa: E402
 
@@ -95,32 +97,33 @@ def fetch(path, body=None):
         return r.read().decode()
 
 
-def preflight():
+def preflight(after=False):
+    """The same guard, pointing both ways.
+
+    Step 02 counted before the position existed and step 04 counts after, with
+    the same tool, the same categories and the same detector. So the check on
+    `Session` has to invert rather than be deleted: `--after` requires the
+    field to be there, and its absence is the default, so the pre-fix guard
+    cannot be lost by forgetting a flag.
+    """
     head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
                           capture_output=True, text=True).stdout.strip()
     build = json.loads(fetch("/health"))["build"]
-    problems = []
-    if set(store.Session.__dataclass_fields__) & {"position", "stage", "step"}:
+    problems = preflight_check.check(build, head)
+    has_position = "position" in store.Session.__dataclass_fields__
+    if after and not has_position:
+        problems.append("Session carries no position — this is not the post-fix "
+                        "count")
+    if not after and has_position:
         problems.append("Session has gained a position — this is no longer the "
-                        "pre-fix count")
-    SERVICE = ("main.py", "assembler.py", "corpus.py", "runtime.py", "store.py",
-               "qc.py", "content", "child", "panel")
-    if subprocess.run(["git", "cat-file", "-e", f"{build}^{{commit}}"], cwd=ROOT,
-                      capture_output=True).returncode != 0:
-        problems.append(f"production is at {build}, which this clone lacks — git fetch")
-    else:
-        moved = [p for p in SERVICE
-                 if subprocess.run(["git", "diff", "--quiet", build, "HEAD", "--", p],
-                                   cwd=ROOT).returncode != 0]
-        if moved:
-            problems.append(f"the tree differs from production in {moved}")
+                        "pre-fix count. Pass --after if that is the run you mean.")
     if problems:
         sys.exit("  refusing to run:\n  - " + "\n  - ".join(problems))
     return head, build
 
 
-def run(n, out_path):
-    head, build = preflight()
+def run(n, out_path, after=False):
+    head, build = preflight(after)
     print(f"  tree {head} · production {build}\n")
     stamp = int(time.time())
     records = []
@@ -145,6 +148,7 @@ def run(n, out_path):
     pathlib.Path(out_path).write_text(
         json.dumps({"host": HOST, "build": build, "head": head, "n": n,
                     "categories": "M-11-step02-categories.md",
+                    "after_the_position_fix": after,
                     "calls": records}, indent=1) + "\n")
     print(f"\n  wrote {out_path} — {len(records)} calls")
 
@@ -153,5 +157,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=5)
     ap.add_argument("--out", default="step02_count.json")
+    ap.add_argument("--after", action="store_true",
+                    help="the post-fix run: Session must carry a position")
     a = ap.parse_args()
-    run(a.n, a.out)
+    run(a.n, a.out, a.after)

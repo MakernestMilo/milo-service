@@ -28,6 +28,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 import corpus     # noqa: E402
+sys.path.insert(0, str(ROOT / 'tools'))
+import preflight as preflight_check   # noqa: E402
 import runtime    # noqa: E402
 import store      # noqa: E402
 
@@ -69,8 +71,7 @@ def preflight():
     problems = []
     if dirty:
         problems.append(f"the working tree is dirty:\n{dirty}")
-    if build != head:
-        problems.append(f"production is at {build}, the tree is at {head}")
+    problems += preflight_check.check(build, head)
     if fields & {"position", "stage", "step"}:
         problems.append("Session already carries a position — this is no "
                         "longer the pre-fix baseline")
