@@ -28,8 +28,21 @@ import sys
 import textwrap
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-CATEGORIES = json.loads(
-    (ROOT / "content" / "reading_categories.json").read_text())
+_ALL = json.loads((ROOT / "content" / "reading_categories.json").read_text())
+
+
+def categories(name="axes"):
+    """A named set. `axes` is M-11's and stays the default, so a reading taken
+    before M-12 is read back against the categories it was taken under."""
+    if name == "axes":
+        return {"axes": _ALL["axes"]}
+    if name not in _ALL:
+        raise SystemExit(f"  no category set called {name!r} — "
+                         f"{[k for k in _ALL if not k.startswith('_')]}")
+    return {"axes": _ALL[name]}
+
+
+CATEGORIES = categories()
 
 
 def load(path):
@@ -114,7 +127,10 @@ if __name__ == "__main__":
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--revision", action="store_true")
     ap.add_argument("--why", default="")
+    ap.add_argument("--set", default="axes",
+                    help="which named category set to read against")
     a = ap.parse_args()
+    CATEGORIES = categories(a.set)
     run = load(a.run)
     if a.show:
         show(run)
