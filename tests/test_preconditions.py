@@ -77,23 +77,36 @@ def test_the_block_reaches_exactly_the_chapters_that_need_it(key):
             p = assembler.assemble(
                 runtime.Turn("x", key, None, 0, position=1,
                              position_established=est), lvl).stage["prompt"]
-            here = "WHERE THIS CHAPTER BEGINS" in p
+            here = "WHEN THIS CHAPTER CANNOT BE STARTED YET" in p
             assert here == (key in CANNOT), f"{key}/{lvl} established={est}"
 
 
-def test_the_block_carries_the_fact_and_not_a_sentence_for_the_child():
-    """The architect's ruling: serve the fact, leave the wording to Milo. An
-    authored sentence would be judged against a baseline chosen to beat it."""
+def test_the_block_carries_the_fact_and_the_authored_line():
+    """**Superseded, and the subject is kept.**
+
+    Step 06 served the fact alone and left the wording to Milo, on the
+    architect's ruling that an authored sentence would otherwise be judged
+    against a baseline chosen to beat it. It moved almost nothing — asserts 15
+    to 13, chapter 11 five of five unchanged — so the sentence was written
+    afterwards, against evidence rather than ahead of it, which is the
+    condition the ruling set.
+
+    What is still tested is that the chapter-specific fact is derived and
+    present. What has gone is the claim that nothing authored is served.
+    """
     block = " ".join(assembler.precondition_block("11")).lower()
     assert PRE["11"]["first_instruction"].lower() in block
     assert PRE["11"]["needs"].lower() in block
-    # No instruction about what to say. Scoped to this block: the first
-    # version scanned the whole prompt and tripped on ABSOLUTION's authored
-    # *tell them they have done nothing wrong*, which is not this block's and
-    # is exactly right where it is.
-    for phrase in ("tell them", "say that", "explain to the child",
-                   "you should say", "let them know"):
-        assert phrase not in block
+    assert "when this chapter cannot be started yet" in block
+
+
+def test_the_authored_line_is_the_architects_and_says_before_you_answer():
+    """The one phrase the engineer supplied and the architect took. `anything`
+    is chapter 12's cause word and chapter 12 is served this block, so the
+    original *before anything else* would have convicted it at every rung."""
+    assert "before you answer" in assembler.CANNOT_START_YET
+    assert "anything" not in assembler.CANNOT_START_YET
+    assert "before anything else" not in assembler.CANNOT_START_YET
 
 
 @pytest.mark.parametrize("key", sorted(corpus.BY_KEY))
