@@ -380,6 +380,28 @@ _QUICK = _PROBE_FILE["probes"]
 _HELD_PROBES = _PROBE_FILE["_withheld_from_the_dock"]["probes"]
 
 
+# Milo's opening line. Page text, not a reply: it never reaches the model, is
+# never stored as a turn, and never appears in an assembled prompt — a test
+# asserts the last at every rung and both position states. The sentence is the
+# architect's; the only per-chapter part is the corpus's own subtitle.
+_GREETING = json.loads(
+    (pathlib.Path(__file__).parent / "content" / "greeting.json").read_text())
+
+
+def greeting_for(key: str) -> str:
+    """The line for one chapter.
+
+    The subtitle goes in verbatim — leading capital, trailing full stop — and
+    stands as its own sentence, which is what it is: these were written to sit
+    alone on a card. Only the template's own stop after the slot is dropped,
+    when the subtitle brings one, so the sentence ends once. No word changes.
+    """
+    sub = corpus.BY_KEY[key]["sub"]
+    if sub.endswith(".") and "{sub}." in _GREETING["text"]:
+        return _GREETING["text"].replace("{sub}.", sub)
+    return _GREETING["text"].replace("{sub}", sub)
+
+
 # The chapter list the selector renders. One QR code ships on the kit, so every
 # chapter but First Light is reached from the page rather than from a printed
 # code — and the numbering that made a cold arrival at 11 or 12 rare goes with
@@ -424,7 +446,8 @@ def render_page(key: str) -> str:
     # page builds both with textContent, so no authored string is ever parsed
     # as HTML.
     out = out.replace("__QUICK__", json.dumps(_QUICK))
-    return out.replace("__CHAPTERS__", json.dumps(_CHAPTER_LIST))
+    out = out.replace("__CHAPTERS__", json.dumps(_CHAPTER_LIST))
+    return out.replace("__GREETING__", json.dumps(greeting_for(key)))
 
 
 # --- the panel ---------------------------------------------------------------

@@ -132,6 +132,12 @@ var QUICK = __QUICK__;
 // corpus's, and the line on the two that cannot be started cold is the
 // architect's, carried in content/selector_label.json.
 var CHAPTERS = __CHAPTERS__;
+// Milo's opening line. Page text, not a reply — never sent, never stored,
+// never in a prompt. Shown only when the dock is empty at session start, so a
+// child returning inside the six hours sees their conversation rather than a
+// greeting. Nothing here detects a first-ever visit: there is no identity for
+// a child, and building one is M-13's.
+var GREETING = __GREETING__;
 
 var log = document.getElementById("log"),
     input = document.getElementById("in"),
@@ -208,7 +214,7 @@ async function ask(text){
 // child expects; being told it is still there is not.
 (async function resume(){
   var existing = stored();
-  if (!existing) return;
+  if (!existing) return greet();
   sid = existing;
   var r;
   try {
@@ -219,14 +225,26 @@ async function ask(text){
     // conversation to fix a display problem.
     return;
   }
-  if (r.status === 404) { forget(); return; }   // expired — BA, six hours
+  if (r.status === 404) { forget(); greet(); return; }   // expired — BA, six hours
   if (!r.ok) return;
   var s = await r.json();
-  if (s.chapter !== CHAPTER) { forget(); return; }
+  if (s.chapter !== CHAPTER) { forget(); greet(); return; }
   s.turns.forEach(function(turn){
     addMsg(turn.who === "child" ? "me" : "milo", turn.said);
   });
+  greet();
 })();
+
+// Milo's opening line, on an empty dock only. It is called from resume() at
+// every path that ends without turns on screen, rather than run beside it: a
+// greeting shown before the replay resolves would sit above a conversation the
+// child was in the middle of. On a network failure resume() returns without
+// calling this, because the conversation may still be there and a greeting
+// would say it is not.
+function greet(){
+  if (log.children.length) return;
+  addMsg("milo", GREETING);
+}
 
 // The selector. It navigates to that chapter's own URL — the same URL its
 // printed card would open — so nothing about a session, a page or a prompt is
