@@ -391,12 +391,14 @@ _GREETING = json.loads(
 def greeting_for(key: str) -> str:
     """The line for one chapter.
 
-    The subtitle lands mid-sentence after "you're about to", so its first
-    letter is lowered and its trailing full stop dropped. That is typography
-    and not authorship — no word changes, and nothing is written here.
+    The subtitle goes in verbatim — leading capital, trailing full stop — and
+    stands as its own sentence, which is what it is: these were written to sit
+    alone on a card. Only the template's own stop after the slot is dropped,
+    when the subtitle brings one, so the sentence ends once. No word changes.
     """
-    sub = corpus.BY_KEY[key]["sub"].rstrip(".")
-    sub = sub[:1].lower() + sub[1:] if sub else sub
+    sub = corpus.BY_KEY[key]["sub"]
+    if sub.endswith(".") and "{sub}." in _GREETING["text"]:
+        return _GREETING["text"].replace("{sub}.", sub)
     return _GREETING["text"].replace("{sub}", sub)
 
 

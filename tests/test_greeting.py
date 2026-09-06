@@ -38,9 +38,14 @@ def test_the_subtitle_comes_from_the_corpus_and_is_not_hard_coded(key):
     comment, which is a form-matcher convicting prose.
     """
     sub = corpus.BY_KEY[key]["sub"]
-    body = sub.rstrip(".")
-    body = body[:1].lower() + body[1:]
-    assert body in greeting_in(client.get(f"/c/{key}").text)
+    body = sub
+    # Verbatim: the subtitle is its own sentence, so the capital and the stop
+    # are the corpus's and stay. The earlier version lowered it to sit after
+    # "you're about to", which read as nonsense on seven of the fourteen.
+    line = greeting_in(client.get(f"/c/{key}").text)
+    assert sub in line, f"{key}'s subtitle is not verbatim"
+    assert f"Origins — {sub}" in line
+    assert ".." not in line and "..." not in line
 
     tree = ast.parse((ROOT / "main.py").read_text())
     docs = {ast.get_docstring(n, clean=False) for n in ast.walk(tree)
@@ -57,7 +62,7 @@ def test_the_sentence_is_authored_and_lives_in_content():
     """It is the architect's and is not reworded in code. Held in content/ so
     that is visible, the same as the selector's label and the probes."""
     assert "{sub}" in GRT["text"]
-    assert GRT["text"].startswith("I'm Milo.")
+    assert GRT["text"].startswith("I'm Milo. This is Origins — {sub}.")
     for f in ("main.py", "child/page.html"):
         src = (ROOT / f).read_text()
         assert "I'm Milo. This is Origins" not in src, f"the line is written into {f}"
