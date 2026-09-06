@@ -1,0 +1,11 @@
+{
+  "_what": "Milo's opening line. Fixed page text, shown once when the dock is empty at session start.",
+
+  "_authored": "The architect's. It is not reworded. {sub} is the slot the chapter's own subtitle goes into — the subtitle is the corpus's and is not authored per chapter here.",
+
+  "_not_a_reply": "This never reaches the model. It is not a turn, it is not stored, and it is not in any assembled prompt — asserted at every rung and both position states.",
+
+  "_the_slot": "The subtitle is inserted after 'you're about to', so it is lowered at its first letter and its trailing full stop is dropped. That is typography, not authorship: no word changes. Seven of the fourteen subtitles are not verb phrases and do not read as a continuation of that clause — flagged to the architect rather than fixed here, because the sentence and the subtitles are both theirs.",
+
+  "text": "I'm Milo. This is Origins, and you're about to {sub}. I know this chapter — the parts, how they go together, and what usually goes wrong with it. When something doesn't work, tell me what you're seeing and we'll find it. The card has numbered steps; say which one you're on and I'll pick it up from there."
+}

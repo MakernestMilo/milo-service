@@ -114,8 +114,11 @@ def test_switching_chapters_starts_a_new_session():
     that a child can change chapter without changing device."""
     page = client.get("/c/01").text
     assert 'KEY = "milo:session:" + CHAPTER' in page
-    # and a session from another chapter is dropped rather than replayed
-    assert "if (s.chapter !== CHAPTER) { forget(); return; }" in page
+    # and a session from another chapter is dropped rather than replayed.
+    # Asserted on the branch's effect rather than its exact spelling: the
+    # greeting added a call to this line and the old string match broke on a
+    # change that did not alter what it was checking.
+    assert re.search(r"if \(s\.chapter !== CHAPTER\) \{ forget\(\);.*return; \}", page)
 
 
 # --- Y3, the part that can be tested without the network ---------------------
