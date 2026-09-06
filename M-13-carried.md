@@ -11,10 +11,11 @@ the block and serve both.
 
 ---
 
-## The register · C-47, and C-48 proposed
+## The register · C-47 and C-48
 
 M-13 has no order document yet, so these open here and move into its register
-when it is written. Numbering continues from M-12's C-46.
+when it is written. Numbering continues from M-12's C-46. **Both are taken —
+M-13 inherits no open item from this list.**
 
 ### C-47 · A withholding withholds the facts inside the sentence, and nothing knows which
 
@@ -40,11 +41,11 @@ what Milo is told about position, and every withholding it proposes has the same
 blind spot. A withholding needs an inventory before it is measured, not after it
 is shipped.
 
-### C-48 · proposed · No rule convicts on a false statement about the child's own work
+### C-48 · No rule convicts on a false statement about the child's own work
 
-**The engineer's, offered for ruling.** On the reply telling a child they have
-six chapters' worth of cards where the chapter needs eleven, in that chapter's
-own context:
+**The engineer's, ruled taken by the architect.** On the reply telling a child
+they have six chapters' worth of cards where the chapter needs eleven, in that
+chapter's own context:
 
 | | |
 |---|---|
