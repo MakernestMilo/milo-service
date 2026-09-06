@@ -17,11 +17,40 @@ body{margin:0;background:var(--pa);color:var(--ink);
   display:flex;flex-direction:column;
   height:100dvh;overscroll-behavior:none}
 
+/* the chapter list. One QR code ships, so every other chapter is reached
+   from here. It is a way to reach the card you are holding, not a menu to
+   browse: the ordering is the corpus's own and nothing is hidden or locked. */
+.sheet{position:fixed;inset:0;background:var(--pa);z-index:9;display:flex;flex-direction:column}
+/* display:flex above outranks the browser's own [hidden]{display:none}, so the
+   sheet opened on load. Without this line the page's first screen is the
+   chapter list rather than the chapter. */
+.sheet[hidden]{display:none}
+.sheet .sh{padding:14px 20px;background:var(--ink);color:var(--sd);flex:none;
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet .sh span{font:700 8.5px/1 'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
+.sheet .sh button{border:1px solid var(--sd);background:none;color:var(--sd);border-radius:7px;
+  padding:7px 11px;font:700 8px/1 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.sheet ol{list-style:none;margin:0;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
+.sheet li{border-bottom:1px solid var(--ln)}
+.sheet a{display:block;padding:13px 20px;text-decoration:none;color:var(--ink)}
+.sheet a:active{background:var(--sd)}
+.sheet .n{font:700 9px/1 'Space Mono',monospace;letter-spacing:.18em;color:#7a4a22}
+.sheet .t{font:600 19px/1.15 'Hanken Grotesk',system-ui,sans-serif;letter-spacing:-.02em;margin:5px 0 3px}
+.sheet .s{font:400 14px/1.35 'Newsreader',Georgia,serif;font-style:italic;color:#3d382f;margin:0}
+.sheet .needs{font:700 8px/1.4 'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase;
+  color:#7a4a22;margin-top:6px}
+.sheet a[aria-current]{background:#f1ece0}
+
 /* the chapter — AZ. It confirms the scan worked. */
 .hd{padding:16px 20px 13px;background:var(--sd);flex:none}
 .hd .k{font:700 9px/1 'Space Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:#7a4a22;margin-bottom:8px}
 .hd h1{font:600 29px/1.05 'Hanken Grotesk',system-ui,sans-serif;letter-spacing:-.03em;margin:0 0 5px;text-wrap:balance}
 .hd .sub{font:400 15px/1.35 'Newsreader',Georgia,serif;font-style:italic;color:#3d382f;margin:0 0 12px}
+.hd .pick{display:block;width:100%;text-align:left;border:none;background:none;padding:0;
+  margin:0 0 12px;color:inherit;font:inherit;cursor:pointer}
+.hd .pick .sub{margin-bottom:8px}
+.hd .pick .cue{font:700 8px/1.3 'Space Mono',monospace;letter-spacing:.1em;text-transform:uppercase;
+  color:#8a5a30;display:inline-block;border-bottom:1px solid #cbb692;padding-bottom:3px}
 .hd .met{display:flex;gap:18px;font:700 8px/1.4 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#7a4a22}
 .hd .met b{display:block;font:400 13px/1.3 'Newsreader',Georgia,serif;color:var(--ink);letter-spacing:0;text-transform:none}
 
@@ -65,9 +94,18 @@ body{margin:0;background:var(--pa);color:var(--ink);
 
 <div class="hd">
   <div class="k">Build __KEY__ · __RUNG__</div>
-  <h1>__NAME__</h1>
-  <p class="sub">__SUB__</p>
+  <button type="button" class="pick" id="pick" aria-expanded="false" aria-controls="sheet">
+    <h1>__NAME__</h1>
+    <p class="sub">__SUB__</p>
+    <span class="cue">Holding a different card? Tap to switch</span>
+  </button>
   <div class="met"><span>Time<b>__TIME__</b></span><span>Open<b>__OPEN__</b></span></div>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sh"><span>Which card are you holding?</span>
+    <button type="button" id="shut">Close</button></div>
+  <ol id="chlist"></ol>
 </div>
 
 <div class="dock">
@@ -89,6 +127,11 @@ body{margin:0;background:var(--pa);color:var(--ink);
 // child's hand — AY. It is not a thing this page decides or a child can pick.
 var CHAPTER = "__KEY__";
 var QUICK = __QUICK__;
+// Every chapter, in the corpus's own order, with its number, name and
+// subtitle. Nothing here is authored by this page: the three fields are the
+// corpus's, and the line on the two that cannot be started cold is the
+// architect's, carried in content/selector_label.json.
+var CHAPTERS = __CHAPTERS__;
 
 var log = document.getElementById("log"),
     input = document.getElementById("in"),
@@ -184,6 +227,44 @@ async function ask(text){
     addMsg(turn.who === "child" ? "me" : "milo", turn.said);
   });
 })();
+
+// The selector. It navigates to that chapter's own URL — the same URL its
+// printed card would open — so nothing about a session, a page or a prompt is
+// special-cased for having arrived this way. One session per chapter is
+// already how the store is keyed, so switching chapters starts a new one
+// without a new mechanism.
+var sheet = document.getElementById("sheet"),
+    pick = document.getElementById("pick"),
+    chlist = document.getElementById("chlist");
+
+CHAPTERS.forEach(function(c){
+  var li = document.createElement("li"),
+      a = document.createElement("a");
+  a.href = "/c/" + encodeURIComponent(c.key);
+  if (c.key === CHAPTER) a.setAttribute("aria-current", "page");
+
+  var n = document.createElement("div"); n.className = "n"; n.textContent = c.key;
+  var t = document.createElement("div"); t.className = "t"; t.textContent = c.name;
+  var s2 = document.createElement("p"); s2.className = "s"; s2.textContent = c.sub;
+  a.appendChild(n); a.appendChild(t); a.appendChild(s2);
+  if (c.needs) {
+    var w = document.createElement("div"); w.className = "needs"; w.textContent = c.needs;
+    a.appendChild(w);
+  }
+  li.appendChild(a);
+  chlist.appendChild(li);
+});
+
+function openSheet(state){
+  sheet.hidden = !state;
+  pick.setAttribute("aria-expanded", state ? "true" : "false");
+  if (state) { var cur = chlist.querySelector("[aria-current]"); if (cur) cur.focus(); }
+}
+pick.addEventListener("click", function(){ openSheet(sheet.hidden); });
+document.getElementById("shut").addEventListener("click", function(){ openSheet(false); });
+document.addEventListener("keydown", function(e){
+  if (e.key === "Escape" && !sheet.hidden) openSheet(false);
+});
 
 form.addEventListener("submit", function(e){
   e.preventDefault();

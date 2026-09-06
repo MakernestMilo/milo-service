@@ -1,0 +1,12 @@
+{
+  "_what": "The line shown beneath a chapter in the selector that cannot be started cold, and the chapters it is shown on.",
+
+  "_why": "One QR code ships. The printed numbering was what made a child arriving cold at these chapters rare, and a selector removes that protection. This line replaces it, so it is the mitigation and not decoration.",
+
+  "_authored": "The line is the architect's. It is not reworded, and it is here rather than in main.py so that is visible.",
+
+  "_why_not_04": "04 also does not begin from a box, and it is deliberately not labelled. Milo handles it: five of five state the precondition and one offers the route by name. The labelled set is the two chapters in LAUNCH-KNOWN.md, where Milo does not. If this is ever derived from preconditions.begins_from_a_box it will silently gain 04 — the test pins the set to this file for that reason.",
+
+  "line": "needs the builds from earlier chapters",
+  "chapters": ["11", "12"]
+}

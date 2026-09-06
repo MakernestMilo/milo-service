@@ -380,6 +380,28 @@ _QUICK = _PROBE_FILE["probes"]
 _HELD_PROBES = _PROBE_FILE["_withheld_from_the_dock"]["probes"]
 
 
+# The chapter list the selector renders. One QR code ships on the kit, so every
+# chapter but First Light is reached from the page rather than from a printed
+# code — and the numbering that made a cold arrival at 11 or 12 rare goes with
+# it. `_SELECTOR["line"]` is the architect's and replaces that protection; it is
+# the mitigation for LAUNCH-KNOWN.md's two defects, not decoration.
+#
+# The three visible fields are the corpus's own. Nothing here is authored in
+# this file, and nothing is hidden, disabled or reordered: the order is
+# corpus.BY_KEY's, which is the order the cards are numbered in.
+_SELECTOR = json.loads(
+    (pathlib.Path(__file__).parent / "content" / "selector_label.json").read_text())
+_CHAPTER_LIST = [
+    {
+        "key": ch["key"],
+        "name": ch["name"],
+        "sub": ch["sub"],
+        **({"needs": _SELECTOR["line"]} if k in _SELECTOR["chapters"] else {}),
+    }
+    for k, ch in corpus.BY_KEY.items()
+]
+
+
 def render_page(key: str) -> str:
     """The child's view of one chapter.
 
@@ -398,9 +420,11 @@ def render_page(key: str) -> str:
         ("__OPEN__", ch["open"]),
     ):
         out = out.replace(token, html.escape(str(value)))
-    # The probes go in as JSON rather than as markup: the page builds the
-    # buttons with textContent, so a label is never parsed as HTML.
-    return out.replace("__QUICK__", json.dumps(_QUICK))
+    # The probes and the chapter list go in as JSON rather than as markup: the
+    # page builds both with textContent, so no authored string is ever parsed
+    # as HTML.
+    out = out.replace("__QUICK__", json.dumps(_QUICK))
+    return out.replace("__CHAPTERS__", json.dumps(_CHAPTER_LIST))
 
 
 # --- the panel ---------------------------------------------------------------
