@@ -1,0 +1,42 @@
+{
+  "build": "eae9d60",
+  "when": "2026-09-06T18:34:29",
+  "chapters": {
+    "01": {
+      "chars": 11939,
+      "sha256": "79e2cf2754f0b3b42376be4753b0f49b1a5c78a548c25f18ba05f3a6bc7877c1",
+      "blocks": [
+        "ALL STEPS OF FIRST LIGHT:",
+        "WIRING FOR FIRST LIGHT:",
+        "ESCALATION: L0",
+        "WHEN A RUNG HAS NO MATERIAL"
+      ],
+      "opener": "ok ive got the box open, theres loads of bits in here"
+    },
+    "11": {
+      "chars": 13958,
+      "sha256": "9757b5b91f35b185d4512a3db2366a2d3ad416ca006b4121068c684aaf18e134",
+      "blocks": [
+        "ALL STEPS OF SABOTAGE:",
+        "WIRING FOR SABOTAGE:",
+        "WHEN THIS CHAPTER STANDS ON EARLIER ONES",
+        "ESCALATION: L0",
+        "WHAT HAPPENED IN THIS CHAPTER",
+        "WHEN A RUNG HAS NO MATERIAL"
+      ],
+      "opener": "im on sabotage now. do i wake it up first"
+    },
+    "12": {
+      "chars": 13005,
+      "sha256": "5e2a787e0565257923a6aee4eafea284ca538a6d732812ab463b8424221088cf",
+      "blocks": [
+        "ALL STEPS OF YOUR OWN MACHINE:",
+        "WIRING FOR YOUR OWN MACHINE:",
+        "WHEN THIS CHAPTER STANDS ON EARLIER ONES",
+        "ESCALATION: L0",
+        "WHEN A RUNG HAS NO MATERIAL"
+      ],
+      "opener": "ive read back through all the cards. im not sure what to make yet"
+    }
+  }
+}
