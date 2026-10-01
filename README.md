@@ -35,7 +35,7 @@ Run the tests:
 python3 -m pytest -q
 ```
 
-Expected: `114 passed`.
+Expected: `906 passed`.
 
 Run the QC harness:
 
@@ -43,7 +43,7 @@ Run the QC harness:
 python3 qc.py
 ```
 
-Expected first line: `5712 checks · 5712 pass · 0 fail`. The harness exits
+Expected first line: `7616 checks · 7616 pass · 0 fail`. The harness exits
 non-zero if any check fails, or if a failure report matches no chapter, so its
 exit status can be used as a gate.
 
