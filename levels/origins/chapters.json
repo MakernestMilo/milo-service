@@ -1,0 +1,429 @@
+[
+ {
+  "key": "01",
+  "label": "01",
+  "title": "First Light",
+  "verb": "Sense",
+  "aim": "Teach a machine to feel.",
+  "time": "60 to 90 min",
+  "needs": null,
+  "open": "Compartment 01",
+  "sketch": "01",
+  "parts": [
+   "The base",
+   "The board",
+   "The shield",
+   "Sensor A",
+   "Display",
+   "Wires",
+   "USB lead",
+   "Battery pack",
+   "Screws, spacers"
+  ],
+  "pages": [
+   9,
+   19
+  ],
+  "wiring_new": [
+   "01a",
+   "01b"
+  ],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run, go hunting",
+   "05 Break it: The number that isn't real",
+   "06 Your decision",
+   "07 Show it",
+   "08 Name it, and before you go on"
+  ]
+ },
+ {
+  "key": "02",
+  "label": "02",
+  "title": "The Tripwire",
+  "verb": "Decide",
+  "aim": "Give it an opinion, and a way to show it.",
+  "time": "50-60 min",
+  "needs": "Chapter 01",
+  "open": "Compartment 02",
+  "sketch": "02",
+  "parts": [
+   "The dial",
+   "The light ring"
+  ],
+  "pages": [
+   20,
+   29
+  ],
+  "wiring_new": [
+   "02r",
+   "02d"
+  ],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "03 Build, the wires",
+   "04 First run",
+   "05 Break it: The false alarm",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "03",
+  "label": "03",
+  "title": "The Noisemaker",
+  "verb": "Act",
+  "aim": "Loud enough that somebody does something.",
+  "time": "60 min",
+  "needs": "01",
+  "open": "Compartment 03",
+  "sketch": "03",
+  "parts": [
+   "The buzzer"
+  ],
+  "pages": [
+   30,
+   39
+  ],
+  "wiring_new": [
+   "03"
+  ],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: The output with nothing behind it",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "04",
+  "label": "04",
+  "title": "The Chatterbox",
+  "verb": "Stop",
+  "aim": "Teach it when to stop.",
+  "time": "40-50 min",
+  "needs": "03",
+  "open": "Nothing new",
+  "sketch": "04",
+  "parts": [],
+  "pages": [
+   40,
+   48
+  ],
+  "wiring_new": [],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: The chatter",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "05",
+  "label": "05",
+  "title": "Sensor Duel",
+  "verb": "Compare",
+  "aim": "When two sensors disagree.",
+  "time": "50 min",
+  "needs": "01",
+  "open": "Compartment 05",
+  "sketch": "05",
+  "parts": [
+   "Sensor B on its lead",
+   "Cable ties"
+  ],
+  "pages": [
+   49,
+   59
+  ],
+  "wiring_new": [
+   "05"
+  ],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run, the hunt",
+   "05 Break it: It is watching the wrong one",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "06",
+  "label": "06",
+  "title": "The Witness",
+  "verb": "Count",
+  "aim": "Count what nobody was watching.",
+  "time": "50 min",
+  "needs": "02",
+  "open": "Compartment 06",
+  "sketch": "06",
+  "parts": [
+   "Door switch and magnet",
+   "Sticky pads"
+  ],
+  "pages": [
+   60,
+   69
+  ],
+  "wiring_new": [
+   "06"
+  ],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: The double count",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "07",
+  "label": "07",
+  "title": "The Night Shift",
+  "verb": "Remember",
+  "aim": "Find out what your room does while you sleep.",
+  "time": "40 min + 7 days",
+  "needs": "01",
+  "open": "Compartment 07 and the chart card",
+  "sketch": "07",
+  "parts": [
+   "The chart card"
+  ],
+  "pages": [
+   70,
+   79
+  ],
+  "wiring_new": [],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run, then every night",
+   "05 Break it: The moment your machine missed",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "08",
+  "label": "08",
+  "title": "Chain Reaction",
+  "verb": "Sequence",
+  "aim": "Things happen in an order you set.",
+  "time": "60 min",
+  "needs": "03",
+  "open": "Compartment 08",
+  "sketch": "08",
+  "parts": [
+   "Lamp switch board",
+   "The lamp",
+   "9 V battery and clip"
+  ],
+  "pages": [
+   80,
+   89
+  ],
+  "wiring_new": [
+   "08"
+  ],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: A sequence never checks",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "d",
+  "label": "D",
+  "title": "The Doorkeeper",
+  "verb": "Flagship",
+  "aim": "Everything you have learnt, at one door, for a week.",
+  "time": "Three sessions and a week",
+  "needs": "01 to 08",
+  "open": "Nothing new",
+  "sketch": "d",
+  "parts": [],
+  "pages": [
+   90,
+   105
+  ],
+  "wiring_new": [],
+  "positions": [
+   "Session one: The brief",
+   "Session one: Build",
+   "Session one: Card D1",
+   "Session two: The negotiation",
+   "Session two: Put it up",
+   "Session two: Set it going",
+   "Session three: Read the week",
+   "Session three: The week itself",
+   "Session three: Fix exactly one thing",
+   "Session three: Show it"
+  ]
+ },
+ {
+  "key": "09",
+  "label": "09",
+  "title": "Stakeout",
+  "verb": "Place",
+  "aim": "Where it sits decides what it knows.",
+  "time": "60 min",
+  "needs": "05",
+  "open": "Compartment 09",
+  "sketch": "09",
+  "parts": [
+   "Sticky cable clips",
+   "Cable ties"
+  ],
+  "pages": [
+   106,
+   115
+  ],
+  "wiring_new": [],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: The easy place",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "10",
+  "label": "10",
+  "title": "The Creature",
+  "verb": "Dress",
+  "aim": "Give it a body. Keep it working.",
+  "time": "60 to 75 min",
+  "needs": "09",
+  "open": "Compartment 10",
+  "sketch": "09",
+  "parts": [
+   "Card body set"
+  ],
+  "pages": [
+   116,
+   124
+  ],
+  "wiring_new": [],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: The sealed box",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "11",
+  "label": "11",
+  "title": "Sabotage",
+  "verb": "Diagnose",
+  "aim": "Somebody broke it. Find out how.",
+  "time": "30 to 90 min",
+  "needs": "Everything",
+  "open": "A sealed fault, opened by somebody else",
+  "sketch": "09",
+  "parts": [],
+  "pages": [
+   125,
+   135
+  ],
+  "wiring_new": [],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 The five places a fault can live",
+   "04 First test",
+   "05 Find it",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "12",
+  "label": "12",
+  "title": "Your Own Machine",
+  "verb": "Design",
+  "aim": "Write the sentence. Build to it.",
+  "time": "90 min, or two evenings",
+  "needs": "All of them",
+  "open": "Nothing new. Your cards, and a rough notebook of your own",
+  "sketch": "12",
+  "parts": [],
+  "pages": [
+   136,
+   144
+  ],
+  "wiring_new": [],
+  "positions": [
+   "01 Open",
+   "02 The one idea",
+   "03 Build",
+   "04 First run",
+   "05 Break it: The sentence was too big",
+   "06 Your decision",
+   "07 Show it",
+   "08 Before you go on"
+  ]
+ },
+ {
+  "key": "g",
+  "label": "G",
+  "title": "The Gift",
+  "verb": "Flagship",
+  "aim": "Somebody else's problem, in their words.",
+  "time": "Three sessions",
+  "needs": "Whatever the brief needs",
+  "open": "Nothing new",
+  "sketch": "g",
+  "parts": [],
+  "pages": [
+   145,
+   158
+  ],
+  "wiring_new": [],
+  "positions": [
+   "Session one: Who is it for?",
+   "Session one: Three questions, in order",
+   "Session one: Their sentence, then yours",
+   "Session two: No instructions",
+   "Session two: Give it a body",
+   "Session three: The handover",
+   "Session three: The brief was wrong",
+   "Session three: The last card"
+  ]
+ }
+]

@@ -1,0 +1,10 @@
+{
+ "id": "connected",
+ "name": "Connected",
+ "numeral": "III",
+ "status": "coming",
+ "colour": "#2C7DC4",
+ "on_colour": "#FBF9F3",
+ "theme": "Internet of things",
+ "order": []
+}

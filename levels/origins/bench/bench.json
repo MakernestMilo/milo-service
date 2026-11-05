@@ -1,0 +1,766 @@
+{
+ "about": "Bench experiments for The Maker's Book of Origins. One per chapter, on the 170-point breadboard. They use only the shield's free rows (10, 12, 13, A0, A1), so nothing on the machine is unplugged, and no bench sketch touches the board's saved settings or notebook.",
+ "rules": [
+  "Bench sketches replace your chapter sketch while you use them. Your settings and your notebook stay saved on the board. When you finish, upload the chapter's sketch again and your machine is back exactly as it was.",
+  "While a bench sketch runs, the display and the ring freeze on whatever they last showed. That is normal.",
+  "If the light ring is still lit from your chapter sketch, switch everything off and on again before you start. It goes dark and stops using power the bench needs.",
+  "The breadboard has 17 numbered columns and two halves, top and bottom. The five holes in one column of one half are joined underneath. Nothing joins across the gap in the middle.",
+  "Every jumper from the shield has a female end: push it onto a shield pin. The male end goes into the breadboard. G, V and S are the same three pins you have used all book: ground, power, signal.",
+  "Never put a wire straight from V to G. That is a short circuit."
+ ],
+ "parts": {
+  "led_red": "red LED (long leg is +)",
+  "led_yellow": "yellow LED",
+  "led_green": "green LED",
+  "r220": "220 Ω resistor (red, red, brown)",
+  "r10k": "10 kΩ resistor (brown, black, orange)",
+  "ldr": "light sensor (LDR): either way round",
+  "button": "push button, four legs",
+  "piezo": "passive buzzer board (KY-006)",
+  "servo": "SG90 servo",
+  "soil": "soil sensor: probe and its small board",
+  "battery9v": "9 V battery and its clip",
+  "mf": "male-to-female jumper",
+  "ff": "female-to-female jumper",
+  "mm": "male-to-male jumper",
+  "transistor": "BC546 NPN transistor (flat face towards you: collector, base, emitter, left to right)",
+  "cap100n": "100 nF capacitor (marked 104)"
+ },
+ "pack": [
+  [
+   "Light sensor (LDR, GL5528, 5 mm)",
+   2
+  ],
+  [
+   "Push button, 6 × 6 mm, four legs",
+   2
+  ],
+  [
+   "Yellow LED, 5 mm",
+   1
+  ],
+  [
+   "Green LED, 5 mm",
+   1
+  ],
+  [
+   "Resistor 220 Ω, 1/4 W",
+   10
+  ],
+  [
+   "Passive buzzer board (KY-006)",
+   1
+  ],
+  [
+   "SG90 micro servo with horns",
+   1
+  ],
+  [
+   "Soil moisture sensor (YL-69 probe with comparator board)",
+   1
+  ]
+ ],
+ "experiments": {
+  "01": {
+   "title": "Light an LED from the battery on the breadboard",
+   "idea": "A circuit is a loop. Power leaves the battery, goes through the LED and comes back. Break the loop anywhere and the light goes out.",
+   "parts": [
+    "led_red",
+    "r220",
+    "r220",
+    "battery9v"
+   ],
+   "uses_board": false,
+   "steps": [
+    "Put the LED in the top half: long leg in column 5, short leg in column 6.",
+    "Put one 220 Ω resistor from column 6 to column 8, and the second from column 8 to column 10. Two in a row, because 9 volts is a lot for one small LED.",
+    "Push the 9 V clip's red wire into column 5, top half.",
+    "Push the clip's black wire into column 10, top half.",
+    "Snap the clip onto the 9 V battery. The LED lights."
+   ],
+   "wiring": [
+    [
+     "battery +",
+     "red",
+     "column 5 top"
+    ],
+    [
+     "battery −",
+     "black",
+     "column 10 top"
+    ]
+   ],
+   "sketch": null,
+   "notice": "Nothing in this circuit is clever. It lights because the loop is closed.",
+   "break_it": "Turn the LED round so the long leg is in column 6. It stays dark, and nothing is broken: an LED only lets power through one way.",
+   "try_this": "Swap one 220 Ω for a 10 kΩ. The LED gets much dimmer. A bigger resistor lets less through.",
+   "safety": "Never leave both resistors out. Nine volts straight into an LED destroys it in a second. Unclip the battery when you finish: it is the lamp's battery."
+  },
+  "02": {
+   "title": "Make an LED switch on below a number",
+   "idea": "A light sensor and a resistor share the power between them. More light, bigger number. The board compares the number with your line, exactly like the Tripwire.",
+   "parts": [
+    "ldr",
+    "r10k",
+    "led_red",
+    "r220",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Put the light sensor in the top half, one leg in column 3 and the other in column 6.",
+    "Put the 10 kΩ resistor from column 6 to column 10, top half.",
+    "Put the LED in the top half: long leg in column 13, short leg in column 14.",
+    "Put a 220 Ω resistor from column 14 to column 17, top half.",
+    "Jumpers from the shield: A0 V to column 3, A0 S to column 6, A0 G to column 10.",
+    "More jumpers: row 12 S to column 13, row 12 G to column 17.",
+    "Upload bench sketch 02 and open Tools, Serial Monitor at 9600."
+   ],
+   "wiring": [
+    [
+     "A0 V",
+     "red",
+     "column 3 top"
+    ],
+    [
+     "A0 S",
+     "blue",
+     "column 6 top"
+    ],
+    [
+     "A0 G",
+     "black",
+     "column 10 top"
+    ],
+    [
+     "row 12 S",
+     "yellow",
+     "column 13 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 17 top"
+    ]
+   ],
+   "sketch": "b02",
+   "notice": "Cover the sensor with your hand. Watch the number fall in the Serial Monitor. When it goes under LINE, the LED comes on.",
+   "break_it": "Pull the 10 kΩ out. The number sits near the top and hardly moves, and the LED never comes on. The sensor needs a partner to share the power with, or there is nothing to compare.",
+   "try_this": "Change LINE to the number your room shows at dusk. Now it comes on when it gets dark."
+  },
+  "03": {
+   "title": "Make a buzzer sing two notes",
+   "idea": "Your machine's buzzer can only beep. This one is passive: it makes whatever pitch the board sends it. A note is just a number of vibrations every second.",
+   "parts": [
+    "piezo",
+    "ff",
+    "ff"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Find the S and − pins on the passive buzzer board. The middle pin is not used.",
+    "Female-to-female jumpers straight from the shield, no breadboard: row 12 S to the buzzer's S, row 12 G to the buzzer's −.",
+    "Upload bench sketch 03."
+   ],
+   "wiring": [
+    [
+     "row 12 S",
+     "yellow",
+     "buzzer S"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "buzzer −"
+    ]
+   ],
+   "sketch": "b03",
+   "notice": "Two notes, then quiet, then again.",
+   "break_it": "Move the S wire to the middle pin. Silence. The right part, the wrong pin.",
+   "try_this": "Change NOTE_TWO to 784. Then try making the first three notes of a tune everyone at home knows.",
+   "breadboard": false
+  },
+  "04": {
+   "title": "A light that waits before it changes its mind",
+   "idea": "One line makes a light that flickers when the number sits on it. Two lines and a wait make a light that only changes when the change is real. Exactly the Chatterbox, on a breadboard.",
+   "parts": [
+    "ldr",
+    "r10k",
+    "led_red",
+    "r220",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "same_circuit_as": "02",
+   "steps": [
+    "Build bench 02's circuit, or keep it if it is still on the breadboard.",
+    "Upload bench sketch 04 and open the Serial Monitor."
+   ],
+   "wiring": [
+    [
+     "A0 V",
+     "red",
+     "column 3 top"
+    ],
+    [
+     "A0 S",
+     "blue",
+     "column 6 top"
+    ],
+    [
+     "A0 G",
+     "black",
+     "column 10 top"
+    ],
+    [
+     "row 12 S",
+     "yellow",
+     "column 13 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 17 top"
+    ]
+   ],
+   "sketch": "b04",
+   "notice": "Cover the sensor quickly and uncover it. Nothing happens. Keep it covered for two seconds and the LED comes on. It needs more light than before to go off again.",
+   "break_it": "Make OFF_ABOVE the same as ON_BELOW and WAIT 0. Hold your hand where the number sits on the line. It chatters.",
+   "try_this": "Find the smallest gap and the shortest wait that still stop it chattering in your room."
+  },
+  "05": {
+   "title": "Two light sensors and one LED that picks the brighter side",
+   "idea": "Two sensors never read exactly the same. Comparing them means deciding how close counts as equal.",
+   "parts": [
+    "ldr",
+    "ldr",
+    "r10k",
+    "r10k",
+    "led_red",
+    "r220",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Build bench 02's circuit in the top half. That is sensor A on A0, and the LED on row 12.",
+    "Sensor B in the bottom half: one leg in column 3, the other in column 6.",
+    "A 10 kΩ from column 6 to column 10, bottom half.",
+    "Jumpers: A1 V to column 3 bottom, A1 S to column 6 bottom, A1 G to column 10 bottom.",
+    "Upload bench sketch 05 and open the Serial Monitor."
+   ],
+   "wiring": [
+    [
+     "A0 V",
+     "red",
+     "column 3 top"
+    ],
+    [
+     "A0 S",
+     "blue",
+     "column 6 top"
+    ],
+    [
+     "A0 G",
+     "black",
+     "column 10 top"
+    ],
+    [
+     "A1 V",
+     "red",
+     "column 3 bottom"
+    ],
+    [
+     "A1 S",
+     "light blue",
+     "column 6 bottom"
+    ],
+    [
+     "A1 G",
+     "black",
+     "column 10 bottom"
+    ],
+    [
+     "row 12 S",
+     "yellow",
+     "column 13 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 17 top"
+    ]
+   ],
+   "sketch": "b05",
+   "notice": "Shine a torch at A, then at B. The LED follows the brighter side. With both in the same light, look at the two numbers: they still disagree a little.",
+   "break_it": "Set GAP to 0. With both sensors in the same light, the LED flickers between them.",
+   "try_this": "Point one sensor at the window and one at the room. Which side wins at different times of day?"
+  },
+  "06": {
+   "title": "A push button that counts, and a second one that undoes",
+   "idea": "A button doesn't close cleanly. For a few thousandths of a second it bounces, and a fast board sees several presses. That is the Witness's double count, on a breadboard.",
+   "parts": [
+    "button",
+    "button",
+    "mf",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Put button one across the middle gap, its legs in columns 3 and 5. Push it in until it clicks flat.",
+    "Put button two across the gap, its legs in columns 10 and 12.",
+    "Button one: row 12 S to column 3 top, row 12 G to column 5 bottom. Always diagonally opposite corners.",
+    "Button two: row 10 S to column 10 top, row 10 G to column 12 bottom.",
+    "Upload bench sketch 06 and open the Serial Monitor."
+   ],
+   "wiring": [
+    [
+     "row 12 S",
+     "yellow",
+     "column 3 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 5 bottom"
+    ],
+    [
+     "row 10 S",
+     "green",
+     "column 10 top"
+    ],
+    [
+     "row 10 G",
+     "black",
+     "column 12 bottom"
+    ]
+   ],
+   "sketch": "b06",
+   "notice": "Press button one: the count goes up by one. Button two takes one away. It never goes below zero.",
+   "break_it": "Set SETTLE to 0 and upload. Press button one ten times, counting yourself. The board's count is higher than yours.",
+   "try_this": "Find the smallest SETTLE that never double counts on your buttons."
+  },
+  "07": {
+   "title": "A light sensor that writes down every time the room goes dark",
+   "idea": "Writing something down is what makes a machine useful when nobody is watching. Where it writes it decides whether it survives.",
+   "parts": [
+    "ldr",
+    "r10k",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Build the sensor half of bench 02: the light sensor in columns 3 and 6, the 10 kΩ from 6 to 10, and the three A0 jumpers.",
+    "Upload bench sketch 07 and open the Serial Monitor.",
+    "Cover and uncover the sensor a few times. Then type L and press Enter."
+   ],
+   "wiring": [
+    [
+     "A0 V",
+     "red",
+     "column 3 top"
+    ],
+    [
+     "A0 S",
+     "blue",
+     "column 6 top"
+    ],
+    [
+     "A0 G",
+     "black",
+     "column 10 top"
+    ]
+   ],
+   "sketch": "b07",
+   "notice": "Every dark is written down with the time since the upload.",
+   "break_it": "Unplug the USB lead, plug it back in, type L. The list is empty. This one writes in working memory, which forgets when the power goes. Your machine's notebook writes in the board's saved memory, which is why your week survived.",
+   "try_this": "Leave it by a window overnight on a phone charger and type L in the morning. When did it get dark?"
+  },
+  "08": {
+   "title": "Traffic lights: three LEDs and your own timings",
+   "idea": "A sequence is a list of things in an order, each with how long it lasts. Change the numbers, change the crossing.",
+   "parts": [
+    "led_red",
+    "led_yellow",
+    "led_green",
+    "r220",
+    "r220",
+    "r220",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Red LED: long leg in column 2, short leg in column 3. A 220 Ω from column 3 to column 5.",
+    "Yellow LED: long leg in column 7, short leg in column 8. A 220 Ω from column 8 to column 10.",
+    "Green LED: long leg in column 12, short leg in column 13. A 220 Ω from column 13 to column 15.",
+    "All in the top half. Jumpers: row 12 S to column 2, row 12 G to column 5.",
+    "Row 13 S to column 7, row 13 G to column 10.",
+    "Row 10 S to column 12, row 10 G to column 15.",
+    "Upload bench sketch 08."
+   ],
+   "wiring": [
+    [
+     "row 12 S",
+     "yellow",
+     "column 2 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 5 top"
+    ],
+    [
+     "row 13 S",
+     "pink",
+     "column 7 top"
+    ],
+    [
+     "row 13 G",
+     "black",
+     "column 10 top"
+    ],
+    [
+     "row 10 S",
+     "green",
+     "column 12 top"
+    ],
+    [
+     "row 10 G",
+     "black",
+     "column 15 top"
+    ]
+   ],
+   "sketch": "b08",
+   "notice": "Red, red and yellow, green, yellow, and round again.",
+   "break_it": "Make YELLOW_TIME 0. Green jumps straight to red. Ask somebody at home if that would be safe at a real crossing.",
+   "try_this": "Time a real crossing near you and copy its numbers."
+  },
+  "d": {
+   "title": "A doorbell that plays a different tune after dark",
+   "idea": "The same press can mean two things. The board reads a second sensor before deciding what to do.",
+   "parts": [
+    "button",
+    "piezo",
+    "ldr",
+    "r10k",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "mf",
+    "ff",
+    "ff"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Button across the middle gap, legs in columns 3 and 5. Row 12 S to column 3 top, row 12 G to column 5 bottom.",
+    "Light sensor in the bottom half, columns 9 and 12. A 10 kΩ from column 12 to column 16, bottom half.",
+    "Jumpers: A0 V to column 9 bottom, A0 S to column 12 bottom, A0 G to column 16 bottom.",
+    "Passive buzzer straight from the shield: row 13 S to its S, row 13 G to its −.",
+    "Upload bench sketch D."
+   ],
+   "wiring": [
+    [
+     "row 12 S",
+     "yellow",
+     "column 3 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 5 bottom"
+    ],
+    [
+     "A0 V",
+     "red",
+     "column 9 bottom"
+    ],
+    [
+     "A0 S",
+     "blue",
+     "column 12 bottom"
+    ],
+    [
+     "A0 G",
+     "black",
+     "column 16 bottom"
+    ],
+    [
+     "row 13 S",
+     "pink",
+     "buzzer S"
+    ],
+    [
+     "row 13 G",
+     "black",
+     "buzzer −"
+    ]
+   ],
+   "sketch": "bd",
+   "notice": "Press it in daylight: ding-dong. Cover the sensor and press: three soft notes.",
+   "break_it": "Set DARK to 0. It is never night any more, and the soft tune never plays.",
+   "try_this": "Write a third tune for when somebody presses it twice quickly."
+  },
+  "09": {
+   "title": "A soil sensor that tells you when a plant needs water",
+   "idea": "Wet soil carries power better than dry soil. Powering the probe only while it reads keeps it from corroding away.",
+   "parts": [
+    "soil",
+    "led_red",
+    "r220",
+    "ff",
+    "ff",
+    "ff",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Join the probe to its small board with the two-wire lead.",
+    "Female-to-female from the small board: VCC to row 13 S, GND to A1 G, AO to A1 S. Leave DO empty.",
+    "LED and 220 Ω as in bench 02: long leg column 13, short leg column 14, resistor 14 to 17, top half. Row 12 S to column 13, row 12 G to column 17.",
+    "Upload bench sketch 09 and open the Serial Monitor.",
+    "Hold the probe in air, then dip the forks in a cup of water. Write down both numbers. Set DRY_ABOVE about a third of the way down from the air number."
+   ],
+   "wiring": [
+    [
+     "row 13 S",
+     "red",
+     "soil board VCC"
+    ],
+    [
+     "A1 G",
+     "black",
+     "soil board GND"
+    ],
+    [
+     "A1 S",
+     "light blue",
+     "soil board AO"
+    ],
+    [
+     "row 12 S",
+     "yellow",
+     "column 13 top"
+    ],
+    [
+     "row 12 G",
+     "black",
+     "column 17 top"
+    ]
+   ],
+   "sketch": "b09",
+   "notice": "Push the forks into a plant pot, not touching the plant. Dry soil: LED on. Water it and wait a minute: LED off.",
+   "break_it": "Move the VCC wire from row 13 S to row 13 V. It still works, but now the probe has power all the time, and in a few weeks the forks start to rust. Put it back.",
+   "try_this": "Find the number for just right, not too wet and not too dry, and add a second line.",
+   "safety": "Only the forks go in the soil. Keep the small board and the shield dry."
+  },
+  "10": {
+   "title": "A servo that waves when somebody walks past",
+   "idea": "A servo turns to the angle you send it. A passing shadow is a sudden drop in light, so the light sensor can notice somebody walking past.",
+   "parts": [
+    "servo",
+    "ldr",
+    "r10k",
+    "mf",
+    "mf",
+    "mf"
+   ],
+   "uses_board": true,
+   "steps": [
+    "Push the servo's plug straight onto row 10: brown on G, red on V, orange on S.",
+    "Build the sensor half of bench 02: light sensor in columns 3 and 6, the 10 kΩ from 6 to 10, A0 V to 3, A0 S to 6, A0 G to 10.",
+    "Press a horn onto the servo.",
+    "Upload bench sketch 10, unplug the USB lead and switch on the battery pack.",
+    "Put it where people walk past, with the sensor facing the path."
+   ],
+   "wiring": [
+    [
+     "row 10 G",
+     "brown",
+     "servo brown"
+    ],
+    [
+     "row 10 V",
+     "red",
+     "servo red"
+    ],
+    [
+     "row 10 S",
+     "orange",
+     "servo orange"
+    ],
+    [
+     "A0 V",
+     "red",
+     "column 3 top"
+    ],
+    [
+     "A0 S",
+     "blue",
+     "column 6 top"
+    ],
+    [
+     "A0 G",
+     "black",
+     "column 10 top"
+    ]
+   ],
+   "sketch": "b10",
+   "notice": "Walk past it slowly. It waves three times.",
+   "break_it": "Set DROP to 5. Now it waves at clouds.",
+   "try_this": "Make it wave only after dark, using a number from bench 02.",
+   "safety": "Run it from the battery pack, and switch the pack off and on first so the ring goes dark. If the board restarts every time the arm moves, the servo is asking for more power than the board can give: the pack may be low, or the USB socket is too weak."
+  },
+  "11": {
+   "title": "Five broken bench circuits to fix, one a week",
+   "idea": "Each one is a bench circuit you already know, built wrong on purpose. Build it exactly as shown, see what it does, and find the fault without looking at the answer.",
+   "uses_board": true,
+   "faults": [
+    {
+     "n": 1,
+     "label": "Week 1 · kindest",
+     "based_on": "01",
+     "build": "Build bench 01 exactly as it says, except the LED: short leg in column 5, long leg in column 6.",
+     "should": "The LED lights when the battery is clipped on.",
+     "does": "Nothing lights. The battery is new.",
+     "sketch": null,
+     "hints": [
+      "Is power getting into the breadboard at all? How could you check without a meter?",
+      "Every part in this loop is happy either way round except one.",
+      "Look at the LED's two legs. Which one is longer, and which column is it in?"
+     ],
+     "answer": "The LED is in backwards. An LED only lets power through from the long leg to the short one. Turn it round."
+    },
+    {
+     "n": 2,
+     "label": "Week 2",
+     "based_on": "06",
+     "build": "Build bench 06, but push button one's G wire into column 3 top, next to its S wire, instead of column 5 bottom.",
+     "should": "Each press adds one.",
+     "does": "The count goes up once by itself, and after that no press of button one ever counts.",
+     "sketch": "b06",
+     "hints": [
+      "Watch the Serial Monitor without touching anything. Is the board seeing a press that isn't happening?",
+      "What joins two holes on a breadboard, even with no part in them?",
+      "Look at the two wires for button one. Which column is each of them in?"
+     ],
+     "answer": "Both of button one's wires are in column 3, top half. The five holes in a column are joined underneath, so S is joined to G all the time and the board thinks the button is held down forever. G belongs on the diagonally opposite leg: column 5, bottom half."
+    },
+    {
+     "n": 3,
+     "label": "Week 3",
+     "based_on": "02",
+     "build": "Build bench 02, but leave the 10 kΩ resistor out.",
+     "should": "The LED comes on when you cover the sensor.",
+     "does": "The number stays high and barely moves. The LED never comes on.",
+     "sketch": "b02",
+     "hints": [
+      "Does the number in the Serial Monitor change when you cover the sensor?",
+      "A0 is measuring how the power is shared between two parts. How many parts are sharing it?",
+      "Look at what joins column 6 to column 10."
+     ],
+     "answer": "The 10 kΩ is missing. Without it, the sensor has nothing to share the power with, so A0 always sees nearly all of it. Put it back from column 6 to column 10."
+    },
+    {
+     "n": 4,
+     "label": "Week 4",
+     "based_on": "08",
+     "build": "Build bench 08, but put the yellow LED's resistor from column 9 to column 10 instead of 8 to 10.",
+     "should": "Red, red and yellow, green, yellow.",
+     "does": "Red and green work. Yellow never lights.",
+     "sketch": "b08",
+     "hints": [
+      "Two of three work, so the board and the sketch are probably fine. What is different about the third?",
+      "Follow the loop for yellow with your finger, from row 13 S, through the LED, back to G.",
+      "Which column is the yellow LED's short leg in, and is anything else in that column?"
+     ],
+     "answer": "The resistor doesn't share a column with the LED's short leg, so yellow's loop is open. Move its end from column 9 to column 8."
+    },
+    {
+     "n": 5,
+     "label": "Week 5 · hardest",
+     "based_on": "02",
+     "build": "Build bench 02 exactly, every wire correct. Upload the fault 5 sketch instead of bench sketch 02.",
+     "should": "The LED comes on when you cover the sensor.",
+     "does": "The number in the Serial Monitor goes up and down perfectly. The LED never comes on.",
+     "sketch": "f5",
+     "hints": [
+      "The number is right, so the sensor half works. The fault is in the other half, or somewhere you can't see.",
+      "The circuit is exactly bench 02's. Is the sketch?",
+      "Read the sketch out loud, line by line. Which row does it think the LED is on?"
+     ],
+     "answer": "The sketch says LED_PIN is 10, but the LED is wired to row 12. Nothing on the breadboard is wrong. Change it to 12, or move the wire to row 10. Sometimes the fault is in the code."
+    }
+   ]
+  },
+  "12": {
+   "title": "Take any bench circuit and change one thing in its code",
+   "idea": "Before you change anything, say out loud what you think will happen. Then upload and find out. The surprise is where you learn something.",
+   "uses_board": true,
+   "ideas": [
+    [
+     "02",
+     "Make the LED come on above the line instead of below it."
+    ],
+    [
+     "03",
+     "Add a third note, and make the gap between notes shorter."
+    ],
+    [
+     "04",
+     "Make it wait five seconds before it switches off, but only half a second before it switches on."
+    ],
+    [
+     "05",
+     "Make the LED blink when the two sides are almost equal."
+    ],
+    [
+     "06",
+     "Make button two reset the count to zero instead of taking one away."
+    ],
+    [
+     "08",
+     "Add a flashing green before yellow."
+    ],
+    [
+     "d",
+     "Make the night tune play only after three presses."
+    ],
+    [
+     "10",
+     "Make it wave once in the day and three times after dark."
+    ]
+   ],
+   "steps": [
+    "Pick one bench circuit you have already built, and build it again.",
+    "Pick one change. One. Write in your rough notebook what you think will happen.",
+    "Change the sketch, upload it, and watch.",
+    "Write what actually happened next to your guess. If it surprised you, ask me why."
+   ]
+  }
+ }
+}
