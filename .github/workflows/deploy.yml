@@ -21,8 +21,9 @@ jobs:
         env:
           HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
-          if [ -z "$HOST" ]; then echo "DEPLOY_HOST is not set: nothing to deploy to yet."; exit 1; fi
+          if [ -z "$HOST" ]; then echo "::warning::DEPLOY_HOST is not set: nothing to deploy to yet."; echo "skip=1" >> "$GITHUB_ENV"; fi
       - name: Update the server
+        if: env.skip != '1'
         env:
           HOST: ${{ secrets.DEPLOY_HOST }}
           USER: ${{ secrets.DEPLOY_USER }}
