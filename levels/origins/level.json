@@ -1,0 +1,106 @@
+{
+ "id": "origins",
+ "name": "Origins",
+ "numeral": "I",
+ "status": "live",
+ "colour": "#F4B223",
+ "on_colour": "#191713",
+ "tint": "#F9E5B9",
+ "book": "The Maker's Book of Origins",
+ "tagline": "Fourteen things to build, and one machine that becomes all of them.",
+ "ages": "Makers aged 9 to 14",
+ "order": [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "d",
+  "09",
+  "10",
+  "11",
+  "12",
+  "g"
+ ],
+ "acts": [
+  {
+   "name": "Act one",
+   "title": "A whole loop",
+   "chapters": [
+    "01",
+    "02",
+    "03",
+    "04"
+   ]
+  },
+  {
+   "name": "Act two",
+   "title": "",
+   "chapters": [
+    "05",
+    "06",
+    "07",
+    "08",
+    "d"
+   ]
+  },
+  {
+   "name": "Act three",
+   "title": "",
+   "chapters": [
+    "09",
+    "10",
+    "11",
+    "12",
+    "g"
+   ]
+  }
+ ],
+ "steps": [
+  "Open",
+  "The one idea",
+  "Build",
+  "First run",
+  "Break it on purpose",
+  "Your decision",
+  "Show it",
+  "Before you go on"
+ ],
+ "code_coach": [
+  "12",
+  "g"
+ ],
+ "no_spoilers": [
+  "11"
+ ],
+ "hardware": [
+  "Board: an Arduino-compatible UNO R3 with a CH340 USB chip. In the Arduino IDE it is Tools, Board, Arduino Uno.",
+  "Shield: Sensor Shield V4.0 on top of the board. Every pin has three rows: G (ground, black), V (power, red), S (signal, its own colour).",
+  "Power: the 2S Li-ion battery pack (7.4 V, two sealed cells, its own switch), plugged onto the shield's POWER pins, black on GND, red on VIN. The pack powers the machine.",
+  "The USB lead is for sending sketches. While it is plugged in, the board also runs from the computer. For the two week-long chapters (07 and the Doorkeeper), the USB lead goes into a phone charger instead.",
+  "The 9 V battery powers the lamp, through the switch board, and bench experiment 01. It is not rechargeable.",
+  "Shield rows used by the machine: 2 sensor A (black, red, blue), 3 dial power and its first signal (yellow), 4 dial (purple), 5 dial button (pink), 6 buzzer (magenta), 7 sensor B (light blue), 8 door switch (lime), 9 lamp switch board (grey), 11 light ring (cyan, with a 330 ohm resistor sealed in its lead), A4 and A5 the display (green SDA on A4, orange SCL on A5, brown power on POWER 3V3).",
+  "Free rows for the bench: 10, 12, 13, A0 and A1.",
+  "Sensors A and B are DHT22 temperature and humidity sensors. They are read every two seconds.",
+  "The display is a 0.96 inch OLED. It runs on 3.3 volts, so its power wire goes to 3V3, never 5 V.",
+  "The light ring is 8 WS2812B LEDs. The buzzer is a KY-012 active buzzer: it beeps, it cannot play tunes. The door switch is an MC-38 reed switch with a magnet. The switch board is an IRF520 MOSFET board. The lamp is a 12 V LED lamp on a 1 m lead.",
+  "Library: MakerNest Origins, from the IDE's Library Manager. It asks to install U8g2, Adafruit NeoPixel and DHT sensor library too: say yes.",
+  "Settings and the notebook live in the board's saved memory (EEPROM). Uploading a new sketch never clears them. Hold the dial down and press the shield's reset button to put every setting back to how it came; the notebook is kept.",
+  "Every sketch uses about 28 KB of the board's 32 KB. Chapter 12 leaves about 4 KB for the maker's own code.",
+  "Bench parts already in the box: a 170-point breadboard, 5 red LEDs, 5 × 10 kΩ resistors, 5 × 100 nF capacitors, 5 BC546 NPN transistors and jumper wires. The bench pack adds 2 light sensors (LDR), 2 push buttons, a yellow and a green LED, 10 × 220 Ω resistors, a KY-006 passive buzzer board, an SG90 servo and a soil sensor."
+ ],
+ "errata": [
+  "The help table at the back of the book says 'the yellow wire is loose' for a number that never changes. Sensor A's signal wire is blue (row 2 S). Always say blue."
+ ],
+ "safety": [
+  "Makers never open the battery pack. A grown-up charges it with the charger in the box, and nobody leaves it charging with nobody at home.",
+  "Never push anything metal into the pack or the shield while it is switched on.",
+  "If anything gets hot, smells of burning or looks scorched: switch the pack off, tell a grown-up, and email support@makernest.com.",
+  "Nothing in this kit needs mains electricity or soldering. Never suggest either.",
+  "The magnet and small parts stay out of mouths and away from small children."
+ ],
+ "support": "support@makernest.com"
+}

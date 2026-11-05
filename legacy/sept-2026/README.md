@@ -1,0 +1,86 @@
+# MakerNest Milo Service
+
+M-01 — Stand the service up empty.
+
+## Stack
+
+Python + FastAPI.
+
+Chosen because it provides a small, conventional HTTP service suitable for the M-01 runtime.
+
+## Run locally
+
+Python 3.11, as pinned in `.python-version`. These steps were run against 3.11.9.
+
+Create and activate a virtual environment:
+
+```
+python3.11 -m venv .venv
+source .venv/bin/activate
+```
+
+Activation is per terminal. A new window starts without it, and the symptom is
+`ModuleNotFoundError` on the first command that needs a dependency.
+
+Install both requirement sets. The dev set carries pytest and is required for
+the tests:
+
+```
+python3 -m pip install -r requirements.txt -r requirements-dev.txt
+```
+
+Run the tests:
+
+```
+python3 -m pytest -q
+```
+
+Expected: `906 passed`.
+
+Run the QC harness:
+
+```
+python3 qc.py
+```
+
+Expected first line: `7616 checks · 7616 pass · 0 fail`. The harness exits
+non-zero if any check fails, or if a failure report matches no chapter, so its
+exit status can be used as a gate.
+
+Start the service:
+
+```
+python3 main.py
+```
+
+It listens on port 8000 unless `PORT` is set. Confirm it is up:
+
+```
+curl http://127.0.0.1:8000/health
+```
+
+Returns `status`, the build id, uptime, the chapter count (14), the session
+store and whether it degraded, and the pause threshold in seconds.
+
+## Deployment
+
+`https://milo-service.onrender.com` — Render, free tier, deployed from `main`.
+
+The child's page is `GET /c/{chapter}` — `…/c/01` is what the QR code on
+chapter 01's card opens. It is served by the same service it talks to, so
+`/turn` is same-origin, and it is the only route a child sees. It shows the
+chapter and never the rung: AZ and C-33.
+
+The build id in `/health` is the commit it is serving; check it against `main`
+before reading anything into a run. The service sleeps when idle: a first
+request after sleep took 22.4s on 2026-09-03, and the next took 0.18s.
+
+The runtime panel is `GET /panel/{token}` and `/panel/{token}/{session}` —
+BB. It is not linked from the child's page and not a query parameter on it. An
+unset `PANEL_TOKEN` makes the route 404 rather than 403, because a 403 tells
+whoever found it that there is something there.
+
+`MODEL_API_KEY`, `SESSION_STORE_URL` and `PANEL_TOKEN` are set in the Render
+environment and exist nowhere in this repository — no file, no example, no
+fixture.
+

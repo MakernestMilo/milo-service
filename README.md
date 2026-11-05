@@ -1,86 +1,92 @@
-# MakerNest Milo Service
+# MakerNest Milo
 
-M-01 — Stand the service up empty.
+Milo is the mentor on every chapter page the MakerNest books link to. One service, four levels:
+**Origins** (live), Motion, Connected and Autonomy (listed as coming, filled the same way).
 
-## Stack
+The book prints `makernest.com/origins` and `makernest.com/origins/00` to `/12`, `/d` and `/g`.
+Every one of those is a page here:
 
-Python + FastAPI.
+| Page | What the maker gets |
+|---|---|
+| `/origins` | Every chapter, by act. Milo for questions about the box and getting started. |
+| `/origins/00` | Set up the computer once: Arduino IDE, the CH340 driver, the MakerNest Origins library. |
+| `/origins/01` … `/12`, `/d`, `/g` | The chapter's sketch (copy or download), its wiring drawings and the whole shield, the bench experiment with a breadboard drawing and its own sketch, and Ask Milo. |
 
-Chosen because it provides a small, conventional HTTP service suitable for the M-01 runtime.
+## How Milo works
+
+- **The book is the source.** Milo is given the chapter's pages exactly as printed, the front and
+  back of the book, the kit's hardware facts, the chapter's sketch and its bench experiment
+  (`milo/prompt.py`). It answers only from that. The sealed faults for chapter 11 (book pages 159
+  to 161) are never given to it.
+- **The maker says where they are.** Each chapter page has a "Where are you?" picker with that
+  chapter's steps. Milo is told the step and believes it; it never infers it.
+- **Sketches.** Milo gives a chapter's sketch exactly, never a different one. In chapter 12 and the
+  Gift it writes code with the maker one line at a time, from the starter sketch.
+- **Chapter 11.** Milo holds the book's hint ladder against the minutes the maker has been
+  looking, and never names the fault.
+- **Voice.** `milo/voice.md`: the book's voice, two to four sentences, one question at most,
+  never "child", the maker's decisions stay the maker's, safety and privacy rules, and a
+  kind route to a trusted grown-up and Childline 1098 if a maker is in trouble.
+- **Privacy.** Phone numbers and email addresses are removed before anything is stored or sent
+  (`milo/guard.py`). Conversations are kept 7 days (`MILO_KEEP_DAYS`). Request bodies are never logged.
+
+## Content
+
+`levels/origins/` holds everything a level needs:
+
+| Path | What | Made by |
+|---|---|---|
+| `level.json` | Name, colours, chapter order, hardware facts, safety, errata | hand |
+| `chapters.json`, `book/*.md` | Each chapter's printed pages, and its steps | `tools/build_origins.py` from the final book |
+| `sketches/*.ino` | 01 and 02 from the library examples, 03 to G from "Milo sketches" | `tools/build_origins.py` |
+| `wiring/*.svg` | The book's wiring drawings | `tools/build_origins.py`, using the book's `wiring.py` |
+| `bench/bench.json` | 13 bench experiments and chapter 11's five faults | hand |
+| `bench/sketches/*.ino` | Bench sketches. All compile for the UNO. None touches EEPROM. | hand |
+| `bench/svg/*.svg` | Breadboard drawings, from the same columns as the steps | `tools/bench_svg.py` |
+| `library/` | The MakerNest Origins library zip, until it is in Library Manager | copied |
+
+To fill Motion, Connected or Autonomy: make the same folder, set `"status": "live"`, and run the
+tests. Nothing in the code is Origins-specific except `pages.SETUP`.
+
+When the book changes: render it to `pages.json` with `tools/pages_text.py`, then run
+`tools/build_origins.py --pages … --sketches … --wiring …` and the tests.
 
 ## Run locally
 
-Python 3.11, as pinned in `.python-version`. These steps were run against 3.11.9.
-
-Create and activate a virtual environment:
+Python 3.11.
 
 ```
-python3.11 -m venv .venv
-source .venv/bin/activate
-```
-
-Activation is per terminal. A new window starts without it, and the symptom is
-`ModuleNotFoundError` on the first command that needs a dependency.
-
-Install both requirement sets. The dev set carries pytest and is required for
-the tests:
-
-```
+python3.11 -m venv .venv && source .venv/bin/activate
 python3 -m pip install -r requirements.txt -r requirements-dev.txt
-```
-
-Run the tests:
-
-```
 python3 -m pytest -q
+python3 main.py            # http://127.0.0.1:8000/origins
 ```
 
-Expected: `906 passed`.
+Without `MODEL_API_KEY` the pages work and Ask Milo answers that it can't think right now.
 
-Run the QC harness:
-
-```
-python3 qc.py
-```
-
-Expected first line: `7616 checks · 7616 pass · 0 fail`. The harness exits
-non-zero if any check fails, or if a failure report matches no chapter, so its
-exit status can be used as a gate.
-
-Start the service:
+## Check Milo's replies against the real model
 
 ```
-python3 main.py
+MODEL_API_KEY=… python3 evals/run.py --n 3
 ```
 
-It listens on port 8000 unless `PORT` is set. Confirm it is up:
+Thirty scripted messages: sketch requests, wiring facts, the decision steps, chapter 11 pressure,
+code coaching, battery and mains safety, privacy, prompt injection, off-topic, distress, Tamil.
+The checks are form checks: read the replies in the results file it writes.
 
-```
-curl http://127.0.0.1:8000/health
-```
+## Environment (Render)
 
-Returns `status`, the build id, uptime, the chapter count (14), the session
-store and whether it degraded, and the pause threshold in seconds.
+| Variable | |
+|---|---|
+| `MODEL_API_KEY` | Anthropic key. Never in this repository. |
+| `SESSION_STORE_URL` | Render Key Value (Redis) URL. Without it, conversations live in memory and `/health` says `store: memory`. |
+| `PANEL_TOKEN` | Opens `/panel/<token>`: recent conversations, for reading. Unset means 404. |
+| `MILO_MODEL` | Optional. Default `claude-sonnet-5`. |
 
-## Deployment
+`/health` gives the build, the levels, the store and whether the model key is set.
 
-`https://milo-service.onrender.com` — Render, free tier, deployed from `main`.
+## The September service
 
-The child's page is `GET /c/{chapter}` — `…/c/01` is what the QR code on
-chapter 01's card opens. It is served by the same service it talks to, so
-`/turn` is same-origin, and it is the only route a child sees. It shows the
-chapter and never the rung: AZ and C-33.
-
-The build id in `/health` is the commit it is serving; check it against `main`
-before reading anything into a run. The service sleeps when idle: a first
-request after sleep took 22.4s on 2026-09-03, and the next took 0.18s.
-
-The runtime panel is `GET /panel/{token}` and `/panel/{token}/{session}` —
-BB. It is not linked from the child's page and not a query parameter on it. An
-unset `PANEL_TOKEN` makes the route 404 rather than 403, because a 403 tells
-whoever found it that there is something there.
-
-`MODEL_API_KEY`, `SESSION_STORE_URL` and `PANEL_TOKEN` are set in the Render
-environment and exist nowhere in this repository — no file, no example, no
-fixture.
-
+The first Milo (work orders M-01 to M-13) was built on the September book. Its rules no longer
+match the final book (USB-only power, no sketches, no code writing), so it is kept for reference
+in `legacy/` and is not run.
