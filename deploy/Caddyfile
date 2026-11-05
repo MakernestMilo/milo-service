@@ -1,0 +1,9 @@
+# Caddy gets and renews the HTTPS certificate for DOMAIN by itself.
+# It appends the visitor's address to X-Forwarded-For, which is the right-most entry Milo trusts.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy milo:8000
+	log {
+		output discard
+	}
+}
