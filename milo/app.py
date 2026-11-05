@@ -52,8 +52,8 @@ TOO_LONG = "That's a lot for me in one go. Send the part you're stuck on, or the
 
 
 def build_id():
-    for k in ("RENDER_GIT_COMMIT", "GIT_COMMIT"):
-        if os.getenv(k):
+    for k in ("GIT_COMMIT", "RENDER_GIT_COMMIT"):
+        if os.getenv(k) and os.getenv(k) != "unknown":
             return os.getenv(k)[:7]
     try:
         return subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=HERE, stderr=subprocess.DEVNULL).decode().strip()

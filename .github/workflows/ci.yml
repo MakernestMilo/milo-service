@@ -23,3 +23,16 @@ jobs:
           python-version: "3.11"
       - run: python3 -m pip install -r requirements.txt -r requirements-dev.txt
       - run: python3 -m pytest -q tests/test_content.py tests/test_evals.py --tb=short
+
+  # The server runs exactly this image. Build it and check it answers.
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build --build-arg GIT_COMMIT=${GITHUB_SHA::7} -t milo .
+      - run: |
+          docker run -d --name milo -p 8000:8000 milo
+          for i in $(seq 1 20); do curl -fs localhost:8000/health && break; sleep 1; done
+          curl -fs localhost:8000/health | grep -q '"chapters":14'
+          curl -fs -o /dev/null localhost:8000/origins/03
+      - run: printf 'DOMAIN=localhost\n' > .env && docker compose config -q

@@ -1,0 +1,33 @@
+name: deploy
+# After every change to main passes its tests, update the server in Mumbai.
+# Needs three repository secrets (Settings, Secrets and variables, Actions):
+#   DEPLOY_HOST     the server's static IP
+#   DEPLOY_USER     ubuntu
+#   DEPLOY_SSH_KEY  the private key Lightsail gave you for the server
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    concurrency: deploy
+    steps:
+      - name: Check the secrets are set
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          if [ -z "$HOST" ]; then echo "::warning::DEPLOY_HOST is not set: nothing to deploy to yet."; echo "skip=1" >> "$GITHUB_ENV"; fi
+      - name: Update the server
+        if: env.skip != '1'
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 600 /dev/null key && printf '%s\n' "$KEY" > key
+          ssh -i key -o StrictHostKeyChecking=accept-new "$USER@$HOST" "cd /opt/milo && sudo bash deploy/update.sh"

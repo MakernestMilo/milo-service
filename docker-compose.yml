@@ -1,0 +1,37 @@
+# Milo on one server: the service, its Redis, and Caddy in front for HTTPS.
+# Secrets live in .env on the server (see deploy/env.example), never in this repository.
+services:
+  milo:
+    build:
+      context: .
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:-unknown}
+    env_file: .env
+    environment:
+      SESSION_STORE_URL: redis://redis:6379/0
+      PORT: "8000"
+    depends_on: [redis]
+    restart: unless-stopped
+    expose: ["8000"]
+
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "128mb", "--maxmemory-policy", "volatile-lru"]
+    volumes: [redis-data:/data]
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.8
+    env_file: .env
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [milo]
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  caddy-data:
+  caddy-config:

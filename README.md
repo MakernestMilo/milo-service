@@ -74,16 +74,21 @@ Thirty scripted messages: sketch requests, wiring facts, the decision steps, cha
 code coaching, battery and mains safety, privacy, prompt injection, off-topic, distress, Tamil.
 The checks are form checks: read the replies in the results file it writes.
 
-## Environment (Render)
+## Where it runs
 
-| Variable | |
+On one server in AWS's Mumbai region, through AWS India, billed in rupees: Milo, its Redis and
+Caddy for HTTPS, from `docker-compose.yml`. `DEPLOY.md` sets it up from nothing; every merge to
+`main` that passes CI is deployed by `.github/workflows/deploy.yml`.
+
+| Variable (in `/opt/milo/.env` on the server) | |
 |---|---|
+| `DOMAIN` | `milo.makernest.com` |
 | `MODEL_API_KEY` | Anthropic key. Never in this repository. |
-| `SESSION_STORE_URL` | Render Key Value (Redis) URL. Without it, conversations live in memory and `/health` says `store: memory`. |
-| `PANEL_TOKEN` | Opens `/panel/<token>`: recent conversations, for reading. Unset means 404. |
-| `MILO_MODEL` | Optional. Default `claude-sonnet-5`. |
+| `PANEL_TOKEN` | Opens `/panel`. Unset means 404. |
+| `MILO_MODEL`, `MILO_KEEP_DAYS`, `MILO_DAILY_CAP` | Optional. |
 
-`/health` gives the build, the levels, the store and whether the model key is set.
+`SESSION_STORE_URL` is set by `docker-compose.yml` to the server's own Redis. `/health` gives
+the build, the levels, the store and whether the model key is set.
 
 ## The September service
 
