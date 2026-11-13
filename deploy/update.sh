@@ -3,6 +3,8 @@
 # it is also safe to run by hand: cd /opt/milo && sudo bash deploy/update.sh
 set -euo pipefail
 cd /opt/milo
+# The folder belongs to the default user and this runs as root: tell git that is fine.
+git config --global --get-all safe.directory 2>/dev/null | grep -qx /opt/milo || git config --global --add safe.directory /opt/milo
 git fetch -q origin main
 git reset -q --hard origin/main
 export GIT_COMMIT=$(git rev-parse --short HEAD)

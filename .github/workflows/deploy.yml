@@ -1,6 +1,6 @@
 name: deploy
-# After every change to main passes its tests, update the server in Mumbai.
-# Needs three repository secrets (Settings, Secrets and variables, Actions):
+# Optional. The server already updates itself from main every five minutes (deploy/milo-update.timer).
+# This workflow only does anything if these three repository secrets are set (Settings, Secrets and variables, Actions):
 #   DEPLOY_HOST     the server's static IP
 #   DEPLOY_USER     ubuntu
 #   DEPLOY_SSH_KEY  the private key Lightsail gave you for the server
