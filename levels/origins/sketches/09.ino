@@ -119,6 +119,6 @@ void loop() {
   }
   if (machine.settings.startWith == 1 && cold && !wasCold) machine.runSequence();
   wasCold = cold;
-  // The display sleeps after a minute and a half to save the battery. Turn the dial to wake it.
+  // The display stays on. Left alone for five minutes, any screen goes back to the reading.
   // Sketch 09 stays on through chapters 10 and 11.
 }

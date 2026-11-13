@@ -137,7 +137,7 @@ SETUP = [
      [("CH340 driver for Windows (WCH)", "https://www.wch-ic.com/downloads/CH341SER_EXE.html"),
       ("CH340 driver for Mac (WCH)", "https://github.com/WCHSoftGroup/ch34xser_macos")]),
     ("Install the MakerNest Origins library", "Open Library Manager (the books icon on the left). Search for MakerNest Origins and install it. When it asks to install other libraries too, say yes. If it isn't listed yet, download the library below and add it with Sketch, Include Library, Add .ZIP Library. Then install U8g2, Adafruit NeoPixel and DHT sensor library from Library Manager by name.",
-     [("MakerNest Origins library 1.1.0 (.zip)", "/origins/library/MakerNestOrigins-1.1.0.zip")]),
+     [("MakerNest Origins library 1.1.1 (.zip)", "/origins/library/MakerNestOrigins-1.1.1.zip")]),
     ("Test it", "Open File, Examples, MakerNest Origins, 01_FirstLight and press Upload, the round arrow. When the IDE says Done uploading, your computer can talk to every part in this kit. You only do this page once.", []),
 ]
 

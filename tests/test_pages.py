@@ -50,7 +50,7 @@ def test_bench_and_fault_downloads(client, origins):
 
 
 def test_library_zip(client):
-    r = client.get("/origins/library/MakerNestOrigins-1.1.0.zip")
+    r = client.get("/origins/library/MakerNestOrigins-1.1.1.zip")
     assert r.status_code == 200 and r.content[:2] == b"PK"
 
 
@@ -69,7 +69,7 @@ def test_answers_are_hidden_until_asked(client):
 
 def test_setup_page_links_the_driver_and_library(client):
     r = client.get("/origins/00")
-    assert "wch-ic.com" in r.text and "MakerNestOrigins-1.1.0.zip" in r.text
+    assert "wch-ic.com" in r.text and "MakerNestOrigins-1.1.1.zip" in r.text
 
 
 def test_no_page_calls_anyone_a_child(client):

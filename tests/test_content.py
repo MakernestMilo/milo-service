@@ -142,6 +142,6 @@ def test_from_chapter_03_every_sketch_draws_its_own_screen(origins):
 def test_the_library_zip_on_the_set_up_page_is_the_one_served():
     lib = os.path.join(ROOT, "origins", "library")
     zips = [f for f in os.listdir(lib) if f.endswith(".zip")]
-    assert zips == ["MakerNestOrigins-1.1.0.zip"]
+    assert zips == ["MakerNestOrigins-1.1.1.zip"]
     pages = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "milo", "pages.py"), encoding="utf-8").read()
     assert "/origins/library/" + zips[0] in pages
