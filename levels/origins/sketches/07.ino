@@ -24,22 +24,42 @@ bool apartNow() {
   return fabs(machine.temperatureA() - machine.temperatureB()) > gap;
 }
 
-// ---- what it does about it (chapters 02 and 03)
+// ---- what it does about it (chapters 02, 03 and 05)
 void showIt(bool cold, bool apart) {
   uint8_t w = machine.settings.whenCold;
-  if (apart) {                                                 // apart: orange, and the buzzer
+  if (apart) {                                                 // apart: orange, and the two-note siren
     machine.ring(ORANGE);
-    machine.buzzerBeep(true);
+    machine.buzzerSiren(true);
     return;
   }
+  machine.buzzerSiren(false);
   if (cold && (w == WHEN_RING || w == WHEN_BOTH)) machine.ring(RED); else machine.ringNormal();
   if (w == WHEN_ALWAYS) machine.buzzer(true);                  // always on: it has stopped asking
   else { machine.buzzer(false); machine.buzzerBeep(cold && (w == WHEN_BUZZER || w == WHEN_BOTH)); }
 }
 
+bool cold = false, apart = false;
+
+// ---- what the screen shows: A and B, the count, how often it writes, and how full the notebook is
+void whatTheScreenShows() {
+  char t[17];
+  const char *every[] = { "10 SEC", "1 MIN", "15 MIN", "1 HOUR" };
+  if (apart) machine.top("APART", true);
+  else if (cold) machine.top("COLD", true);
+  else machine.top("OK");
+  snprintf(t, sizeof t, "A %s  B %s", machine.textA(), machine.textB());
+  machine.tall(1, t);                                          // both readings, tall
+  snprintf(t, sizeof t, "COUNT %-5lu%s", machine.count(), machine.doorOpen() ? "OPEN" : "SHUT");
+  machine.tall(3, t);                                          // the count, and the door as it is right now
+  snprintf(t, sizeof t, "WRITE: %s", every[machine.settings.writeEvery]);
+  machine.line(5, t);
+  machine.notebookLine(6);                                     // how full the notebook is, and how many readings
+  machine.outputsLine(7);
+}
+
 void setup() {
   machine.begin(7, "07|NIGHT|SHIFT");
-  machine.homeShows(SHOW_A | SHOW_B | SHOW_COUNT | SHOW_NOTEBOOK);
+  machine.screen(whatTheScreenShows);
   machine.useScreen(SCR_WRITE_EVERY);
   machine.useScreen(SCR_LOG);
   machine.useScreen(SCR_SETTLE);
@@ -50,14 +70,15 @@ void setup() {
   machine.useScreen(SCR_STOP_AT);
   machine.useScreen(SCR_NORMAL_COLOUR);
   machine.useScreen(SCR_WHEN_COLD);
+  machine.useScreen(SCR_PITCH);
   machine.useScreen(SCR_TEST);
+  machine.useScreen(SCR_RESET);
 }
 
 void loop() {
   machine.update();
-  bool cold = coldNow();
-  bool apart = apartNow();
+  cold = coldNow();
+  apart = apartNow();
   showIt(cold, apart);
-  // The notebook is the board's own memory. It writes sensor A down every WRITE EVERY, and keeps it through
-  // uploads and restarts. The upload gives it the day and time. Keep it on a phone charger all week.
+  // The notebook writes sensor A every WRITE EVERY, inside update(). LOG reads it back, one hour per click.
 }
