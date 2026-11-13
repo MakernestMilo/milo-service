@@ -24,25 +24,46 @@ bool apartNow() {
   return fabs(machine.temperatureA() - machine.temperatureB()) > gap;
 }
 
-// ---- what it does about it (chapters 02 and 03)
+// ---- what it does about it (chapters 02, 03 and 05)
 void showIt(bool cold, bool apart) {
   uint8_t w = machine.settings.whenCold;
-  if (apart) {                                                 // apart: orange, and the buzzer
+  if (apart) {                                                 // apart: orange, and the two-note siren
     machine.ring(ORANGE);
-    machine.buzzerBeep(true);
+    machine.buzzerSiren(true);
     return;
   }
+  machine.buzzerSiren(false);
   if (cold && (w == WHEN_RING || w == WHEN_BOTH)) machine.ring(RED); else machine.ringNormal();
   if (w == WHEN_ALWAYS) machine.buzzer(true);                  // always on: it has stopped asking
   else { machine.buzzer(false); machine.buzzerBeep(cold && (w == WHEN_BUZZER || w == WHEN_BOTH)); }
 }
 
+bool cold = false, apart = false;
+
 bool wasCold = false;
 bool tooManyFired = false;
 
+// ---- what the screen shows: A and B, the count, this hour's openings against TOO MANY, the notebook
+void whatTheScreenShows() {
+  char t[17];
+  if (tooManyFired) machine.top("TOO MANY", true);
+  else if (apart) machine.top("APART", true);
+  else if (cold) machine.top("COLD", true);
+  else machine.top("OK");
+  snprintf(t, sizeof t, "A %s  B %s", machine.textA(), machine.textB());
+  machine.tall(1, t);                                          // both readings, tall
+  snprintf(t, sizeof t, "COUNT %-5lu%s", machine.count(), machine.doorOpen() ? "OPEN" : "SHUT");
+  machine.tall(3, t);                                          // the count, and the door as it is right now
+  if (machine.settings.tooMany) snprintf(t, sizeof t, "LAST HOUR %u OF %u", machine.openingsInLastHour(), machine.settings.tooMany);
+  else snprintf(t, sizeof t, "LAST HOUR %u", machine.openingsInLastHour());
+  machine.line(5, t);
+  machine.notebookLine(6);
+  machine.outputsLine(7);
+}
+
 void setup() {
   machine.begin(13, "D|DOOR-|KEEPER");
-  machine.homeShows(SHOW_A | SHOW_B | SHOW_COUNT | SHOW_NOTEBOOK);
+  machine.screen(whatTheScreenShows);
   machine.useScreen(SCR_TOO_MANY);
   machine.useScreen(SCR_LOG);
   machine.useScreen(SCR_SEQUENCE);
@@ -57,20 +78,22 @@ void setup() {
   machine.useScreen(SCR_WATCHES);
   machine.useScreen(SCR_NORMAL_COLOUR);
   machine.useScreen(SCR_WHEN_COLD);
+  machine.useScreen(SCR_PITCH);
   machine.useScreen(SCR_TEST);
+  machine.useScreen(SCR_RESET);
 }
 
 void loop() {
   machine.update();
-  bool cold = coldNow();
-  bool apart = apartNow();
+  cold = coldNow();
+  apart = apartNow();
   showIt(cold, apart);
 
   // TOO MANY openings in the last hour: run the sequence once. Then wait until it calms down by your gap (chapter 04).
   if (machine.settings.tooMany) {
     int start = machine.settings.coldLine == NOT_SET ? 0 : machine.settings.coldLine;
     int stop = machine.settings.stopAt == NOT_SET ? start : machine.settings.stopAt;
-    int gap = max(1, stop - start);
+    int gap = max(1, abs(stop - start));
     uint8_t n = machine.openingsInLastHour();
     if (!tooManyFired && n >= machine.settings.tooMany) { tooManyFired = true; machine.runSequence(); }
     if (tooManyFired && n + gap <= machine.settings.tooMany) tooManyFired = false;

@@ -123,3 +123,25 @@ def test_errata_correct_the_help_table(origins):
 def test_level_json_is_valid():
     for lid in LEVEL_ORDER:
         json.load(open(os.path.join(ROOT, lid, "level.json")))
+
+
+def test_from_chapter_03_every_sketch_draws_its_own_screen(origins):
+    # Library 1.1: the home screen shows the reading, the chapter's own number and the decision.
+    # 01 and 02 are printed in the book, so the library draws theirs.
+    for k in ("03", "04", "05", "06", "07", "08", "d", "09", "12", "g"):
+        sk = origins.sketches[k]
+        assert "void whatTheScreenShows()" in sk and "machine.screen(whatTheScreenShows);" in sk, k
+        assert "machine.top(" in sk, k
+    for k in ("01", "02"):
+        assert "whatTheScreenShows" not in origins.sketches[k], k
+    # 09 stays on for 10 and 11, where the display gives no clues: it never describes the outputs.
+    assert "outputsLine" not in origins.sketches["09"]
+    assert "SCR_WATCH_FOR" in origins.sketches["09"] and "SCR_PITCH" in origins.sketches["03"]
+
+
+def test_the_library_zip_on_the_set_up_page_is_the_one_served():
+    lib = os.path.join(ROOT, "origins", "library")
+    zips = [f for f in os.listdir(lib) if f.endswith(".zip")]
+    assert zips == ["MakerNestOrigins-1.1.0.zip"]
+    pages = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "milo", "pages.py"), encoding="utf-8").read()
+    assert "/origins/library/" + zips[0] in pages

@@ -24,22 +24,41 @@ bool apartNow() {
   return fabs(machine.temperatureA() - machine.temperatureB()) > gap;
 }
 
-// ---- what it does about it (chapters 02 and 03)
+// ---- what it does about it (chapters 02, 03 and 05)
 void showIt(bool cold, bool apart) {
   uint8_t w = machine.settings.whenCold;
-  if (apart) {                                                 // apart: orange, and the buzzer
+  if (apart) {                                                 // apart: orange, and the two-note siren
     machine.ring(ORANGE);
-    machine.buzzerBeep(true);
+    machine.buzzerSiren(true);
     return;
   }
+  machine.buzzerSiren(false);
   if (cold && (w == WHEN_RING || w == WHEN_BOTH)) machine.ring(RED); else machine.ringNormal();
   if (w == WHEN_ALWAYS) machine.buzzer(true);                  // always on: it has stopped asking
   else { machine.buzzer(false); machine.buzzerBeep(cold && (w == WHEN_BUZZER || w == WHEN_BOTH)); }
 }
 
+bool cold = false, apart = false;
+
+// ---- what the screen shows: A and B, the count, the door, and your SETTLE
+void whatTheScreenShows() {
+  char t[17];
+  if (apart) machine.top("APART", true);
+  else if (cold) machine.top("COLD", true);
+  else machine.top("OK");
+  snprintf(t, sizeof t, "A %s  B %s", machine.textA(), machine.textB());
+  machine.tall(1, t);                                          // both readings, tall
+  snprintf(t, sizeof t, "COUNT %-5lu%s", machine.count(), machine.doorOpen() ? "OPEN" : "SHUT");
+  machine.tall(3, t);                                          // the count, and the door as it is right now
+  snprintf(t, sizeof t, "SETTLE %u SEC", machine.settings.settle);
+  machine.line(5, t);                                          // how long it ignores the switch after a count
+  machine.line(6, machine.settings.keepCount ? "KEEP COUNT YES" : "KEEP COUNT NO");
+  machine.outputsLine(7);
+}
+
 void setup() {
   machine.begin(6, "06|THE|WITNESS");
-  machine.homeShows(SHOW_A | SHOW_B | SHOW_COUNT);
+  machine.screen(whatTheScreenShows);
   machine.useScreen(SCR_SETTLE);
   machine.useScreen(SCR_KEEP_COUNT);
   machine.useScreen(SCR_APART_BY);
@@ -48,13 +67,16 @@ void setup() {
   machine.useScreen(SCR_STOP_AT);
   machine.useScreen(SCR_NORMAL_COLOUR);
   machine.useScreen(SCR_WHEN_COLD);
+  machine.useScreen(SCR_PITCH);
   machine.useScreen(SCR_TEST);
+  machine.useScreen(SCR_RESET);
 }
 
 void loop() {
   machine.update();
-  bool cold = coldNow();
-  bool apart = apartNow();
+  cold = coldNow();
+  apart = apartNow();
   showIt(cold, apart);
   // The count happens inside update(): every time the door opens, after SETTLE seconds of ignoring the switch.
+  // Each count plays a short high note, so you can hear a door that counted twice.
 }

@@ -5,15 +5,21 @@
 
 #include <MakerNestOrigins.h>
 
-// ---- the cold rule, with its gap (chapter 04)
-bool coldNow() {
+// ---- the watch rule, with its gap (chapters 04 and 09)
+// COLD and DRY go off when the number goes under START. HOT and DAMP go off when it goes over.
+bool watchNow() {
   static bool alarm = false;
-  if (machine.settings.coldLine == NOT_SET) return false;      // no line chosen yet: no opinion
+  if (machine.settings.coldLine == NOT_SET) return false;      // no START chosen yet: no opinion
   int start = machine.settings.coldLine;
   int stop = (machine.settings.stopAt == NOT_SET) ? start : machine.settings.stopAt;
-  float t = machine.watchedTemperature();                      // sensor A, or B if you chose B (chapter 05)
-  if (!alarm && t < start) alarm = true;                       // below START: it starts
-  if (alarm && t >= stop) alarm = false;                       // back up to STOP AT: it stops
+  float v = machine.watchedValue();                            // the temperature, or the humidity for DAMP and DRY
+  if (machine.watchGoesUp()) {
+    if (!alarm && v > start) alarm = true;                     // over START: it starts
+    if (alarm && v <= stop) alarm = false;                     // back down to STOP AT: it stops
+  } else {
+    if (!alarm && v < start) alarm = true;                     // under START: it starts
+    if (alarm && v >= stop) alarm = false;                     // back up to STOP AT: it stops
+  }
   return alarm;
 }
 
@@ -24,25 +30,59 @@ bool apartNow() {
   return fabs(machine.temperatureA() - machine.temperatureB()) > gap;
 }
 
-// ---- what it does about it (chapters 02 and 03)
+// ---- what it does about it (chapters 02, 03 and 05)
 void showIt(bool cold, bool apart) {
   uint8_t w = machine.settings.whenCold;
-  if (apart) {                                                 // apart: orange, and the buzzer
+  if (apart) {                                                 // apart: orange, and the two-note siren
     machine.ring(ORANGE);
-    machine.buzzerBeep(true);
+    machine.buzzerSiren(true);
     return;
   }
+  machine.buzzerSiren(false);
   if (cold && (w == WHEN_RING || w == WHEN_BOTH)) machine.ring(RED); else machine.ringNormal();
   if (w == WHEN_ALWAYS) machine.buzzer(true);                  // always on: it has stopped asking
   else { machine.buzzer(false); machine.buzzerBeep(cold && (w == WHEN_BUZZER || w == WHEN_BOTH)); }
 }
 
+bool cold = false, apart = false;
+
 bool wasCold = false;
 bool tooManyFired = false;
 
+// ---- what the screen shows: what you are watching for, its START and STOP, the count, the notebook
+void whatTheScreenShows() {
+  char t[17];
+  const char *what[] = { "COLD", "HOT", "DAMP", "DRY" };
+  uint8_t w = machine.settings.watchFor;
+  bool humid = (w == WATCH_DAMP || w == WATCH_DRY);
+  const char *unit = humid ? "%" : "";
+  int start = machine.settings.coldLine;
+  int stop = (machine.settings.stopAt == NOT_SET) ? start : machine.settings.stopAt;
+
+  if (tooManyFired) machine.top("TOO MANY", true);
+  else if (apart) machine.top("APART", true);
+  else if (cold) { snprintf(t, sizeof t, "TOO %s", what[w]); machine.top(t, true); }   // TOO DAMP, TOO HOT...
+  else machine.top("OK");
+  if (humid) snprintf(t, sizeof t, "A %s  H %d%%", machine.textA(), (int)(machine.humidityA() + 0.5));
+  else snprintf(t, sizeof t, "A %s  B %s", machine.textA(), machine.textB());
+  machine.tall(1, t);
+  snprintf(t, sizeof t, "COUNT %-5lu%s", machine.count(), machine.doorOpen() ? "OPEN" : "SHUT");
+  machine.tall(3, t);                                          // the count, and the door as it is right now
+  if (start == NOT_SET) snprintf(t, sizeof t, "%s START --", what[w]);
+  else snprintf(t, sizeof t, "%s %d%s STOP%d%s", what[w], start, unit, stop, unit);
+  machine.line(5, t);                                          // what it watches for, and your two numbers
+  machine.notebookLine(6);
+  if (machine.settings.tooMany) snprintf(t, sizeof t, "LAST HOUR %u OF %u", machine.openingsInLastHour(), machine.settings.tooMany);
+  else snprintf(t, sizeof t, "LAST HOUR %u", machine.openingsInLastHour());
+  machine.line(7, t);
+  // No line saying what the ring and buzzer are doing: this sketch stays on for chapter 11,
+  // where the display gives no clues. You find out by looking and listening.
+}
+
 void setup() {
   machine.begin(9, "09|STAKEOUT");
-  machine.homeShows(SHOW_A | SHOW_B | SHOW_COUNT | SHOW_NOTEBOOK);
+  machine.screen(whatTheScreenShows);
+  machine.useScreen(SCR_WATCH_FOR);
   machine.useScreen(SCR_TOO_MANY);
   machine.useScreen(SCR_LOG);
   machine.useScreen(SCR_SEQUENCE);
@@ -57,20 +97,22 @@ void setup() {
   machine.useScreen(SCR_WATCHES);
   machine.useScreen(SCR_NORMAL_COLOUR);
   machine.useScreen(SCR_WHEN_COLD);
+  machine.useScreen(SCR_PITCH);
   machine.useScreen(SCR_TEST);
+  machine.useScreen(SCR_RESET);
 }
 
 void loop() {
   machine.update();
-  bool cold = coldNow();
-  bool apart = apartNow();
+  cold = watchNow();                                           // the thing you chose to watch for
+  apart = apartNow();
   showIt(cold, apart);
 
   // TOO MANY openings in the last hour: run the sequence once. Then wait until it calms down by your gap (chapter 04).
   if (machine.settings.tooMany) {
     int start = machine.settings.coldLine == NOT_SET ? 0 : machine.settings.coldLine;
     int stop = machine.settings.stopAt == NOT_SET ? start : machine.settings.stopAt;
-    int gap = max(1, stop - start);
+    int gap = max(1, abs(stop - start));
     uint8_t n = machine.openingsInLastHour();
     if (!tooManyFired && n >= machine.settings.tooMany) { tooManyFired = true; machine.runSequence(); }
     if (tooManyFired && n + gap <= machine.settings.tooMany) tooManyFired = false;

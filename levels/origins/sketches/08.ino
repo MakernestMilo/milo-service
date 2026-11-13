@@ -24,24 +24,45 @@ bool apartNow() {
   return fabs(machine.temperatureA() - machine.temperatureB()) > gap;
 }
 
-// ---- what it does about it (chapters 02 and 03)
+// ---- what it does about it (chapters 02, 03 and 05)
 void showIt(bool cold, bool apart) {
   uint8_t w = machine.settings.whenCold;
-  if (apart) {                                                 // apart: orange, and the buzzer
+  if (apart) {                                                 // apart: orange, and the two-note siren
     machine.ring(ORANGE);
-    machine.buzzerBeep(true);
+    machine.buzzerSiren(true);
     return;
   }
+  machine.buzzerSiren(false);
   if (cold && (w == WHEN_RING || w == WHEN_BOTH)) machine.ring(RED); else machine.ringNormal();
   if (w == WHEN_ALWAYS) machine.buzzer(true);                  // always on: it has stopped asking
   else { machine.buzzer(false); machine.buzzerBeep(cold && (w == WHEN_BUZZER || w == WHEN_BOTH)); }
 }
 
+bool cold = false, apart = false;
+
 bool wasCold = false;
+
+// ---- what the screen shows: A and B, the count, your three steps, and the step running now
+void whatTheScreenShows() {
+  char t[17];
+  const char *step[] = { "NONE", "RING", "BUZZ", "LAMP" };
+  if (apart) machine.top("APART", true);
+  else if (cold) machine.top("COLD", true);
+  else machine.top("OK");
+  snprintf(t, sizeof t, "A %s  B %s", machine.textA(), machine.textB());
+  machine.tall(1, t);                                          // both readings, tall
+  snprintf(t, sizeof t, "COUNT %-5lu%s", machine.count(), machine.doorOpen() ? "OPEN" : "SHUT");
+  machine.tall(3, t);                                          // the count, and the door as it is right now
+  snprintf(t, sizeof t, "%s %s %s", step[machine.settings.stepOut[0]], step[machine.settings.stepOut[1]], step[machine.settings.stepOut[2]]);
+  machine.line(5, t);                                          // the sequence you set
+  if (machine.sequenceRunning()) machine.line(6, "");
+  else machine.line(6, machine.settings.startWith ? "READY: ON COLD" : "READY: RUN NOW");
+  machine.outputsLine(7);                                      // while it runs: STEP 2 BUZZER 3S
+}
 
 void setup() {
   machine.begin(8, "08|CHAIN|REACTION");
-  machine.homeShows(SHOW_A | SHOW_B | SHOW_COUNT | SHOW_NOTEBOOK);
+  machine.screen(whatTheScreenShows);
   machine.useScreen(SCR_SEQUENCE);
   machine.useScreen(SCR_RUN_NOW);
   machine.useScreen(SCR_START_WITH);
@@ -55,16 +76,17 @@ void setup() {
   machine.useScreen(SCR_STOP_AT);
   machine.useScreen(SCR_NORMAL_COLOUR);
   machine.useScreen(SCR_WHEN_COLD);
+  machine.useScreen(SCR_PITCH);
   machine.useScreen(SCR_TEST);
+  machine.useScreen(SCR_RESET);
 }
 
 void loop() {
   machine.update();
-  bool cold = coldNow();
-  bool apart = apartNow();
+  cold = coldNow();
+  apart = apartNow();
   showIt(cold, apart);
-  // START WITH your cold decision: the sequence runs by itself the moment it turns cold.
+  // START WITH COLD: the moment it turns cold, run the sequence once. It never checks a step worked.
   if (machine.settings.startWith == 1 && cold && !wasCold) machine.runSequence();
   wasCold = cold;
-  // The sequence never checks whether a step worked. It only knows what comes next.
 }
