@@ -6,7 +6,7 @@ no fixture in this repository.
 import os
 import time
 
-MODEL = os.getenv("MILO_MODEL", "claude-sonnet-5")
+MODEL = os.getenv("MILO_MODEL", "claude-sonnet-5-5")
 # Thinking and the reply share max_tokens. A low ceiling with adaptive thinking can spend the
 # whole budget reasoning and return no text, so the ceiling is generous and effort is medium.
 MAX_TOKENS = 16000

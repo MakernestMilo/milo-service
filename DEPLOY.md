@@ -29,29 +29,19 @@ tests is deployed to it automatically.
 4. Back in Lightsail, press **Connect using SSH**. In the window that opens, paste:
    ```
    curl -fsSL https://raw.githubusercontent.com/MakernestMilo/milo-service/main/deploy/setup.sh | bash
-   nano /opt/milo/.env
    ```
-   Fill in `MODEL_API_KEY` (the Anthropic key) and a long random `PANEL_TOKEN`. Keep
-   `DOMAIN=milo.makernest.com`. Save with Ctrl-O, Enter, Ctrl-X. Then:
-   ```
-   cd /opt/milo && sudo bash deploy/update.sh
-   ```
-   It ends with `Milo is up at build …`.
+   It installs everything, makes the panel password by itself, and asks for one thing: the
+   Anthropic API key. Paste it and press Enter (nothing shows while you paste). It ends with
+   `Milo is up at build …`.
 5. Open `https://milo.makernest.com/health`. Expect `"store": "redis"`,
    `"model_configured": true` and `"origins": {"status": "live", "chapters": 14}`.
 
 ## 3. Deploy on every merge
 
-In GitHub, open the repository's **Settings, Secrets and variables, Actions** and add:
-
-| Secret | Value |
-|---|---|
-| `DEPLOY_HOST` | the static IP |
-| `DEPLOY_USER` | `ubuntu` |
-| `DEPLOY_SSH_KEY` | the private key from Lightsail, **Account, SSH keys**, Mumbai default key (the whole file) |
-
-From then on, every merge to `main` that passes CI runs `deploy/update.sh` on the server. The
-**deploy** workflow can also be run by hand from the Actions tab.
+Nothing to set up. The server checks `main` every five minutes (`milo-update.timer`) and runs
+`deploy/update.sh` when there is a new commit, so a merge is live within five minutes and GitHub
+holds no keys to the server. To update at once: `cd /opt/milo && sudo bash deploy/update.sh`.
+To see the last checks: `systemctl list-timers milo-update.timer` and `journalctl -u milo-update -n 50`.
 
 ## 4. makernest.com/origins
 
